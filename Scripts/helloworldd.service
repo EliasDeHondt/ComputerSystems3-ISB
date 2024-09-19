@@ -1,0 +1,17 @@
+############################
+# @author Elias De Hondt   #
+# @see https://eliasdh.com #
+# @since 19/09/2024        #
+############################
+
+[Unit]
+Description=Hello World Service - Making the world a better place, one hello at a time!
+
+[Service]
+ExecStartPost=/bin/bash -c 'echo "Service started: Hello World is on duty!"'
+ExecStart=/usr/local/sbin/helloworldd
+ExecStartPost=/bin/bash -c 'echo "Service is running like a well-oiled machine!"'
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
