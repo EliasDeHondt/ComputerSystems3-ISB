@@ -270,16 +270,24 @@ gcc -o programma_a ./source/a.c
 gcc -o programma_b ./source/b.c
 gcc -o programma_c ./source/c.c
 gcc -o programma_d ./source/d.c
-g++ -o programma_main ./source/b.cpp
+g++ -o programma_z ./source/b.cpp
 
 # Run the compiled programs
 ./programma_a
 ./programma_b
 ./programma_c
 ./programma_d
-./programma_main
+./programma_z
 ```
-- There's an error because there is a file missing (vmlinuz)
+- Problem 1 (programma_a): It's attempting to utilize too much memory. Also too much iterations in a loop for the CPU to handle.
+
+- Problem 2 (programma_b): The program creates an infinite loop that repeatedly sends HTTP requests to a local server, potentially causing a Denial of Service (DoS) by overloading the server with continuous connections and requests.
+
+- Problem 3 (programma_c): This program runs an infinite loop without any exit condition, which will cause the CPU to be fully utilized and can lead to the system becoming unresponsive.
+
+- Problem 4 (programma_d): This program enters an infinite loop that repeatedly copies the `/boot/vmlinuz` file to `/tmp/` with different names, which will quickly fill up the `/tmp` directory and can lead to a lack of disk space and potential system instability.
+
+- Problem 5 (programma_z): This program configures a network interface, then initiates multiple flood pings to a specified IP address in the background, which can overwhelm the target with excessive traffic, potentially leading to a Denial of Service (DoS) condition. After a set number of pings, it terminates all ping processes.
 
 - The source files are provided in the [source](/source) folder.
 

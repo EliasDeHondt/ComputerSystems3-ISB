@@ -7,8 +7,7 @@
 2. [📝Assignment](#📝assignment)
 3. [✨Exercises](#✨exercises)
 
-4. [📦Extra](#📦extra)
-5. [🔗Links](#🔗links)
+4. [🔗Links](#🔗links)
 
 ---
 
@@ -23,8 +22,6 @@
 
 
 
-
-## 📦Extra
 
 
 ## 🔗Links

@@ -10,7 +10,7 @@ int main() {
     printf("programma d \n");
 
     while(1) {
-        sprintf(command, "cp /vmlinuz /tmp/%s%d", base, counter);
+        sprintf(command, "cp /boot/vmlinuz /tmp/%s%d", base, counter);
         system(command);
         counter++;
         if (switcher == 0 & counter>100) {
