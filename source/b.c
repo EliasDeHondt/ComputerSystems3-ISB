@@ -54,6 +54,6 @@ int main(int argc, char** argv)
     write(sock_id,request,strlen(request));
     msglen = read(sock_id,message,1024*1024);
 	}
-	
+
     return 0;
 }

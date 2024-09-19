@@ -28,7 +28,7 @@ int main(void) {
 		}
 		i++;
 	}
-		
+
 	printf("Het programma is aan zijn einde gekomen\n");
 
 	return 0;

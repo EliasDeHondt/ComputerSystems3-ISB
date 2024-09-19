@@ -19,7 +19,7 @@ int main() {
 	//Clean screen first?
 	cout << "Do you want to clean the screen first? (yes/no)\n";
 	cin >> answer;
-	
+
 	if ((answer.compare("yes")==0) || (answer.compare("y")==0) || (answer.compare("") ==0)) {
 		system("clear");
 		//Print title.
@@ -40,5 +40,5 @@ int main() {
 	//End of program...
 	cout << "\nEND .\n";
 
-	return 0;	
+	return 0;
 }
