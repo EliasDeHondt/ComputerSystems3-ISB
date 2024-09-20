@@ -12,7 +12,6 @@
     4. [👉Exercise 4: Extra 100MB Disk](#👉exercise-4-extra-100mb-disk)
     5. [👉Exercise 5: Extra 200MB Disk](#👉exercise-5-extra-200mb-disk)
     6. [👉Exercise 6: Test RAID](#👉exercise-6-test-raid)
-    7. [👉Exercise 7: Replace the 1st RAID Disk](#👉exercise-7-replace-the-1st-raid-disk)
 4. [🔗Links](#🔗links)
 
 ---
@@ -60,14 +59,6 @@
     - Zet de machine af en start op met enkel de 1ste raidschijf
     - (bij de 2de schijf kies je "Remove Attachment")
     - Bekijk het verschil als je terug cat `/proc/mdstat uitvoert`
-
-7. XTRA voor de PRO's : Vervangen van de eerste schijf
-    - Opgelet: Hiermee kan je alles overhoop gooien!
-    - We gaan er van uit dat de 2de schijf defect is.
-    - Volg de procedure op [link4](https://www.howtoforge.com/replacing_hard_disks_in_a_raid1_array) om met jouw raiddisk3 schijf een "nieuwe" schijf te voorzien.
-    - Gebruik volgend commando om te zien wanneer de RAID1 terug ok is:
-    - watch `cat /proc/mdstat`
-    - Als alles klaar is, kan je watch stoppen met CTRL-C
 
 ## ✨Exercises
 
@@ -147,7 +138,7 @@ sudo pvcreate /dev/sdd1
 # 3) Extend the Volume Group
 sudo vgextend VolGroupHome /dev/sdd1
 # 4) Extend the Logical Volume
-sudo lvextend -L +200M /dev/VolGroupHome/LogVolHome
+sudo lvextend -L +200M /dev/VolGroupHome/LogVolHome # +100%
 # 5) Resize the disk
 sudo resize2fs /dev/VolGroupHome/LogVolHome
 # 6) Check if the disk is mounted
@@ -167,14 +158,6 @@ cat /proc/mdstat >> /root/raidok.txt
 - Start the machine and check the RAID status
 ```bash
 cat /proc/mdstat >> /root/raidok.txt
-```
-
-### 👉Exercise 7: Replace the 1st RAID Disk
-
-- Follow the procedure on [HowToForge](https://www.howtoforge.com/replacing_hard_disks_in_a_raid1_array) to replace the 1st RAID disk
-- Check the RAID status
-```bash
-watch cat /proc/mdstat
 ```
 
 ## 🔗Links
