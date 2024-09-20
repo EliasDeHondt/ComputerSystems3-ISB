@@ -6,7 +6,12 @@
 1. [📘Table of Contents](#📘table-of-contents)
 2. [📝Assignment](#📝assignment)
 3. [✨Exercises](#✨exercises)
-
+    1. [👉Exercise 1: User software package chkservice](#👉exercise-1-user-software-package-chkservice)
+    2. [👉Exercise 2: Collecting test data for analytics purposes with systemd](#👉exercise-2-collecting-test-data-for-analytics-purposes-with-systemd)
+    3. [👉Exercise 3: Stop and start the nginx service with systemctl](#👉exercise-3-stop-and-start-the-nginx-service-with-systemctl)
+    4. [👉Exercise 4: View the nginx log](#👉exercise-4-view-the-nginx-log)
+    5. [👉Exercise 5: Create a service that displays "Hello World" every 10 seconds](#👉exercise-5-create-a-service-that-displays-hello-world-every-10-seconds)
+    6. [👉Exercise 6: Create a firewalld service](#👉exercise-6-create-a-firewalld-service)
 4. [🔗Links](#🔗links)
 
 ---
@@ -192,13 +197,6 @@ sudo rm /usr/local/sbin/firewalld
 sudo rm /etc/systemd/system/firewalld.service
 sudo systemctl daemon-reload
 ```
-
-
-
-
-
-
-
 
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).
