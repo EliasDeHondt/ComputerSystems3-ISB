@@ -6,8 +6,26 @@
 1. [📘Table of Contents](#📘table-of-contents)
 2. [📝Assignment](#📝assignment)
 3. [✨Exercises](#✨exercises)
-
-4. [🔗Links](#🔗links)
+    1. [👉Exercise 0: Preparations](#👉exercise-0-preparations)
+    2. [👉Exercise 1: Network preparations](#👉exercise-1-network-preparations)
+    3. [👉Exercise 2: Network connection test](#👉exercise-2-network-connection-test)
+    4. [👉Exercise 3: Iptables script](#👉exercise-3-iptables-script)
+    5. [👉Exercise 4: Iptables command to empty chains](#👉exercise-4-iptables-command-to-empty-chains)
+    6. [👉Exercise 5: Iptables command to set default policies](#👉exercise-5-iptables-command-to-set-default-policies)
+    7. [👉Exercise 6: Log the UDP request for nslookup](#👉exercise-6-log-the-udp-request-for-nslookup)
+    8. [👉Exercise 7: Block IPv6 ping](#👉exercise-7-block-ipv6-ping)
+    9. [👉Exercise 8: Install nemesis](#👉exercise-8-install-nemesis)
+    10. [👉Exercise 9: Limit the number of ICMP packets](#👉exercise-9-limit-the-number-of-icmp-packets)
+    11. [👉Exercise 10: Loop script with nemesis-icmp](#👉exercise-10-loop-script-with-nemesis-icmp)
+    12. [👉Exercise 11: DNS request with nemesis](#👉exercise-11-dns-request-with-nemesis)
+    13. [👉Exercise 12: Iptables rules for UDP](#👉exercise-12-iptables-rules-for-udp)
+    14. [👉Exercise 13: Show the iptables rules](#👉exercise-13-show-the-iptables-rules)
+    15. [👉Exercise 14: Strict ACL on Linux](#👉exercise-14-strict-acl-on-linux)
+    16. [👉Exercise 15: Apache webserver on port 8080](#👉exercise-15-apache-webserver-on-port-8080)
+    17. [👉Exercise 16: FTP server](#👉exercise-16-ftp-server)
+    18. [👉Exercise 17: SSH server](#👉exercise-17-ssh-server)
+4. [📦Extra](#📦extra)
+5. [🔗Links](#🔗links)
 
 ---
 
@@ -113,7 +131,7 @@ nameserver 8.8.8.8
 
 ### 👉Exercise 2: Network connection test
 
-- Ping from machine A to machine B.
+- Ping from machine 1 to machine 2.
     - Machine 1: `ping -i 0.01 192.168.1.209` 100 pings per second.
     - Machine 2: `sudo tcpdump` to sniff the traffic.
     - And analyze the traffic.
@@ -226,6 +244,207 @@ sudo make install
 sudo nemesis dns -v -q 1 -d ens18 -S 192.168.1.210 -D 8.8.8.8 -x 12345 -y 53
 ```
 
+### 👉Exercise 9: Limit the number of ICMP packets
+
+- Clear the logs.
+```bash
+sudo dmesg -C
+```
+
+- Write an iptables rule to limit the number of ICMP packets per second. `machine 1`
+```bash
+sudo iptables -A INPUT -p icmp --icmp-type echo-request -m limit --limit 1/s --limit-burst 5 -j ACCEPT
+sudo iptables -A INPUT -p icmp --icmp-type echo-request -j LOG --log-prefix "ICMP IPTABLES: " --log-level 7
+sudo iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
+```
+
+- Test if the ping of 100 per second is detected. `machine 2`
+```bash
+ping -i 0.01 192.168.1.210
+```
+
+- Check the logs.
+```bash
+sudo dmesg | grep "ICMP IPTABLES"
+```
+
+### 👉Exercise 10: Loop script with nemesis-icmp
+
+- Create a loop script in shell that uses nemesis-icmp to ping.
+```bash
+echo -e '#!/bin/bash' > loop.sh
+echo -e 'for i in {1..100}; do' >> loop.sh
+echo -e 'sudo nemesis icmp -v -S 192.168.1.210 -D "$1" -c 100;' >> loop.sh
+echo -e 'done' >> loop.sh
+cat loop.sh # Check the content of the script
+chmod +x loop.sh # Make the script executable
+sudo ./loop.sh 192.168.1.210 # Run the script
+```
+
+### 👉Exercise 11: DNS request with nemesis
+
+- Make a DNS request with nemesis.
+```bash
+# SRC (Source Address)
+# DST (Destination Address)
+sudo nemesis dns -v -q 1 -d ens18 -S 192.168.1.210 -D 192.168.1.210 -x 12345 -y 53 -T 1 
+```
+
+- Check the logs.
+```bash
+sudo dmesg
+```
+
+### 👉Exercise 12: Iptables rules for UDP
+
+- Write iptables rules for UDP that only allow UDP traffic to enter that you have requested yourself. Also, make sure this rule does not apply to a local interface.
+```bash
+# Drop all incoming UDP traffic
+sudo iptables -P INPUT DROP
+
+# Allow loopback traffic (necessary for local applications)
+sudo iptables -A INPUT -i lo -j ACCEPT
+
+# Allow all outgoing traffic
+sudo iptables -A OUTPUT -j ACCEPT
+
+# Allow incoming UDP traffic on port 12345
+sudo iptables -A INPUT -p udp --dport 12345 -m state --state ESTABLISHED,RELATED -j ACCEPT
+```
+
+### 👉Exercise 13: Show the iptables rules
+
+- Execute the following command:
+```bash
+sudo iptables -n -L INPUT # Show the iptables rules (for incoming traffic)
+```
+
+### 👉Exercise 14: Strict ACL on Linux
+
+- Write a strict ACL on your Linux so that you can ping another computer, but no one can ping your Linux.
+```bash
+# Drop all incoming ICMP traffic
+sudo iptables -P INPUT DROP
+
+# Allow loopback traffic (necessary for local applications)
+sudo iptables -A INPUT -i lo -p icmp -j ACCEPT
+
+# Allow incoming ICMP traffic on the network interface
+sudo iptables -A INPUT -i ens18 -p icmp --icmp-type echo-request -j ACCEPT
+
+# Allow all outgoing ICMP traffic
+sudo iptables -A OUTPUT -p icmp -j ACCEPT
+```
+
+### 👉Exercise 15: Apache webserver on port 8080
+
+- Install and start the apache webserver and lynx.
+```bash
+sudo apt-get install apache2 lynx -y
+sudo systemctl start apache2
+```
+
+- Check if the website is running on port 80. `machine 1`
+```bash
+lynx http://localhost
+```
+
+- Check if the website is running on port 80. `machine 2`
+```bash
+lynx http://192.168.1.210:80
+```
+
+- Use iptables to allow people who connect on port 8080 to see the website on port 80.
+```bash
+sudo iptables -A INPUT -p tcp --dport 8081 -j ACCEPT
+sudo iptables -t nat -A PREROUTING -p tcp --dport 8081 -j REDIRECT --to-port 80
+```
+
+### 👉Exercise 16: FTP server
+
+- Install and start the FTP server and Wireshark `machine 1`
+```bash
+sudo apt-get install vsftpd wireshark -y
+sudo systemctl start vsftpd
+```
+
+- Test if you can start a passive FTP session to the server. `machine 2`
+```bash
+# Use FileZilla to connect to the FTP server
+# Check the traffic in Wireshark between machine 1 and machine 2
+```
+
+- Create the necessary firewall rules to deny everything except the passive FTP connections for `machine 1`.
+```bash
+# Drop all incoming traffic
+sudo iptables -P INPUT DROP
+
+# Allow loopback traffic (necessary for local applications)
+sudo iptables -A INPUT -i lo -j ACCEPT
+
+# Allow all outgoing traffic
+sudo iptables -A OUTPUT -j ACCEPT
+
+# Allow incoming passive FTP traffic (Commands)
+sudo iptables -A INPUT -p tcp --dport 21 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# Allow incoming passive FTP traffic (Data)
+sudo iptables -A INPUT -p tcp --dport 1024:65535 -m state --state ESTABLISHED -j ACCEPT
+```
+
+### 👉Exercise 17: SSH server
+
+- Install and start the SSH server `machine 1`
+```bash
+sudo apt-get install openssh-server -y
+sudo systemctl start ssh
+```
+
+- Delete all firewall rules.
+```bash
+sudo iptables -P
+```
+
+- Create firewall rules to accept 22 & 80 traffic.
+```bash
+# Allow all outgoing traffic
+sudo iptables -A OUTPUT -j ACCEPT
+
+# Allow incoming SSH traffic on port 22
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+# Allow incoming HTTP traffic on port 80
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+
+# Allow loopback traffic (necessary for local applications)
+sudo iptables -A INPUT -i lo -j ACCEPT
+```
+
+## 📦Extra
+
+- Show the iptables rules.
+```bash
+sudo iptables -L -v -n
+```
+
+- Clear the firewall rules.
+```bash
+sudo iptables -F
+```
+
+- Useful firewall rules.
+```bash
+# Block all incoming ICMP traffic
+sudo iptables -A INPUT -p icmp -j DROP
+
+# Block all outgoing ICMP traffic
+sudo iptables -A OUTPUT -p icmp -j DROP
+```
+
+- Allow incoming SSH traffic.
+```bash
+sudo iptables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT
+```
 
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).
