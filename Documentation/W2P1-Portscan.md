@@ -50,6 +50,7 @@ Welke aanval(len) zie je in de logs?
 sudo apt-get update && sudo apt-get upgrade -y
 sudo apt-get install tshark -y # In the UI press YES
 sudo apt-get install snort -y # In the UI select the network interface
+sudo apt install p0f -y
 ```
 
 The binary log file [Portscan-2021.pcap](/source/Portscan-2021.pcap) was created using the following command:
@@ -108,7 +109,15 @@ tshark -r Portscan-2021.pcap -Y "tcp.flags.syn == 1 && tcp.flags.ack == 1" -T fi
 
 ### 👉Question 8:
 
-- ???
+- With this command you can analyze the log file (p0f).
+```bash
+# Get the IP address of the attacker
+ip=$(tshark -r Portscan-2021.pcap -Y "tcp.flags.syn == 1 && tcp.flags.ack == 1" -T fields -e ip.src | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2}')
+
+# Get the OS of the attacker
+p0f -r Portscan-2021.pcap | awk -v ip="$ip" '$0 ~ ip { getline; print $0 } $0 ~ /os/ { print $0 }' | awk '{print $4}' | grep -i "Windows" && echo "Windows" || echo "Linux"
+
+```
 
 ### 👉Question 9:
 
