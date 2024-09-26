@@ -103,7 +103,7 @@ su elias
 sudo lsblk
 ```
 
-![Image](/Images/W2P1-LVM-1.png)
+![Image](/Images/W1P1-LVM-1.png)
 
 ### 👉Exercise 4: Extra 100MB Disk
 
@@ -145,7 +145,7 @@ sudo resize2fs /dev/VolGroupHome/LogVolHome
 df -h >> /home/df.txt
 ```
 
-![Image](/Images/W2P1-LVM-2.png)
+![Image](/Images/W1P1-LVM-2.png)
 
 ### 👉Exercise 6: Test RAID
 
