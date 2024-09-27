@@ -1,16 +1,11 @@
 #!/bin/bash
-#============================================================
-#          FILE:  fdiskscript.sh
-#         USAGE:  ./fdiskscript.sh
-#   DESCRIPTION:  auto create partition on disk
-#       OPTIONS:  none
-#  REQUIREMENTS:  none
-#        AUTHOR:  Jan Celis (jan.celis@kdg.be)
-#       COMPANY:  KdG
-#       VERSION:  20/09/2021 12:49:38 CET
-#============================================================
+############################
+# @author Elias De Hondt   #
+# @see https://eliasdh.com #
+# @since 19/09/2024        #
+############################
 
-mijnschijf="/dev/sdx" #replace by device 
+mijnschijf="/dev/sdx"
 
 (
 echo o # Create a new empty DOS partition table
