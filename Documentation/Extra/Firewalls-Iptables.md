@@ -25,6 +25,8 @@
     17. [👉Exercise 16: FTP server](#👉exercise-16-ftp-server)
     18. [👉Exercise 17: SSH server](#👉exercise-17-ssh-server)
 4. [📦Extra](#📦extra)
+    1. [📦Extra (Useful firewall rules)](#📦extra-useful-firewall-rules)
+    2. [📦Extra (Random)](#📦extra-random)
 5. [🔗Links](#🔗links)
 
 ---
@@ -422,29 +424,59 @@ sudo iptables -A INPUT -i lo -j ACCEPT
 
 ## 📦Extra
 
-- Show the iptables rules.
-```bash
-sudo iptables -L -v -n
-```
+### 📦Extra (Useful firewall rules)
 
-- Clear the firewall rules.
+- Block all incoming/outgoing ICMP traffic.
 ```bash
-sudo iptables -F
-```
-
-- Useful firewall rules.
-```bash
-# Block all incoming ICMP traffic
 sudo iptables -A INPUT -p icmp -j DROP
-
-# Block all outgoing ICMP traffic
 sudo iptables -A OUTPUT -p icmp -j DROP
 ```
 
-- Allow incoming SSH traffic.
+- Limit the number of ICMP packets to 1 per seconds and drop the rest.
 ```bash
-sudo iptables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT
+# The limit-burst allows the first 5 packets to pass through and then the limit of 1 packets per second is applied.
+sudo iptables -A INPUT -p icmp --icmp-type echo-request -m limit --limit 1/s --limit-burst 5 -j ACCEPT
+sudo iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
 ```
+
+- Block all incoming/outgoing traffic except SSH traffic.
+```bash
+# Allow all outgoing traffic
+sudo iptables -A OUTPUT -j ACCEPT
+
+# Allow incoming SSH traffic on port 22, but limit to 2 simultaneous connections
+sudo iptables -A INPUT -p tcp --dport 22 -m connlimit --connlimit-above 2 -j REJECT
+
+# Allow incoming SSH traffic on port 22 (for up to 2 connections)
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+# Drop all other incoming traffic
+sudo iptables -A INPUT -j DROP
+```
+
+### 📦Extra (Random)
+
+- Switch the hostnames of the machines.
+```bash
+sudo nano /etc/hostname
+sudo nano /etc/hosts
+sudo reboot
+```
+
+- Reset the firewall rules.
+```bash
+sudo iptables -F INPUT      # Flush the INPUT chain
+sudo iptables -F OUTPUT     # Flush the OUTPUT chain
+sudo iptables -Z            # Zero the packet and byte counters
+sudo iptables -P INPUT DROP # Set the default policy for the INPUT chain to DROP
+sudo iptables -P OUTPUT DROP # Set the default policy for the OUTPUT chain to DROP
+```
+
+- Check the iptables rules.
+```bash
+sudo iptables -n -L INPUT
+```
+
 
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).
