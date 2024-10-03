@@ -1,5 +1,5 @@
 ![logo](https://eliasdh.com/assets/media/images/logo-github.png)
-# 💙🤍W2P1 Portscan🤍💙
+# 💙🤍W3P1 Portscan🤍💙
 
 ## 📘Table of Contents
 
@@ -85,19 +85,19 @@ tshark -r Portscan-2021.pcap -Y "tcp.flags.syn == 1 && tcp.flags.ack == 1" -T fi
 - Method 1: Port sweep (ACK scan)
     - A port sweep is a scan that scans all ports on a target.
 
-        ![Image](/Images/W2P1-Portscan-1.png)
+        ![Image](/Images/W3P1-Portscan-1.png)
 - Method 2: Stealth scan
     - If the target responds with a SYN/ACK packet, the port is open. If the target responds with a RST packet, the port is closed.
 
-        ![Image](/Images/W2P1-Portscan-2.png)
+        ![Image](/Images/W3P1-Portscan-2.png)
 - Method 3: XMAS scan
     - A XMAS scan is a scan that sends a packet with the FIN, URG, and PSH flags set to 1. If the target responds with a RST packet, the port is closed. If the target does not respond, the port is open.
 
-        ![Image](/Images/W2P1-Portscan-3.png)
+        ![Image](/Images/W3P1-Portscan-3.png)
 - Method 4: FIN scans
     - A FIN scan is a scan that sends a packet with the FIN flag set to 1. If the target responds with a RST packet, the port is closed. If the target does not respond, the port is open.
 
-        ![Image](/Images/W2P1-Portscan-4.png)
+        ![Image](/Images/W3P1-Portscan-4.png)
 
 ### 👉Question 6:
 

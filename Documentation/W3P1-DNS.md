@@ -1,5 +1,5 @@
 ![logo](https://eliasdh.com/assets/media/images/logo-github.png)
-# 💙🤍W2P1 DNS🤍💙
+# 💙🤍W3P1 DNS🤍💙
 
 ## 📘Table of Contents
 
@@ -14,7 +14,8 @@
     6. [👉Exercise 5: Test forward lookup](#👉exercise-5-test-forward-lookup)
     7. [👉Exercise 6: Test reverse lookup](#👉exercise-6-test-reverse-lookup)
     8. [👉Exercise 7: Configure ping via nameserver](#👉exercise-7-configure-ping-via-nameserver)
-4. [🔗Links](#🔗links)
+4. [📦Extra](#📦extra)
+5. [🔗Links](#🔗links)
 
 ---
 
@@ -121,7 +122,7 @@ dig @192.168.1.210 mail.dehondt.localtest
 clear && dig @192.168.1.210 dehondt.localtest | grep -q "QUESTION" && echo -e "\e[32mOK\e[0m - dehondt.localtest" || echo -e "\e[31mFAILED\e[0m - dehondt.localtest"; dig @192.168.1.210 www.dehondt.localtest | grep -q "QUESTION" && echo -e "\e[32mOK\e[0m - www.dehondt.localtest" || echo -e "\e[31mFAILED\e[0m - www.dehondt.localtest"; dig @192.168.1.210 mail.dehondt.localtest | grep -q "QUESTION" && echo -e "\e[32mOK\e[0m - mail.dehondt.localtest" || echo -e "\e[31mFAILED\e[0m - mail.dehondt.localtest"
 ```
 
-![Image](/Images/W2P1-DNS-1.png)
+![Image](/Images/W3P1-DNS-1.png)
 
 ### 👉Exercise 4: Configure DNS server as DNS server
 
@@ -151,7 +152,7 @@ host www.dehondt.localtest
 clear && dig www.dehondt.localtest | grep -q "QUESTION" && echo -e "\e[32mOK\e[0m - www.dehondt.localtest (dig)" || echo -e "\e[31mFAILED\e[0m - www.dehondt.localtest"; nslookup www.dehondt.localtest | grep -q "142.250.179.142" && echo -e "\e[32mOK\e[0m - www.dehondt.localtest (nslookup)" || echo -e "\e[31mFAILED\e[0m - www.dehondt.localtest"; host www.dehondt.localtest | grep -q "142.250.179.142" && echo -e "\e[32mOK\e[0m - www.dehondt.localtest (host)" || echo -e "\e[31mFAILED\e[0m - www.dehondt.localtest"
 ```
 
-![Image](/Images/W2P1-DNS-2.png)
+![Image](/Images/W3P1-DNS-2.png)
 
 ### 👉Exercise 6: Test reverse lookup
 
@@ -210,7 +211,7 @@ host 192.168.1.210
 clear && dig -x 192.168.1.210 | grep -q "dehondt.localtest" && echo -e "\e[32mOK\e[0m - dig reverse lookup" || echo -e "\e[31mFAILED\e[0m - dig reverse lookup"; nslookup 192.168.1.210 | grep -q "dehondt.localtest" && echo -e "\e[32mOK\e[0m - nslookup" || echo -e "\e[31mFAILED\e[0m - nslookup"; host 192.168.1.210 | grep -q "dehondt.localtest" && echo -e "\e[32mOK\e[0m - host" || echo -e "\e[31mFAILED\e[0m - host"
 ```
 
-![Image](/Images/W2P1-DNS-3.png)
+![Image](/Images/W3P1-DNS-3.png)
 
 ### 👉Exercise 7: Configure ping via nameserver
 
@@ -229,7 +230,25 @@ hosts:          files dns
 ping www.dehondt.localtest
 ```
 
-![Image](/Images/W2P1-DNS-4.png)
+![Image](/Images/W3P1-DNS-4.png)
+
+## 📦Extra
+
+- Modify `/etc/resolv.conf` with extra configuration.
+```bash
+search eliasdh.com                # First looking in this domain
+nameserver 10.0.0.53              # Primary DNS server
+nameserver 10.0.0.54              # Secondary DNS server
+
+options timeout:2                 # Timeout after 2 seconds (default 5)
+options attempts:2                # Number of attempts (default 2)
+options rotate                    # Use all nameservers in order (default off)
+options single-request-reopen     # Reopen the connection for each request (default off)
+options single-request            # Only one request per connection (default off)
+options ndots:2                   # Number of dots before trying absolute name (default 1)
+options debug                     # Debugging information (default off)
+options inet6                     # Enable IPv6 (default off)
+```
 
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).
