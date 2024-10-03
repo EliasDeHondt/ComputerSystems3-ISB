@@ -1,5 +1,5 @@
 ![logo](https://eliasdh.com/assets/media/images/logo-github.png)
-# 💙🤍IBM Mainframe Challenge VSC1🤍💙
+# 💙🤍1 VSC🤍💙
 
 ## 📘Table of Contents
 
@@ -19,7 +19,7 @@
 
 ## 📚Reference
 
-- [📚IBM Mainframe Challenge VSC1](https://ibmzxplore-static.s3.eu-gb.cloud-object-storage.appdomain.cloud/VSC1.pdf)
+- [📚IBM Mainframe Challenge](https://ibmzxplore-static.s3.eu-gb.cloud-object-storage.appdomain.cloud/VSC1.pdf)
 
 ## ✨Steps
 
