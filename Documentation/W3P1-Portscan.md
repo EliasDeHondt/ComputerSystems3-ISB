@@ -100,11 +100,17 @@ tshark -r Portscan-2021.pcap -Y "tcp.flags.syn == 1 && tcp.flags.ack == 1" -T fi
 
 ### 👉Question 6
 
-- ???
+- `Nmap` was used to scan the target. This can be seen in the log file.
+```bash
+p0f -r Portscan-2021.pcap | grep -i "nmap"
+```
 
 ### 👉Question 7
 
-- ???
+- With this command you can analyze the log file.
+```bash
+nmap -sS -sV -O -T4 -p- -oN scan.txt
+```
 
 ### 👉Question 8
 
