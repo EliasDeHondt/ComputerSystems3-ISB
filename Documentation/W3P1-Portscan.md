@@ -28,7 +28,7 @@
 
 3. Wat is het IP adres van de target? (De persoon die SYN+ACK packets stuurt naar de aanvaller)
 
-4. Welke poorten staan open op de target?
+4. Welke poorten staan open op de target? (Externe poorten)
 
 5. De target werd op minstens 4 manieren gescand. Geef de 4 methodes en leg uit hoe ze werken.
 
