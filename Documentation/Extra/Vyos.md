@@ -5,8 +5,12 @@
 
 1. [📘Table of Contents](#📘table-of-contents)
 2. [📝Assignment](#📝assignment)
-
-5. [🔗Links](#🔗links)
+3. [✨Steps](#✨steps)
+    1. [👉Step 1: Configure the network of the server](#👉step-1-configure-the-network-of-the-server)
+    2. [👉Step 2: Configure the network of the VyOS](#👉step-2-configure-the-network-of-the-vyos)
+    3. [👉Step 3: SSH](#👉step-3-ssh)
+    4. [👉Step 4: Configure the firewall of the VyOS](#👉step-4-configure-the-firewall-of-the-vyos)
+4. [🔗Links](#🔗links)
 
 ---
 
