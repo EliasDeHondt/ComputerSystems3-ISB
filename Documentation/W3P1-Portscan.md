@@ -38,8 +38,7 @@
 
 8. Welk besturingssysteem draait de aanvaller?
 
-9. Stel snort in (zorg dat portscans gedetecteerd worden) en laat snort de portscan analyseren.
-Welke aanval(len) zie je in de logs?
+9. Stel snort in (zorg dat portscans gedetecteerd worden) en laat snort de portscan analyseren. Welke aanval(len) zie je in de logs?
 
 ## ✨Questions
 
@@ -116,7 +115,6 @@ ip=$(tshark -r Portscan-2021.pcap -Y "tcp.flags.syn == 1 && tcp.flags.ack == 1" 
 
 # Get the OS of the attacker
 p0f -r Portscan-2021.pcap | awk -v ip="$ip" '$0 ~ ip { getline; print $0 } $0 ~ /os/ { print $0 }' | awk '{print $4}' | grep -i "Windows" && echo "Windows" || echo "Linux"
-
 ```
 
 ### 👉Question 9
