@@ -109,7 +109,8 @@ p0f -r Portscan-2021.pcap | grep -i "nmap"
 
 - With this command you can analyze the log file.
 ```bash
-nmap -sS -sV -O -T4 -p- -oN scan.txt
+# On ip 192.168.1.1
+nmap -sS -sV -O -T4 -p- 192.168.1.1 -oN scan.txt
 ```
 
 ### 👉Question 8
