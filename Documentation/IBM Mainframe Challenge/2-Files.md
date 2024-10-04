@@ -6,7 +6,14 @@
 1. [📘Table of Contents](#📘table-of-contents)
 2. [📚Reference](#📚reference)
 3. [✨Steps](#✨steps)
-
+    1. [👉Step 1: Refine your filter](#👉step-1-refine-your-filter)
+    2. [👉Step 2: Les's make some datasets](#👉step-2-less-make-some-datasets)
+    3. [👉Step 3: Rename in the mainframe](#👉step-3-rename-in-the-mainframe)
+    4. [👉Step 4: Member Deletion](#👉step-4-member-deletion)
+    5. [👉Step 5: Copy and paste](#👉step-5-copy-and-paste)
+    6. [👉Step 6: Sequential access](#👉step-6-sequential-access)
+    7. [👉Step 7: Make your own member](#👉step-7-make-your-own-member)
+    8. [👉Step 8: Record your victory](#👉step-8-record-your-victory)
 4. [🔗Links](#🔗links)
 
 ---
@@ -86,12 +93,6 @@
 - Right-click on it and select `Submit Job` to hand in your work.
 - If you have completed all the steps correctly, the validation job will complete with a "completion code" `CC` of `0000`.
 - If you have missed a step or two, or not implemented an instruction correctly, the validation job will return a `CC` of `0127`.
-
-
-
-
-
-
 
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).
