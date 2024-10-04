@@ -6,15 +6,15 @@
 1. [📘Table of Contents](#📘table-of-contents)
 2. [📝Assignment](#📝assignment)
 3. [✨Exercises](#✨exercises)
-    1. [👉Question 1:](#👉question-1)
-    2. [👉Question 2:](#👉question-2)
-    3. [👉Question 3:](#👉question-3)
-    4. [👉Question 4:](#👉question-4)
-    5. [👉Question 5:](#👉question-5)
-    6. [👉Question 6:](#👉question-6)
-    7. [👉Question 7:](#👉question-7)
-    8. [👉Question 8:](#👉question-8)
-    9. [👉Question 9:](#👉question-9)
+    1. [👉Question 1](#👉question-1)
+    2. [👉Question 2](#👉question-2)
+    3. [👉Question 3](#👉question-3)
+    4. [👉Question 4](#👉question-4)
+    5. [👉Question 5](#👉question-5)
+    6. [👉Question 6](#👉question-6)
+    7. [👉Question 7](#👉question-7)
+    8. [👉Question 8](#👉question-8)
+    9. [👉Question 9](#👉question-9)
 4. [🔗Links](#🔗links)
 
 ---
@@ -24,9 +24,9 @@
 
 1. Hoe werd het binaire logbestand [Portscan-2021.pcap](/source/Portscan-2021.pcap) aangemaakt?
 
-2. Wat is het IP adres van de aanvaller?
+2. Wat is het IP adres van de aanvaller? (De persoon die SYN packets stuurt naar de target)
 
-3. Wat is het IP adres van de target?
+3. Wat is het IP adres van de target? (De persoon die SYN+ACK packets stuurt naar de aanvaller)
 
 4. Welke poorten staan open op de target?
 
@@ -43,7 +43,7 @@ Welke aanval(len) zie je in de logs?
 
 ## ✨Questions
 
-### 👉Question 1:
+### 👉Question 1
 
 - Install tshark with the following command:
 ```bash
@@ -59,28 +59,28 @@ The binary log file [Portscan-2021.pcap](/source/Portscan-2021.pcap) was created
 sudo tcpdump -i ens18 -w Portscan-2021.pcap # ens18 is the network interface (So not the same for your machine)
 ```
 
-### 👉Question 2:
+### 👉Question 2
 
 - With this command you can analyze the log file.
 ```bash
 tshark -r Portscan-2021.pcap -Y "tcp.flags.syn == 1 && tcp.flags.ack == 1" -T fields -e ip.src | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2}'
 ```
 
-### 👉Question 3:
+### 👉Question 3
 
 - With this command you can analyze the log file.
 ```bash
 tshark -r Portscan-2021.pcap -Y "tcp.flags.syn == 1 && tcp.flags.ack == 1" -T fields -e ip.dst | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2}'
 ```
 
-### 👉Question 4:
+### 👉Question 4
 
 - With this command you can analyze the log file.
 ```bash
-tshark -r Portscan-2021.pcap -Y "tcp.flags.syn == 1 && tcp.flags.ack == 1" -T fields -e tcp.dstport | sort -u
+tshark -r Portscan-2021.pcap -Y "tcp.flags.syn == 1 && tcp.flags.ack == 1" -T fields -e tcp.srcport | sort | uniq -c | sort -nr | awk '{print $2}'
 ```
 
-### 👉Question 5:
+### 👉Question 5
 
 - Method 1: Port sweep (ACK scan)
     - A port sweep is a scan that scans all ports on a target.
@@ -99,15 +99,15 @@ tshark -r Portscan-2021.pcap -Y "tcp.flags.syn == 1 && tcp.flags.ack == 1" -T fi
 
         ![Image](/Images/W3P1-Portscan-4.png)
 
-### 👉Question 6:
+### 👉Question 6
 
 - ???
 
-### 👉Question 7:
+### 👉Question 7
 
 - ???
 
-### 👉Question 8:
+### 👉Question 8
 
 - With this command you can analyze the log file (p0f).
 ```bash
@@ -119,7 +119,7 @@ p0f -r Portscan-2021.pcap | awk -v ip="$ip" '$0 ~ ip { getline; print $0 } $0 ~ 
 
 ```
 
-### 👉Question 9:
+### 👉Question 9
 
 - The following command is needed to analyze the log file.
 ```bash
