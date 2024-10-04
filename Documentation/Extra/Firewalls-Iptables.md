@@ -477,7 +477,6 @@ sudo iptables -P OUTPUT DROP # Set the default policy for the OUTPUT chain to DR
 sudo iptables -n -L INPUT
 ```
 
-
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).
 - 📫 How to reach us elias.dehondt@outlook.com
