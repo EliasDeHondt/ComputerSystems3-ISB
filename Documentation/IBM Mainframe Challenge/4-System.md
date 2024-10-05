@@ -6,20 +6,17 @@
 1. [📘Table of Contents](#📘table-of-contents)
 2. [📚Reference](#📚reference)
 3. [✨Steps](#✨steps)
-
 4. [🔗Links](#🔗links)
 
 ---
 
 ## 📚Reference
 
-- [📚IBM Mainframe Challenge]()
+- [📚IBM Mainframe Challenge](https://ibmzxplore-static.s3.eu-gb.cloud-object-storage.appdomain.cloud/Systems.pdf)
 
 ## ✨Steps
 
-### 👉Step 1: 
-
-
+- This is a theoretical challenge, so no steps are required.
 
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).
