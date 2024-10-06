@@ -1,5 +1,5 @@
 ![logo](https://eliasdh.com/assets/media/images/logo-github.png)
-# 💙🤍9 USS🤍💙
+# 💙🤍4 USS🤍💙
 
 ## 📘Table of Contents
 
@@ -13,7 +13,7 @@
 
 ## 📚Reference
 
-- [📚IBM Mainframe Challenge]()
+- [📚IBM Mainframe Challenge](https://ibmzxplore-static.s3.eu-gb.cloud-object-storage.appdomain.cloud/USS1.pdf)
 
 ## ✨Steps
 
