@@ -14,6 +14,8 @@
 
 - [📚IBM Mainframe Challenge](https://ibmzxplore-static.s3.eu-gb.cloud-object-storage.appdomain.cloud/Security-and-Privacy.pdf)
 
+![IBM Concepts](/Images/IBM-Concepts.png)
+
 ## ✨Steps
 
 - This is a theoretical challenge, so no steps are required.

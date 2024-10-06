@@ -15,6 +15,8 @@
 
 - [📚IBM Mainframe Challenge]()
 
+![IBM Fundamentals](/Images/IBM-Fundamentals.png)
+
 ## ✨Steps
 
 ### 👉Step 1: 

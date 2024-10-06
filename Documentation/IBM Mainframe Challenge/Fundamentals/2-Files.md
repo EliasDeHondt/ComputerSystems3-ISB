@@ -23,6 +23,8 @@
 - [📚IBM Mainframe Challenge](https://ibmzxplore-static.s3.eu-gb.cloud-object-storage.appdomain.cloud/FILES1.pdf)
 - [📚Extra](https://s3.amazonaws.com/infl-prod-videos/ibmzxplore%2F1627919051273-Data+Sets+and+Members-rendered.mp4)
 
+![IBM Fundamentals](/Images/IBM-Fundamentals.png)
+
 ## ✨Steps
 
 ### 👉Step 1: Refine your filter
