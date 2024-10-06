@@ -13,7 +13,7 @@
 
 ## 📚Reference
 
-- [📚IBM Mainframe Challenge]()
+- [📚IBM Mainframe Challenge](https://ibmzxplore-static.s3.eu-gb.cloud-object-storage.appdomain.cloud/CODE1.pdf)
 
 ## ✨Steps
 
