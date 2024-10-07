@@ -24,7 +24,7 @@
 
 - [📚IBM Mainframe Challenge](https://ibmzxplore-static.s3.eu-gb.cloud-object-storage.appdomain.cloud/USS1.pdf)
 
-![IBM Fundamentals](/Images/IBM-Fundamentals.png)
+![IBM Fundamentals](/Images/IBM-Fundamentals+Concepts.png)
 
 ## ✨Steps
 
