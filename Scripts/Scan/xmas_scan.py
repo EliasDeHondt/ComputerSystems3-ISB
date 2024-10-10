@@ -9,16 +9,19 @@ import time
 
 def xmas_scan(target):
     for port in range(1, 65536):
-        pkt = IP(dst=target)/TCP(dport=port, flags="FPU")
+        pkt = Ether(dst="ff:ff:ff:ff:ff:ff") / IP(dst=target) / TCP(dport=port, flags="FPU")
         start_time = time.time()
-        ans, _ = sr(pkt, timeout=1, verbose=0)
+        ans, _ = srp(pkt, timeout=1, verbose=0)
 
         if ans:
-            for _, rcv in ans:
+            for snd, rcv in ans:
                 elapsed_time = time.time() - start_time
                 print(f"Datum/tijd: {time.strftime('%Y-%m-%d %H:%M:%S')}")
                 print(f"Elapsed time: {elapsed_time:.3f} seconds")
-                print(f"MAC Address: {rcv.hwsrc}")
+                if rcv.haslayer(Ether):
+                    print(f"MAC Address: {rcv[Ether].src}")
+                print(f"Source IP: {rcv[IP].src}")
+                print(f"Destination IP: {rcv[IP].dst}")
                 print(f"Port {port}: Open")
         else:
             print(f"Port {port}: Closed/Filtered")

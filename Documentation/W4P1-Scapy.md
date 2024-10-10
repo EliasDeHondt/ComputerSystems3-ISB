@@ -17,7 +17,8 @@
     9. [👉Exercise 8: DHCP request](#👉exercise-8-dhcp-request)
     10. [👉Exercise 9: Scans](#👉exercise-9-scans)
     11. [👉Exercise 10: Writing PCAP](#👉exercise-10-writing-pcap)
-4. [🔗Links](#🔗links)
+4. [📦Extra](#📦extra)
+5. [🔗Links](#🔗links)
 
 ---
 
@@ -521,32 +522,34 @@ import time
 
 found_servers = set()
 
+interface = "ens18"
+
 def handle_dhcp(packet):
     if packet.haslayer(DHCP) and packet[DHCP].options[0][1] == 2:
         dhcp_server_ip = packet[IP].src
         found_servers.add(dhcp_server_ip)
-        print(f"[*] DHCP Server gevonden: {dhcp_server_ip}")
+        print(f"[*] DHCP Server found: {dhcp_server_ip}")
 
 def send_dhcp_discover():
     discover = Ether(dst="ff:ff:ff:ff:ff:ff") / IP(src="0.0.0.0", dst="255.255.255.255") / UDP(sport=68, dport=67) / BOOTP(chaddr="12:34:56:78:9a:bc") / DHCP(options=[("message-type", "discover"), "end"])
-    sendp(discover)
-    print("[*] DHCP Discover-pakket verzonden.")
+    sendp(discover, iface=interface)
+    print(f"[*] DHCP Discover packet sent via interface {interface}.")
 
 send_dhcp_discover()
 
-print("[*] Luisteren naar DHCP-antwoord... (druk Ctrl+C om te stoppen)")
+print(f"[*] Listening for DHCP responses on {interface}... (press Ctrl+C to stop)")
 while True:
     try:
-        sniff(filter="udp and (port 67 or port 68)", prn=handle_dhcp, timeout=5)
+        sniff(filter="udp and (port 67 or port 68)", prn=handle_dhcp, iface=interface, timeout=5)
         time.sleep(1)
 
         if found_servers:
-            print("Gevonden DHCP-servers:")
+            print("Found DHCP servers:")
             for server in found_servers:
                 print(f"  - {server}")
 
     except KeyboardInterrupt:
-        print("\nStoppen...")
+        print("\nStopping...")
         break
 ```
 - Make the file executable and run it as root user:
@@ -557,9 +560,9 @@ sudo ./08_dhcp_request.py
 
 ### 👉Exercise 9: Scans
 
-- This script will perform an XMAS scan [09_xmas_scan.py](/Scripts/09_xmas_scan.py):
+- This script will perform an XMAS scan [09_xmas_scan.py](/Scripts/scan/xmas_scan.py):
 ```bash
-sudo nano 09_xmas_scan.py
+sudo nano xmas_scan.py
 ```
 - Copy the following code into the file:
 ```python
@@ -574,16 +577,19 @@ import time
 
 def xmas_scan(target):
     for port in range(1, 65536):
-        pkt = IP(dst=target)/TCP(dport=port, flags="FPU")
+        pkt = Ether(dst="ff:ff:ff:ff:ff:ff") / IP(dst=target) / TCP(dport=port, flags="FPU")
         start_time = time.time()
-        ans, _ = sr(pkt, timeout=1, verbose=0)
+        ans, _ = srp(pkt, timeout=1, verbose=0)
 
         if ans:
-            for _, rcv in ans:
+            for snd, rcv in ans:
                 elapsed_time = time.time() - start_time
                 print(f"Datum/tijd: {time.strftime('%Y-%m-%d %H:%M:%S')}")
                 print(f"Elapsed time: {elapsed_time:.3f} seconds")
-                print(f"MAC Address: {rcv.hwsrc}")
+                if rcv.haslayer(Ether):
+                    print(f"MAC Address: {rcv[Ether].src}")
+                print(f"Source IP: {rcv[IP].src}")
+                print(f"Destination IP: {rcv[IP].dst}")
                 print(f"Port {port}: Open")
         else:
             print(f"Port {port}: Closed/Filtered")
@@ -594,13 +600,13 @@ xmas_scan(target_ip)
 ```
 - Make the file executable and run it as root user:
 ```bash
-sudo chmod +x 09_xmas_scan.py
-sudo ./09_xmas_scan.py
+sudo chmod +x xmas_scan.py
+sudo ./xmas_scan.py
 ```
 
-- This script will perform a SYN scan [09_syn_scan.py](/Scripts/09_syn_scan.py):
+- This script will perform a SYN scan [syn_scan.py](/Scripts/scan/syn_scan.py):
 ```bash
-sudo nano 09_syn_scan.py
+sudo nano syn_scan.py
 ```
 - Copy the following code into the file:
 ```python
@@ -638,8 +644,8 @@ syn_scan(target_ip)
 ```
 - Make the file executable and run it as root user:
 ```bash
-sudo chmod +x 09_syn_scan.py
-sudo ./09_syn_scan.py
+sudo chmod +x syn_scan.py
+sudo ./syn_scan.py
 ```
 
 ### 👉Exercise 10: Writing PCAP
@@ -675,6 +681,26 @@ write_pcap(sys.argv[1])
 sudo chmod +x 10_write_pcap.py
 sudo ./10_write_pcap.py demo.pcap
 ```
+
+## 📦Extra
+
+- [XMAS Scan](/Scripts/Scan/xmas_scan.py): 
+- [SYN Scan](/Scripts/Scan/syn_scan.py):
+- [ACK Scan](/Scripts/Scan/ack_scan.py):
+- [FIN Scan](/Scripts/Scan/fin_scan.py):
+- [NULL Scan](/Scripts/Scan/null_scan.py):
+- [UDP Scan](/Scripts/Scan/udp_scan.py):
+
+
+
+
+
+
+
+
+
+
+
 
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).
