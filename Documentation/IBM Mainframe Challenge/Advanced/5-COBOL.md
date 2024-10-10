@@ -6,7 +6,8 @@
 1. [📘Table of Contents](#📘table-of-contents)
 2. [📚Reference](#📚reference)
 3. [✨Steps](#✨steps)
-
+    1. [👉Step 1: Modify cobol code](#👉step-1-modify-cobol-code)
+    2. [👉Step 5: Finished](#👉step-5-finished)
 4. [🔗Links](#🔗links)
 
 ---
