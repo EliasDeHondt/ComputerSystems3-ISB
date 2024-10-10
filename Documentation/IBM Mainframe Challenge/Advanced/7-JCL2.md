@@ -13,7 +13,7 @@
 
 ## 📚Reference
 
-- [📚IBM Mainframe Challenge](https://ibmzxplore-static.s3.eu-gb.cloud-object-storage.appdomain.cloud/JSL2.pdf)
+- [📚IBM Mainframe Challenge](https://ibmzxplore-static.s3.eu-gb.cloud-object-storage.appdomain.cloud/JCL2.pdf)
 
 ![IBM Fundamentals](/Images/IBM-Advanced.png)
 
