@@ -6,7 +6,12 @@
 1. [📘Table of Contents](#📘table-of-contents)
 2. [📚Reference](#📚reference)
 3. [✨Steps](#✨steps)
-
+    1. [👉Step 1: Connect through SSH](#👉step-1-connect-through-ssh)
+    2. [👉Step 2: Install the web server](#👉step-2-install-the-web-server)
+    3. [👉Step 3: Firewall](#👉step-3-firewall)
+    4. [👉Step 4: Testing](#👉step-4-testing)
+    5. [👉Step 5: Let's build a game](#👉step-5-lets-build-a-game)
+    6. [👉Step 6: Finished](#👉step-6-finished)
 4. [🔗Links](#🔗links)
 
 ---
