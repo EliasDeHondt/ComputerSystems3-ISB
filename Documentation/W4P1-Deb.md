@@ -94,9 +94,72 @@ bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-I
     tar -cvzf ${package}-${version}.tar.gz ${package}-${version}
     ```
 
+### 👉Exercise 3: dh_make
+
+- Run the following commands:
+```bash
+cd pakket/pakket-1
+dh_make --native
+```
+- Press `s` to select `single binary`.
+- Press `y` to confirm the license.
+- Press `y` to confirm the package name.
+
+### 👉Exercise 4: Edit the control file
+
+- Edit the control file
+```bash
+nano debian/control
+```
+- Delete the lines that start with `Description:`
+```bash
+#Vcs-Browser: https://salsa.debian.org/debian/pakket
+#Vcs-Git: https://salsa.debian.org/debian/pakket.git
+Homepage: <insert the upstream URL, if relevant>
+```
+
+- Change the line `Section: unknown` to `Section: misc`.
+- Change the line `Depends: ${shlibs:Depends}, ${misc:Depends}` to `Depends: ${zenity:Depends}, ${menu:Depends}`.
+- Change the line:
+    ```plaintext
+    Description: <insert up to 60 chars description>
+     <insert long description, indented with spaces>
+    ```
+    - To:
+    ```plaintext
+    Description: This is a snake game
+     This is a program that will display the snake game .
+     And other things that are not important.
+    ```
+- Change the line `Architecture: any` to `Architecture: all`.
+    - **Note:** Architecture any means compile for any platform and all means one package for all platforms
 
 
+- Remove the README & copyright file
+```bash
+rm debian/README
+rm debian/README.Debian
+rm debian/README.source
+rm debian/copyright
+```
 
+### 👉Exercise 5: Changelog
+
+- Create a changelog file
+```bash
+dch --create
+dch -a "Add icon"
+# dch -r "Release" # -r is for release
+# dch -i "Increment" # -i is for increment
+```
+
+### 👉Exercise 6: Make the manpage
+
+- Get the manpage from the github repository:
+```bash
+wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/pakket.1
+cp pakket.1 debian
+```
 
 
 

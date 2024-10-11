@@ -1,4 +1,10 @@
 #!/bin/bash
+############################
+# @author Elias De Hondt   #
+# @see https://eliasdh.com #
+# @since 11/10/2024        #
+############################
+
 package="pakket"
 version="1"
 mkdir -p "${package}/${package}-${version}"
