@@ -44,7 +44,7 @@
 - Install the necessary software packages
 ```bash
 sudo apt-get update -y && sudo apt-get upgrade -y
-sudo apt-get install dh-make debhelper fakeroot devscripts zenity menu wget curl -y
+sudo apt-get install dh-make debhelper fakeroot devscripts zenity menu wget curl dbus-x11 -y
 ```
 
 - If you want to leave the virtual environment, you can use the following command
@@ -181,13 +181,11 @@ echo "debian/pakket.1" >> debian/manpages
 - Get the [icon](/Images/32x32.png) from the github repository:
 ```bash
 wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Images/pakket.png
-mv pakket.png
 ```
 
 - Get the [pakket.desktop](/Scripts/Deb/pakket.desktop) file from the github repository:
 ```bash
 wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/pakket.desktop
-mv pakket.desktop
 ```
 
 - Get the [install](/Scripts/Deb/install) file from the github repository:
@@ -211,11 +209,13 @@ debuild -us -uc
 - Install the package
 ```bash
 sudo dpkg -i ../pakket_1_all.deb
+# To rm the package
+sudo dpkg -r pakket
 ```
 
 - Run the package
 ```bash
-pakket
+pakket usr/bin
 ```
 
 ## 🔗Links
