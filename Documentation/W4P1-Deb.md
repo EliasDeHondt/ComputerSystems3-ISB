@@ -36,7 +36,7 @@
 - Install the necessary software packages
 ```bash
 sudo apt-get update -y && sudo apt-get upgrade -y
-sudo apt-get install dh-make debhelper fakeroot devscripts python3-venv python3 -y
+sudo apt-get install dh-make debhelper fakeroot devscripts zenity menu python3-venv python3 wget curl -y
 ```
 
 - Create a virtual environment and install the necessary packages
@@ -54,10 +54,47 @@ deactivate
 
 - Run the following [script](/Scripts/Deb/variables.sh) to set the environment variables:
 ```bash
-wget https://raw.githubusercontent.com/EliasDeHondt/main/Scripts/Deb/variables.sh
-sudo chmod +x variables.sh
-./variables.sh
+bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/variables.sh )
 ```
+- [script](/Scripts/Deb/variables.sh):
+    ```bash
+    #!/bin/bash
+    cat >>~/.bashrc <<EOF
+    DEBEMAIL="elias.dehondt@student.kdg.be"
+    DEBFULLNAME="Elias De Hondt"
+    export DEBEMAIL DEBFULLNAME
+    EOF
+    ```
+- Log out and log back in the terminal
+- Test the environment variables
+```bash
+echo $DEBEMAIL
+echo $DEBFULLNAME
+```
+
+### 👉Exercise 2: Make the executable
+
+- Run the following [script](/Scripts/Deb/executable.sh) to make the executable:
+```bash
+bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/executable.sh )
+```
+- [script](/Scripts/Deb/executable.sh):
+    ```bash
+    #!/bin/bash
+    package="pakket"
+    version="1"
+    mkdir -p "${package}/${package}-${version}"
+    cd "${package}/${package}-${version}"
+    cat > ${package} <<EOF
+    #!/bin/sh
+    zenity --warning --text="\`exec uname -a\`"
+    EOF
+    chmod 755 $package
+    cd ..
+    tar -cvzf ${package}-${version}.tar.gz ${package}-${version}
+    ```
+
+
 
 
 
