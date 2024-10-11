@@ -158,9 +158,33 @@ dch -a "Add icon"
 - Get the manpage from the github repository:
 ```bash
 wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/pakket.1
-cp pakket.1 debian
+mv pakket.1 debian
 ```
 
+- Test the manpage
+```
+man ./debian/pakket.1
+```
+
+- Set the reference to the manpage in the control file
+```bash
+touch debian/manpages
+echo "debian/pakket.1" >> debian/manpages
+```
+
+### 👉Exercise 7: pakket.desktop + Icon
+
+- Get the [icon](/Images/32x32.png) from the github repository:
+```bash
+wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Images/32x32.png
+mv pakket.png debian
+```
+
+- Get the [pakket.desktop](/Scripts/Deb/pakket.desktop) file from the github repository:
+```bash
+wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/pakket.desktop
+mv pakket.desktop debian
+```
 
 
 
