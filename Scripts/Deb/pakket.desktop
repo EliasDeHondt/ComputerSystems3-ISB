@@ -1,11 +1,11 @@
-[Desktop Entry] 
-Name=Pakket 
-Comment=Pakket met zenity 
-GenericName=Pakket 
-X-GNOME-FullName=Pakket 
-Exec=pakket 
-Icon=pakket 
-StartupNotify=false 
-Terminal=false 
-Type=Application 
-Categories=Education;
+[Desktop Entry]
+Name=Pakket
+Comment=Pakket met zenity
+GenericName=Pakket
+X-GNOME-FullName=Pakket
+Exec=pakket
+Icon=pakket
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Utility;Education;

@@ -164,6 +164,25 @@ dch -a "Add icon"
 wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/pakket.1
 mv pakket.1 debian
 ```
+```plaintext
+.TH pakket 1 "Oktober 2024" "Snake Game 1.0" "User Commands"
+.SH NAME 
+pakket \- program that shows a graphical uname \-a 
+.SH SYNOPSIS 
+.B pakket 
+.RI [ options ] 
+.br 
+.SH DESCRIPTION 
+This manual page explains the 
+.B pakket 
+program. This program uses zenity to show a warning message with uname \-a info
+ .PP 
+\fBpakket\fP is showing uname \-a info in X11 
+.SH "SEE ALSO" 
+  zenity(1), uname(1)
+ AUTHOR
+  Elias De Hondt <elias.dehondt@student.kdg.be>
+```
 
 - Test the manpage
 ```
@@ -187,11 +206,29 @@ wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Im
 ```bash
 wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/pakket.desktop
 ```
+```plaintext
+[Desktop Entry]
+Name=Pakket
+Comment=Pakket met zenity
+GenericName=Pakket
+X-GNOME-FullName=Pakket
+Exec=pakket
+Icon=pakket
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Utility;Education;
+```
 
 - Get the [install](/Scripts/Deb/install) file from the github repository:
 ```bash
 wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/install
 mv install debian
+```
+```plaintext
+pakket usr/bin
+pakket.png usr/share/pixmaps
+pakket.desktop usr/share/applications
 ```
 
 ### 👉Exercise 8: Build the package
