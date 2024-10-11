@@ -1,0 +1,14 @@
+Source: pakket
+Section: misc
+Priority: optional
+Maintainer: Elias De Hondt <elias.dehondt@student.kdg.be>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.0
+Rules-Requires-Root: no
+
+Package: pakket
+Architecture: all
+Depends: zenity
+Description: This is a snake game
+ This is a program that will display the snake game .
+ And other things that are not important.

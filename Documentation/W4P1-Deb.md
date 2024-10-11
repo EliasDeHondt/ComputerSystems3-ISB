@@ -40,17 +40,11 @@
 ## ✨Exercises
 
 ### 👉Exercise 0: Install necessary software packages
-
+èg 
 - Install the necessary software packages
 ```bash
 sudo apt-get update -y && sudo apt-get upgrade -y
-sudo apt-get install dh-make debhelper fakeroot devscripts zenity menu python3-venv python3 wget curl -y
-```
-
-- Create a virtual environment and install the necessary packages
-```bash
-python3 -m venv ~/demo_snake
-source ~/demo_snake/bin/activate
+sudo apt-get install dh-make debhelper fakeroot devscripts zenity menu wget curl -y
 ```
 
 - If you want to leave the virtual environment, you can use the following command
@@ -117,7 +111,8 @@ dh_make --native
 
 - Edit the control file
 ```bash
-nano debian/control
+bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/control )
+mv control debian
 ```
 - Delete the lines that start with `Description:`
 ```bash
