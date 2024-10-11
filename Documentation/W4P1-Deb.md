@@ -176,7 +176,7 @@ echo "debian/pakket.1" >> debian/manpages
 
 - Get the [icon](/Images/32x32.png) from the github repository:
 ```bash
-wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Images/32x32.png
+wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Images/pakket.png
 mv pakket.png debian
 ```
 
@@ -184,6 +184,12 @@ mv pakket.png debian
 ```bash
 wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/pakket.desktop
 mv pakket.desktop debian
+```
+
+- Get the [install](/Scripts/Deb/install) file from the github repository:
+```bash
+wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/install
+mv install debian
 ```
 
 
