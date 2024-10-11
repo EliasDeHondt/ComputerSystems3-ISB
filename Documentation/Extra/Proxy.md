@@ -7,8 +7,15 @@
 2. [📝Assignment](#📝assignment)
 3. [✨Exercises](#✨exercises)
     1. [👉Exercise 0: Preparations](#👉exercise-0-preparations)
-    
-5. [🔗Links](#🔗links)
+    2. [👉Exercise 1: Preparations](#👉exercise-1-preparations)
+    3. [👉Exercise 2: Configure squid3](#👉exercise-2-configure-squid3)
+    4. [👉Exercise 3: Block .kdg.be](#👉exercise-3-block-kdgbe)
+    5. [👉Exercise 4: Remove ads](#👉exercise-4-remove-ads)
+    6. [👉Exercise 5: Content filtering](#👉exercise-5-content-filtering)
+    7. [👉Exercise 6: Prox cache](#👉exercise-6-prox-cache)
+    8. [👉Exercise 7: Real-time virus check](#👉exercise-7-real-time-virus-check)
+    9. [👉Exercise 8: Install webmin](#👉exercise-8-install-webmin)
+4. [🔗Links](#🔗links)
 
 ---
 
@@ -68,7 +75,7 @@
 - Install the necessary software on both machines.
 ```bash
 sudo apt-get update && sudo apt-get upgrade -y
-sudo apt-get install squid curl e2guardian clamav-daemon clamav-testfiles -y
+sudo apt-get install squid curl e2guardian clamav-daemon clamav-testfiles libauthen-pam-perl apt-show-versions python3 -y
 ```
 
 ### 👉Exercise 2: Configure squid3
@@ -142,10 +149,75 @@ time wget -e use_proxy=yes -e http_proxy=http://localhost:8080 http://tinycoreli
 sudo du -sh /var/spool/squid
 ```
 
+### 👉Exercise 7: Real-time virus check
 
+- Set the user and group of e2guardian to the clamav daemon user.
+```bash
+sudo sed -i 's/#daemonuser = 'e2guardian'/daemonuser = 'clamav'/g' /etc/e2guardian/e2guardian.conf
+sudo sed -i 's/#daemongroup = 'e2guardian'/daemongroup = 'clamav'/g' /etc/e2guardian/e2guardian.conf
+```
 
+- Set the clamdscan.conf file.
+```bash
+sudo rm /etc/e2guardian/contentscanners/clamdscan.conf
+sudo touch /etc/e2guardian/contentscanners/clamdscan.conf
+sudo bash -c 'echo "plugname = \"clamdscan\"" >> /etc/e2guardian/contentscanners/clamdscan.conf'
+sudo bash -c 'echo "clamdudsfile = \"/run/clamav/clamd.ctl\"" >> /etc/e2guardian/contentscanners/clamdscan.conf'
+```
 
+- Restart e2guardian.
+```bash
+sudo systemctl stop e2guardian
+sudo rm /tmp/.e2guardian*
+sudo systemctl start e2guardian
+```
 
+- Solve any Permission Denied problems by chgrp (no chmod 777!).
+```bash
+sudo chgrp clamav /var/log/e2guardian
+sudo chgrp clamav /var/log/e2guardian/access.log
+sudo chgrp clamav /var/log/e2guardian/error.log
+sudo chgrp clamav /var/log/e2guardian/e2guardian.log
+sudo chgrp clamav /var/log/e2guardian/e2guardianf1.log
+sudo chgrp clamav /var/log/e2guardian/e2guardianf2.log
+
+sudo chgrp clamav /var/log/clamav
+sudo chgrp clamav /var/log/clamav/clamav.log
+sudo chgrp clamav /var/log/clamav/freshclam.log
+```
+
+- Check the clamav user.
+```bash
+ps aux | grep clamav
+```
+
+- Check the e2guardian user.
+```bash
+ps aux | grep e2guardian
+```
+
+- Check the squid user.
+```bash
+ps aux | grep squid
+```
+
+### 👉Exercise 8: Install webmin
+
+- Install webmin.
+```bash
+sudo sh -c 'echo "deb http://download.webmin.com/download/repository sarge contrib" > /etc/apt/sources.list.d/webmin.list'
+wget -qO - http://www.webmin.com/jcameron-key.asc | sudo apt-key add -
+sudo apt-get update && sudo apt-get upgrade -y
+sudo apt-get install webmin -y
+```
+
+- Access webmin via your browser `http://localhost:10000`.
+    - Login with your user and password.
+
+- Test in the terminal.
+```bash
+wget -O - http://localhost:10000
+```
 
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).
