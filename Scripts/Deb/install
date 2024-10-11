@@ -1,2 +1,3 @@
-debian/32x32.png /usr/share/pixmap
-debian/pakket.desktop /usr/share/applications
+pakket usr/bin
+pakket.png usr/share/pixmap
+pakket.desktop usr/share/applications
