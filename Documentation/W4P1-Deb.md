@@ -6,7 +6,15 @@
 1. [📘Table of Contents](#📘table-of-contents)
 2. [📝Assignment](#📝assignment)
 3. [✨Exercises](#✨exercises)
-
+    1. [👉Exercise 0: Install necessary software packages](#👉exercise-0-install-necessary-software-packages)
+    2. [👉Exercise 1: Set environment variables](#👉exercise-1-set-environment-variables)
+    3. [👉Exercise 2: Make the executable](#👉exercise-2-make-the-executable)
+    4. [👉Exercise 3: dh_make](#👉exercise-3-dh_make)
+    5. [👉Exercise 4: Edit the control file](#👉exercise-4-edit-the-control-file)
+    6. [👉Exercise 5: Changelog](#👉exercise-5-changelog)
+    7. [👉Exercise 6: Make the manpage](#👉exercise-6-make-the-manpage)
+    8. [👉Exercise 7: pakket.desktop + Icon](#👉exercise-7-pakketdesktop--icon)
+    9. [👉Exercise 8: Build the package](#👉exercise-8-build-the-package)
 4. [🔗Links](#🔗links)
 
 ---
@@ -119,7 +127,7 @@ Homepage: <insert the upstream URL, if relevant>
 ```
 
 - Change the line `Section: unknown` to `Section: misc`.
-- Change the line `Depends: ${shlibs:Depends}, ${misc:Depends}` to `Depends: ${zenity:Depends}, ${menu:Depends}`.
+- Change the line `Depends: ${shlibs:Depends}, ${misc:Depends}` to `Depends: zenity`.
 - Change the line:
     ```plaintext
     Description: <insert up to 60 chars description>
@@ -134,14 +142,15 @@ Homepage: <insert the upstream URL, if relevant>
 - Change the line `Architecture: any` to `Architecture: all`.
     - **Note:** Architecture any means compile for any platform and all means one package for all platforms
 
-
 - Remove the README & copyright file
 ```bash
 rm debian/README
 rm debian/README.Debian
 rm debian/README.source
-rm debian/copyright
 ```
+
+- Remove all the `#` lins in the dir `debian`.
+- Fill in all the `<..>` in the dir `debian`.
 
 ### 👉Exercise 5: Changelog
 
@@ -192,19 +201,27 @@ wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Sc
 mv install debian
 ```
 
+### 👉Exercise 8: Build the package
 
+- Drop the files in the directories .EX and .ex
+```bash
+sudo rm debian/*.ex debian/*.EX
+```
 
+- Build the package
+```bash
+debuild -us -uc
+```
 
+- Install the package
+```bash
+sudo dpkg -i ../pakket_1_all.deb
+```
 
-
-
-
-
-
-
-
-
-
+- Run the package
+```bash
+pakket
+```
 
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).
