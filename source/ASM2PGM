@@ -1,0 +1,68 @@
+//ASM2PGM  JOB 1,NOTIFY=&SYSUID
+//ASM2PGM  EXEC ASMACL,MBR=ASM2PGM
+//C.SYSIN  DD *
+ASM2PGM   TITLE 'contest program'
+ASM2PGM   CSECT
+*--------------------------------------------------------------------*
+*        register equates                                            *
+*--------------------------------------------------------------------*
+R0       EQU   0                       register 0
+BASEREG  EQU   12                      base register
+SAVEREG  EQU   13                      save area register
+RETREG   EQU   14                      caller's return address
+ENTRYREG EQU   15                      entry address
+SUMREG   EQU   6                       sum register (previously R2)
+LOOPREG  EQU   7                       loop counter (previously R3)
+         EJECT
+*--------------------------------------------------------------------*
+*        standard entry setup, save area chaining, establish         *
+*        base register and addressibility                            *
+*--------------------------------------------------------------------*
+         USING ASM2PGM,ENTRYREG         establish addressibility
+         B     SETUP                   branch around eyecatcher
+         DC    CL8'ASM2PGM'            program name
+         DC    CL8'&SYSDATE'           program assembled date
+SETUP    STM   RETREG,BASEREG,12(SAVEREG)  save caller's registers
+         BALR  BASEREG,R0              establish base register
+         DROP  ENTRYREG                drop initial base register
+         USING *,BASEREG               establish addressibilty
+         LA    ENTRYREG,SAVEAREA       point to this program save area
+         ST    SAVEREG,4(,ENTRYREG)    save address of caller
+         ST    ENTRYREG,8(,SAVEREG)    save address of this program
+         LR    SAVEREG,ENTRYREG        point to this program savearea
+         EJECT
+*--------------------------------------------------------------------*
+*        program body                                                *
+*--------------------------------------------------------------------*
+         SR    SUMREG,SUMREG           initialize sum register (R6=0)
+         L     LOOPREG,=F'10'          initialize loop counter to 10
+LOOPINIT DS    0H
+LOOP     DS    0H
+         A     SUMREG,=F'5'            add 5 to sum register (R6)
+         BCT   LOOPREG,LOOP            decrement loop counter (R7)
+STOP1    LH    7,HALFCON               load halfword constant
+STOP2    A     7,FULLCON               add fullword constant
+STOP3    ST    7,HEXCON                store in hexadecimal constant
+         EJECT
+*--------------------------------------------------------------------*
+*        standard exit -  restore caller's registers and             *
+*        return to caller                                            *
+*--------------------------------------------------------------------*
+EXIT     DS    0H                      halfword boundary alignment
+         L     SAVEREG,4(,SAVEREG)     restore caller's save area addr
+         L     RETREG,12(,SAVEREG)     restore return address register
+         LM    R0,BASEREG,20(SAVEREG)  restore all regs. except reg15
+         WTO   'Giving control back to system'
+         BR    RETREG                  return to caller
+         EJECT
+*--------------------------------------------------------------------*
+*        storage and constant definitions.                           *
+*--------------------------------------------------------------------*
+SAVEAREA DC    18F'-1'                 register save area
+FULLCON  DC    F'-1'
+HEXCON   DC    XL4'9ABC'
+HALFCON  DC    H'32'
+         END   ASM2PGM
+//GO      EXEC PGM=ASM2PGM
+//STEPLIB  DD DSN=&SYSUID..LOAD,DISP=SHR
+//PRINT    DD SYSOUT=*
