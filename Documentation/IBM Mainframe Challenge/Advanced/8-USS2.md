@@ -9,7 +9,7 @@
     1. [👉Step 1: Connect through SSH](#👉step-1-connect-through-ssh)
     2. [👉Step 2: Setup](#👉step-2-setup)
     3. [👉Step 3: Scripting](#👉step-3-scripting)
-    4. [👉Step 2: Finished](#👉step-2-finished)
+    4. [👉Step 4: Finished](#👉step-2-finished)
 4. [🔗Links](#🔗links)
 
 ---
@@ -68,7 +68,7 @@ chmod +x animals.sh && ./animals.sh Dog
 cat ~/uss2output/message
 ```
 
-### 👉Step 2: Finished
+### 👉Step 4: Finished
 
 - Now submit the job `CHKUSS2` from `ZXP.PUBLIC.JCL` to validate the correct output from code (`CC`) of `0000`.
 

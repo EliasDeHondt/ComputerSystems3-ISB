@@ -7,7 +7,7 @@
 2. [📚Reference](#📚reference)
 3. [✨Steps](#✨steps)
     1. [👉Step 1: Modify cobol code](#👉step-1-modify-cobol-code)
-    2. [👉Step 5: Finished](#👉step-5-finished)
+    2. [👉Step 2: Finished](#👉step-2-finished)
 4. [🔗Links](#🔗links)
 
 ---
@@ -86,7 +86,7 @@ Else
 - Right-click your JCL member `JSONJCL` and select `Submit Job`.
 - Copy the output from the job in `cobol.html` in the home directory of your USS.
 
-### 👉Step 5: Finished
+### 👉Step 2s: Finished
 
 - Now submit the job `CHKACBLH` from `ZXP.PUBLIC.JCL` to validate the correct output from code (`CC`) of `0000`.
 
