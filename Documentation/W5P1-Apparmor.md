@@ -22,16 +22,17 @@
 - **REFERENTIES:**
     - [REF A](http://www.mono-project.com/docs/getting-started/application-deployment/)
 
+- **Opmerking:** Je profiel opnieuw maken kan je door `sudo rm /etc/apparmor.d/usr.bin.getstuff` te gebruiken.
+
 1. Download het mono programma `getstuff.exe`
     - Dit programma downloadt het python programma `httpserver.py`
     - Volg de Layout Recommendation vanuit `REF A` om dit als een regulier programma op je systeem te voorzien:
-        - maak de directory `/usr/lib/getstuff` aan
-        - copieer `getstuff.exe` naar `/usr/lib/getstuff/getstuff.exe`
-        - schrijf in `/usr/bin/getstuff` dat je `/usr/lib/gestuff/getstuff.exe` met mono opstart 
-        - maak `/usr/bin/getstuff` executable 
+        - Maak de directory `/usr/lib/getstuff` aan
+        - Copieer `getstuff.exe` naar `/usr/lib/getstuff/getstuff.exe`
+        - Schrijf in `/usr/bin/getstuff` dat je `/usr/lib/gestuff/getstuff.exe` met mono opstart 
+        - Maak `/usr/bin/getstuff` executable 
 
-2. Maak als root een apparmor profiel aan voor getstuff
-    - sudo aa-genprof `/usr/bin/getstuff`
+2. Maak als root een apparmor profiel aan voor getstuff `sudo aa-genprof /usr/bin/getstuff`
     - Start nu de applicatie
         - IN EEN ANDERE TERMINAL
         - ALS GEWONE GEBRUIKER. 
@@ -47,17 +48,11 @@
     - De download mag niet meer lukken (kijk na of het bestand `httpserver.py` geschreven wordt)
     - Kijk na in `/var/log/audit/audit.log`
 
-4. Zorg ervoor dat root nu ook kan downloaden naar de directory /root
+4. Zorg ervoor dat root nu ook kan downloaden naar de directory `/root`.
 
-5. Maak, gelijkaardig aan getstuff.exe, volgens REF1 een executable /usr/bin/httpserver voor httpserver.py aan. (deze draait niet met mono maar met python3)
+5. Maak, gelijkaardig aan getstuff.exe, volgens REF A een executable `/usr/bin/httpserver` voor `httpserver.py` aan. (deze draait niet met mono maar met python3)
 
-6. Maak nu ook een apparmor profiel voor /usr/bin/httpserver. Let erop dat je ook uittest of je de httpserver kan bereiken vanuit je browser vanop http://localhost:1234
-
-Opmerking: Je profiel opnieuw maken kan je door /etc/apparmor.d/usr.bin.getstuff te verwijderen en de machine terug op te starten
-
-
-
-
+6. Maak nu ook een apparmor profiel voor `/usr/bin/httpserver`. Let erop dat je ook uittest of je de httpserver kan bereiken vanuit je browser vanop `http://localhost:1234`
 
 ## ✨Exercises
 
@@ -66,15 +61,25 @@ Opmerking: Je profiel opnieuw maken kan je door /etc/apparmor.d/usr.bin.getstuff
 - Install the necessary software packages
 ```bash
 sudo apt-get update -y && sudo apt-get upgrade -y
-sudo apt-get install apparmor-utils auditd mono-complete -y
+sudo apt-get install apparmor-utils auditd mono-complete curl -y
 ```
 
-### 👉Exercise 1: Download the mono program getstuff.exe
+### 👉Exercise 1: Download the mono program httpserver.py
 
-- Download the mono program getstuff.exe
+- Download the mono program httpserver.py
 ```bash
-sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/source/getstuff.exe -o /usr/lib/getstuff/getstuff.exe
+sudo mkdir /usr/lib/httpserver
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/source/httpserver.py -o /usr/lib/getstuff/getstuff.exe
 ```
+
+- Create the `/usr/bin/httpserver` file
+```bash
+sudo touch /usr/bin/getstuff
+sudo bash -c 'echo "python3 /usr/lib/httpserver/httpserver.py" > /usr/bin/httpserver'
+sudo chmod +x /usr/bin/httpserver
+```
+
+### 👉Exercise 2: Create an apparmor profile for httpserver
 
 
 
