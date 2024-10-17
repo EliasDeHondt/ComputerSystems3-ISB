@@ -74,20 +74,82 @@ Een alternatieve opzet kan via een docker container als node. De mogelijke confi
     ```
 
 
-8. ansible commando's
+8. ANSIBLE COMMANDO'S ANSIBLE COMMANDO'S 
     - Test een shell commando uit op de node
     ```bash
-    ansible all --inventory "node," -m shell -a 'echo Ansible '
+    ansible all --inventory "node1," -m shell -a 'echo Ansible '
     ```
-
-
-
-
-
-
-
-
-
+    - Schrijf de node in het hosts bestand /etc/ansible/hosts. 
+    ```bash
+    sudo nano /etc/ansible/hosts
+    # [node]
+    # node1
+    ```
+    - Je kan nu zonder --inventory of -i een commando uitvoeren op de shell op een host:
+    ```bash
+    ansible all -m shell -a 'echo Ansible op ;hostname'
+    ```
+    - Je kan nu met ansible een ping uitvoeren naar je node. 
+    ```bash
+    ansible all -m ping
+    ```
+    - De uptime van de nodes opvragen
+    ```bash
+    ansible all -m shell -a 'uptime'
+    ```
+    - Standaard heeft de ansible gebruiker geen rechten om als root iets aan te passen. Voer als root op de node volgend commando uit
+    ```bash
+    echo "ansible ALL=(ALL) NOPASSWD: ALL"> /etc/sudoers.d/ansi
+    ```
+    - Normaal gebruik je geen sudo commando om aan te geven dat je dingen als root gaar doen.  Optie --become of -b is om root te worden.
+    ```bash
+    ansible all -m shell -a 'sudo whoami'
+    ansible --become all -m shell -a 'whoami'
+    ```
+    - Installeren met apt
+    ```bash
+    ansible all -b -m apt -a "name=stress state=present"
+    ansible all -b -m apt -a "name=htop state=present"
+    ansible all -m shell -a 'stress --cpu 2 --timeout 30s'
+    ansible all -b -m apt -a "name=htop state=absent"
+    ```
+    - Ansible copy Voer volgende commando's uit op de master in het tekstbestand cmd.sh. Rechten worden overgenomen van de source. Je kan ze ook instellen met de mode parameter.
+    ```bash
+    echo '#!/bin/bash' > cmd.sh
+    echo 'echo Hello world' >> cmd.sh
+    echo 'ip a|grep -o 172.*/|cut -d/ -f1' >> cmd.sh
+    ansible all -m copy -a 'src=cmd.sh dest=cmd.sh'
+    ansible all -m shell -a './cmd.sh'
+    ansible all -m copy -a 'src=cmd.sh dest=cmd.sh mode=755'
+    ansible all -m shell -a './cmd.sh'
+    ```
+    - Soms willen we in bestanden variabelen at runtime aanpassen. Om dat te doen hebben we templates nodig. Templates worden in jinja2 geschreven. Variabelen worden ingesloten in dubbele accolades. Maak het bestand cmd-template.sh.j2 met volgende inhoud:
+    ```bash
+    #!/bin/bash
+    echo {{ bericht }}
+    ip a|grep -o 172.*/|cut -d/ -f1
+    ```
+    - Je kan met de module template de variabelen in de template invullen bij het "copieren".  Bij een shellscript zoals hier, geef je best executable rechten mee, zodat het script kan opgestart worden.
+    ```bash
+    ansible all -m template -a "src=cmd-template.sh.j2 dest=cmd template.sh mode=755" -e "bericht=Hello"
+    ansible all -m shell -a './cmd-template.sh'
+    ```
+    - Ansible kan gebruik maken van rsync om bestanden te synchroniseren tussen source en destination.
+    ```bash
+    ansible all -b -m apt -a "name=rsync state=present"
+    ansible all -m synchronize -a 'src=cmd.sh dest=cmd.sh'
+    ```
+    - Bestanden kunnen ook vanuit een url binnengehaald worden
+    ```bash
+    ansible all -m get_url -a "url='https://github.com/luckylittle/ansible-cheatsheet/blob/master/ansible-cheatsheet.txt' dest=."
+    ansible all -m shell -a 'ls -al *.txt'
+    ```
+    - Bestanden kunnen ook vanuit een git repo binnengehaald worden Package git en tree (optioneel) installeren met apt:
+    ```bash
+    ansible all -b -m apt -a "name=git,tree state=present"
+    ansible all -m git -a "repo=https://github.com/luckylittle/ansible-cheatsheet.git dest=./cheatsheet"
+    ansible all -m shell -a 'tree cheat*'
+    ```
 
 
 ## ✨Exercises
