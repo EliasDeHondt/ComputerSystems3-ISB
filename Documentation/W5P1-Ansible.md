@@ -138,7 +138,8 @@ exit # On master
 ```plaintext
 /etc/ansible/
 ├── playbooks/
-│   └── playbook-main.yml
+│   ├── playbook-main.yml
+│   └── remove-main.yml
 ├── roles/
 │   └── nginx/
 │       ├── tasks/
@@ -218,7 +219,7 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
       echo "Not Running"
     fi
   register: website
-s
+
 - name: Show status
   debug:
     msg: "Website is running"

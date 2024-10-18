@@ -20,9 +20,14 @@
     dest: /var/www/html/index.html
 
 - name: Check if website is running
-  shell: "curl -s http://localhost:80 | grep -q 'Welcome'"
+  content: |
+    #!/bin/bash
+    if curl -s --head  http://localhost:80 | grep "200 OK" > /dev/null; then
+      echo "Running"
+    else
+      echo "Not Running"
+    fi
   register: website
-  ignore_errors: yes
 
 - name: Show status
   debug:
