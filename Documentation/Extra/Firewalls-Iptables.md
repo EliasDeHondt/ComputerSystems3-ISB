@@ -101,7 +101,6 @@
     - Test uit of je vanaf de client kan surfen naar `8080`.
     - Start de openssh server. Test uit of je met je client kan verbinden naar poort `22`.
 
-
 ## ✨Exercises
 
 ### 👉Exercise 0: Preparations
