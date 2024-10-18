@@ -90,6 +90,11 @@ sudo bash -c 'sudo echo ansible:supersecret | chpasswd -c SHA512' # both
 sudo usermod -s /bin/bash ansible # On both
 ```
 
+- Set the `ansible` user to have sudo privileges without a password.
+```bash
+sudo bash -c 'echo "ansible ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/ansible' # On both
+```
+
 - IP address and username are shown when logging in with SSH **(On both)**:
 ```bash
 sudo bash -c 'echo "Banner /etc/motd" >> /etc/ssh/sshd_config'
@@ -114,6 +119,7 @@ sudo su - ansible -c 'echo "/home/ansible/show_info.sh" >> /home/ansible/.bashrc
 - Install the openssh-server on both systems.
 ```bash
 sudo apt install openssh-server ansible-core -y # On both
+sudo apt install ansible-lint -y
 sudo systemctl start ssh # On both
 ```
 
@@ -168,11 +174,11 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
 - The [playbook file](/Scripts/Ansible/playbook-main.yml) look like this:
 ```yml
 ---
-name: Install Nginx
-hosts: nodes1
-become: yes
-roles:
-  - nginx
+- name: Install Nginx
+  hosts: node1
+  become: yes
+  roles:
+    - nginx
 ```
 
 - Create a new role.
@@ -190,18 +196,18 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
 ```yml
 ---
 - name: Install Nginx
-  apt:
+  ansible.builtin.apt:
     name: nginx
     state: present
 
 - name: Start Nginx
-  service:
+  ansible.builtin.service:
     name: nginx
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Ensure Apache2 is not installed
-  apt:
+  ansible.builtin.apt:
     name: apache2
     state: absent
 
@@ -221,12 +227,12 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
   register: website
 
 - name: Show status
-  debug:
+  ansible.builtin.debug:
     msg: "Website is running"
   when: website.rc == 0
 
 - name: Show status
-  debug:
+  ansible.builtin.debug:
     msg: "Website is not running"
   when: website.rc != 0
 ```
@@ -253,11 +259,21 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
 </html>
 ```
 
+- Test the yml files with `ansible-lint`.
+```bash
+ansible-lint /etc/ansible/playbooks/playbook-main.yml # On master
+ansible-lint /etc/ansible/roles/nginx/tasks/tasks-main.yml # On master
+```
+
 - Run the playbook.
 ```bash
 ansible-playbook /etc/ansible/playbooks/playbook-main.yml # On master
 ```
 
+- Test the website.
+```bash
+curl http://node1:80 # On master
+```
 
 
 
