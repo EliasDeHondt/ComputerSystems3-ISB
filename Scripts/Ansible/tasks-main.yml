@@ -1,0 +1,35 @@
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+
+- name: Start Nginx
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Ensure Apache2 is not installed
+  apt:
+    name: apache2
+    state: absent
+
+- name: Copy custom HTML file
+  template:
+    src: /etc/ansible/roles/nginx/templates/index.html.j2
+    dest: /var/www/html/index.html
+
+- name: Check if website is running
+  shell: "curl -s http://localhost:80 | grep -q 'Welcome'"
+  register: website
+  ignore_errors: yes
+
+- name: Show status
+  debug:
+    msg: "Website is running"
+  when: website.rc == 0
+
+- name: Show status
+  debug:
+    msg: "Website is not running"
+  when: website.rc != 0

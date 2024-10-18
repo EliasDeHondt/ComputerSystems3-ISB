@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<!--Author Elias De Hondt-->
+<html>
+  <head>
+      <title>Computer Systems 3</title>
+  </head>
+  <body>
+      <h1>Welcome</h1>
+      <p>IP address: {{ ansible_default_ipv4.address }}</p>
+      <p>Processor: {{ ansible_processor[1] }}</p>
+      <p>RAM: {{ ansible_memtotal_mb }} MB</p>
+  </body>
+</html>

@@ -20,15 +20,14 @@
 
 - **NODIG:** Twee Ubuntu 24.04 LTS systemen. Kies minstens 2 processoren! 
 
-- Schrijf een ansible playbook dat gebruik maakt van een role. Voorzie hiervoor de juiste directorystructuur.
-- Volgende taken worden uitgevoerd op een node met standaard ubuntu 24.04:
-    - Installeren van `nginx`, opstarten als service en ook na reboot
-    - Verzekeren dat er geen `apache2` op staat of kan opstarten
-    - Aanpassen van de standaard website met een custom `html` pagina vanuit een template met volgende facts: `hostname`, `ip adres`, `processor` en `RAM`
+- Schrijf een `ansible playbook` dat gebruik maakt van een `role`. Voorzie hiervoor de juiste directorystructuur.
+- Volgende taken worden uitgevoerd op een node met standaard `ubuntu 24.04`:
+    - Installeren van `nginx`, opstarten als service en ook na reboot.
+    - Verzekeren dat er geen `apache2` op staat of kan opstarten.
+    - Aanpassen van de standaard website met een custom `html` pagina vanuit een template met volgende facts: `hostname`, `ip adres`, `processor` en `RAM`.
     - Installeren van mogelijk extra software die je nodig hebt
-    - Schrijven en draaien van een script op de node dat nakijkt of de website draait op poort `80`
-    - Draait de website, dan toon je `Running`, anders toon je `Not Running`
-    - Zorg dat alle `yml` files voldoen aan ansible-lint
+    - Schrijven en draaien van een script op de node dat nakijkt of de website draait op poort `80` draait de website, dan toon je `Running`, anders toon je `Not Running`.
+    - Zorg dat alle `yml` files voldoen aan `ansible-lint`.
 - Maak ook een playbook waarin alles gestopt en verwijderd wordt
 
 ## ✨Exercises
@@ -86,6 +85,11 @@ sudo useradd -m -u 1001 -g ansible ansible # both
 sudo bash -c 'sudo echo ansible:supersecret | chpasswd -c SHA512' # both
 ```
 
+- Set default shell to bash for the `ansible` user.
+```bash
+sudo usermod -s /bin/bash ansible # On both
+```
+
 - IP address and username are shown when logging in with SSH **(On both)**:
 ```bash
 sudo bash -c 'echo "Banner /etc/motd" >> /etc/ssh/sshd_config'
@@ -109,7 +113,7 @@ sudo su - ansible -c 'echo "/home/ansible/show_info.sh" >> /home/ansible/.bashrc
 
 - Install the openssh-server on both systems.
 ```bash
-sudo apt install openssh-server -y # On both
+sudo apt install openssh-server ansible-core -y # On both
 sudo systemctl start ssh # On both
 ```
 
@@ -128,6 +132,132 @@ ssh-copy-id node1 # On master
 ssh node1 # On master
 exit # On master
 ```
+
+## 👉Exercise 3: Assignment config
+
+```plaintext
+/etc/ansible/
+├── playbooks/
+│   └── playbook-main.yml
+├── roles/
+│   └── nginx/
+│       ├── tasks/
+│       │   └── tasks-main.yml
+│       └── templates/
+│           └── index.html.j2
+```
+
+- Create a new directory for the Ansible configuration.
+```bash
+sudo mkdir /etc/ansible # On master
+```
+
+- Create a new inventory file.
+```bash
+sudo touch /etc/ansible/hosts # On master
+sudo bash -c 'echo -e "[nodes]\nnode1" >> /etc/ansible/hosts' # On master
+```
+
+- Create a new [playbook file](/Scripts/Ansible/playbook-main.yml).
+```bash
+sudo mkdir /etc/ansible/playbooks # On master
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Ansible/playbook-main.yml -o /etc/ansible/playbooks/playbook-main.yml # On master
+```
+
+- The [playbook file](/Scripts/Ansible/playbook-main.yml) look like this:
+```yml
+---
+name: Install Nginx
+hosts: nodes1
+become: yes
+roles:
+  - nginx
+```
+
+- Create a new role.
+```bash
+sudo mkdir /etc/ansible/roles # On master
+sudo ansible-galaxy init /etc/ansible/roles/nginx # On master
+```
+
+- Create a new [task file](/Scripts/Ansible/tasks-/main.yml).
+```bash
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Ansible/tasks-main.yml -o /etc/ansible/roles/nginx/tasks/tasks-main.yml # On master
+```
+
+- The [task file](/Scripts/Ansible/tasks-main.yml) look like this:
+```yml
+---
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+
+- name: Start Nginx
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Ensure Apache2 is not installed
+  apt:
+    name: apache2
+    state: absent
+
+- name: Copy custom HTML file
+  template:
+    src: /etc/ansible/roles/nginx/templates/index.html.j2
+    dest: /var/www/html/index.html
+
+- name: Check if website is running
+  content: |
+    #!/bin/bash
+    if curl -s --head  http://localhost:80 | grep "200 OK" > /dev/null; then
+      echo "Running"
+    else
+      echo "Not Running"
+    fi
+  register: website
+s
+- name: Show status
+  debug:
+    msg: "Website is running"
+  when: website.rc == 0
+
+- name: Show status
+  debug:
+    msg: "Website is not running"
+  when: website.rc != 0
+```
+
+- Create a new [template file](/Scripts/Ansible/index.html.j2).
+```bash
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Ansible/index.html.j2 -o /etc/ansible/roles/nginx/templates/index.html.j2 # On master
+```
+
+- The [template file](/Scripts/Ansible/index.html.j2) look like this:
+```html
+<!DOCTYPE html>
+<!--Author Elias De Hondt-->
+<html>
+  <head>
+      <title>Computer Systems 3</title>
+  </head>
+  <body>
+      <h1>Welcome</h1>
+      <p>IP address: {{ ansible_default_ipv4.address }}</p>
+      <p>Processor: {{ ansible_processor[1] }}</p>
+      <p>RAM: {{ ansible_memtotal_mb }} MB</p>
+  </body>
+</html>
+```
+
+- Run the playbook.
+```bash
+ansible-playbook /etc/ansible/playbooks/playbook-main.yml # On master
+```
+
+
 
 
 

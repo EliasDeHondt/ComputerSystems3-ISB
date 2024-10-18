@@ -1,0 +1,5 @@
+name: Install Nginx
+hosts: nodes1
+become: yes
+roles:
+  - nginx
