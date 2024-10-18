@@ -7,6 +7,8 @@
 2. [📝Assignment](#📝assignment)
 3. [✨Exercises](#✨exercises)
     1. [👉Exercise 0: Preparations](#👉exercise-0-preparations)
+    2. [👉Exercise 1: Start config interface](#👉exercise-1-start-config-interface)
+    3. [👉Exercise 2: Apache configuration](#👉exercise-2-apache-configuration)
 
 
 5. [🔗Links](#🔗links)
@@ -24,12 +26,11 @@
 - [REF C](http://wiki.videolan.org/Documentation:Streaming_HowTo/Streaming_over_IPv6)
 
 
-1. Start als root tcpdump (sudo apt-get install tcpdump) op je loopback interface Installeer een openssh server op Linux (apt-get install openssh-server)
+1. Start als root `tcpdump` op je loopback interface installeer een `openssh server` op linux:
     - Test de verbinding uit naar je ssh server op `127.0.0.1` (IPv4)
     - Maak een verbinding naar je ssh server op `::1`.
-    - Verifieer met tcpdump of wireshark dat de communicatie over IPv6 loopt.
 
-2. Pas je apache configuratie aan zodat deze ENKEL werkt met ipv6. Werkt dit?
+2. Pas je `apache` configuratie aan zodat deze ENKEL werkt met ipv6.
     - Hoe geraak je in je browser aan een ipv6 website?
 
 3. Firewall regels
@@ -70,10 +71,37 @@
 - Install the necessary software on both machines.
 ```bash
 sudo apt-get update && sudo apt-get upgrade -y
-sudo apt-get install tcpdump wireshark vlc nmap openssh-server smplayer -y
+sudo apt-get install tcpdump wireshark vlc nmap openssh-server smplayer apache2 -y
 ```
 
-### 👉Exercise 1: 
+## 👉Exercise 1: Start config interface
+
+- Start as root `tcpdump` on your loopback interface:
+```bash
+sudo tcpdump -i lo
+```
+
+- Test the connection to your ssh server:
+```bash
+ssh root@127.0.0.1
+ssh root@::1
+```
+
+## 👉Exercise 2: Apache configuration
+
+- Show your IPv6 address on interface `ens33`:
+```bash
+ip -6 addr show dev ens33 | grep -Po 'inet6 \K[\da-f:]+'
+```
+
+- Modify your apache configuration to only work with IPv6.
+```bash
+sudo rm /etc/apache2/sites-available/000-default.conf
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/html/index.html -o /var/www/index.html
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/source/ipv6-apache2.conf -o /etc/apache2/sites-available/ipv6-apache2.conf
+sudo a2ensite ipv6-apache2.conf
+sudo systemctl restart apache2
+```
 
 
 
