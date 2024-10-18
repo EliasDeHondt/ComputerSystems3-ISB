@@ -25,7 +25,6 @@
     - Installeren van `nginx`, opstarten als service en ook na reboot.
     - Verzekeren dat er geen `apache2` op staat of kan opstarten.
     - Aanpassen van de standaard website met een custom `html` pagina vanuit een template met volgende facts: `hostname`, `ip adres`, `processor` en `RAM`.
-    - Installeren van mogelijk extra software die je nodig hebt
     - Schrijven en draaien van een script op de node dat nakijkt of de website draait op poort `80` draait de website, dan toon je `Running`, anders toon je `Not Running`.
     - Zorg dat alle `yml` files voldoen aan `ansible-lint`.
 - Maak ook een playbook waarin alles gestopt en verwijderd wordt
