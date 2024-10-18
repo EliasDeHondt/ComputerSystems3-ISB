@@ -3,6 +3,6 @@ galaxy_info:
   description: Install Nginx or Remove Nginx
   company: EliasDH
   license: MIT
-  min_ansible_version: 2.1
+  min_ansible_version: "2.1"
   galaxy_tags: []
 dependencies: []

@@ -148,6 +148,8 @@ exit # On master
 │   └── remove-main.yml
 ├── roles/
 │   └── nginx/
+│       ├── meta/
+│       │   └── main.yml
 │       ├── tasks/
 │       │   └── tasks-main.yml
 │       └── templates/
