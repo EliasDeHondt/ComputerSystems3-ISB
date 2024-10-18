@@ -261,9 +261,16 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
 </html>
 ```
 
+- Replace the `main.yml` file in the `meta` directory of the `nginx` role.
+```bash
+sudo rm /etc/ansible/roles/nginx/meta/main.yml # On master
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Ansible/main.yml -o /etc/ansible/roles/nginx/meta/main.yml # On master
+```
+
 - Test the yml files with `ansible-lint`.
 ```bash
 ansible-lint /etc/ansible/playbooks/playbook-main.yml # On master
+ansible-lint /etc/ansible/roles/nginx/tasks/tasks-main.yml # On master
 ```
 
 - Run the playbook.
