@@ -1,1 +1,21 @@
 ---
+- name: Remove Nginx
+  hosts: node1
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Stop Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: stopped
+        enabled: false
+
+    - name: Remove Nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: absent
+
+    - name: Remove custom HTML file
+      ansible.builtin.file:
+        path: /var/www/html/index.html
+        state: absent

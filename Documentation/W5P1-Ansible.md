@@ -143,9 +143,8 @@ exit # On master
 
 ```plaintext
 /etc/ansible/
-├── playbooks/
-│   ├── playbook-main.yml
-│   └── remove-main.yml
+├── playbook-main.yml
+├── remove-main.yml
 ├── roles/
 │   └── nginx/
 │       ├── meta/
@@ -169,18 +168,18 @@ sudo bash -c 'echo -e "[nodes]\nnode1" >> /etc/ansible/hosts' # On master
 
 - Create a new [playbook file](/Scripts/Ansible/playbook-main.yml).
 ```bash
-sudo mkdir /etc/ansible/playbooks # On master
-sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Ansible/playbook-main.yml -o /etc/ansible/playbooks/playbook-main.yml # On master
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Ansible/playbook-main.yml -o /etc/ansible/playbook-main.yml # On master
 ```
 
 - The [playbook file](/Scripts/Ansible/playbook-main.yml) look like this:
 ```yml
 ---
-- name: Install Nginx
+- name: Setup Nginx
   hosts: node1
   become: true
-  roles:
-    - nginx
+  gather_facts: true
+  tasks:
+    - import_tasks: roles/nginx/tasks/tasks-main.yml
 ```
 
 - Create a new role.
@@ -196,7 +195,6 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
 
 - The [task file](/Scripts/Ansible/tasks-main.yml) look like this:
 ```yml
----
 ---
 - name: Install Nginx
   ansible.builtin.apt:
@@ -221,7 +219,7 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
     mode: '0644' # File permissions
 
 - name: Check if website is running
-  content: |
+  ansible.builtin.shell: |
     #!/bin/bash
     if curl -s --head  http://localhost:80 | grep "200 OK" > /dev/null; then
       echo "Running"
@@ -229,6 +227,7 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
       echo "Not Running"
     fi
   register: website
+  ignore_errors: true
 
 - name: Show status
   ansible.builtin.debug:
@@ -271,7 +270,7 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
 
 - Test the yml files with `ansible-lint`.
 ```bash
-ansible-lint /etc/ansible/playbooks/playbook-main.yml # On master
+ansible-lint /etc/ansible/playbook-main.yml # On master
 ansible-lint /etc/ansible/roles/nginx/tasks/tasks-main.yml # On master
 ```
 
@@ -280,10 +279,56 @@ ansible-lint /etc/ansible/roles/nginx/tasks/tasks-main.yml # On master
 ansible-playbook /etc/ansible/playbooks/playbook-main.yml # On master
 ```
 
-- Test the website.
+- Test the website (should be running).
 ```bash
-curl http://node1:80 # On master
+curl http://localhost:80 # On node1
 ```
+
+- Create a new [playbook file](/Scripts/Ansible/remove-main.yml).
+```bash
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Ansible/remove-main.yml -o /etc/ansible/remove-main.yml # On master
+```
+
+- The [playbook file](/Scripts/Ansible/remove-main.yml) look like this:
+```yml
+---
+- name: Remove Nginx
+  hosts: node1
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Stop Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: stopped
+        enabled: false
+
+    - name: Remove Nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: absent
+
+    - name: Remove custom HTML file
+      ansible.builtin.file:
+        path: /var/www/html/index.html
+        state: absent
+```
+
+- Test the yml files with `ansible-lint`.
+```bash
+ansible-lint /etc/ansible/remove-main.yml # On master
+```
+
+- Run the playbook.
+```bash
+ansible-playbook /etc/ansible/remove-main.yml # On master
+```
+
+- Test the website (should not be running).
+```bash
+curl http://localhost:80 # On node1
+```
+
 
 
 

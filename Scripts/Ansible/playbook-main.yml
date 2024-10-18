@@ -1,6 +1,7 @@
 ---
-- name: Install Nginx
+- name: Setup Nginx
   hosts: node1
   become: true
-  roles:
-    - nginx
+  gather_facts: true
+  tasks:
+    - import_tasks: roles/nginx/tasks/tasks-main.yml
