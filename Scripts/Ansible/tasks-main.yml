@@ -16,9 +16,10 @@
     state: absent
 
 - name: Copy custom HTML file
-  template:
+  ansible.builtin.template:
     src: /etc/ansible/roles/nginx/templates/index.html.j2
     dest: /var/www/html/index.html
+    mode: '0644' # File permissions
 
 - name: Check if website is running
   content: |

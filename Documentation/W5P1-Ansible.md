@@ -176,7 +176,7 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
 ---
 - name: Install Nginx
   hosts: node1
-  become: yes
+  become: true
   roles:
     - nginx
 ```
@@ -195,6 +195,7 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
 - The [task file](/Scripts/Ansible/tasks-main.yml) look like this:
 ```yml
 ---
+---
 - name: Install Nginx
   ansible.builtin.apt:
     name: nginx
@@ -212,9 +213,10 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
     state: absent
 
 - name: Copy custom HTML file
-  template:
+  ansible.builtin.template:
     src: /etc/ansible/roles/nginx/templates/index.html.j2
     dest: /var/www/html/index.html
+    mode: '0644' # File permissions
 
 - name: Check if website is running
   content: |
@@ -262,7 +264,6 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
 - Test the yml files with `ansible-lint`.
 ```bash
 ansible-lint /etc/ansible/playbooks/playbook-main.yml # On master
-ansible-lint /etc/ansible/roles/nginx/tasks/tasks-main.yml # On master
 ```
 
 - Run the playbook.
