@@ -42,13 +42,10 @@
     - Voeg een regel toe met ip6tables om deze ping (en énkel deze ping) te verbieden.
 
 4. Configureer VLC als streaming server
-    - Laat vlc (sudo apt-get install vlc) een film over http streamen (IPv6)
-    - Gebruik nmap om na te kijken of de IPv6 poort open staat (zoek op met man nmap)
-    - Gebruik op dezelfde machine als client smplayer. (sudo apt-get install smplayer) Deze moet de IPv6 stream kunnen bekijken.
+    - Laat vlc een film over http streamen (IPv6)
+    - Gebruik nmap om na te kijken of de IPv6 poort open staat
+    - Gebruik op dezelfde machine als client smplayer. Deze moet de IPv6 stream kunnen bekijken.
     - Gebruik tcpdump of wireshark om te verifiëren dat smplayer IPv6 gebruikt.
-
-5. Multicast?
-    - Kijk na of je ook vlc in IPv6 kan laten multicasten (bv via `FF15::1`).
 
 ## ✨Exercises
 
@@ -127,15 +124,32 @@ sudo ip6tables -I INPUT -s 2001::2/64 -p icmpv6 -j DROP
 
 ## 👉Exercise 4: Configure VLC as streaming server
 
-- Let `vlc` stream a movie over http (IPv6):
+- Download a movie:
 ```bash
+sudo mkdir -p /etc/vlc
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/videos/disney_bitconnect.mp4 -o /etc/vlc/disney_bitconnect.mp4
+```
 
+- Let VLC stream a movie over http (IPv6):
+```bash
+vlc /etc/vlc/disney_bitconnect.mp4 --sout '#http{mux=ts,dst=:1234}' --http-host=[2001::1]
+```
 
+- Check if the IPv6 port is open with `nmap`:
+```bash
+nmap -6 -p 1234 [2001::1]
+```
 
+- Use `smplayer` on the same machine as the client. It should be able to view the IPv6 stream.
+```bash
+smplayer http://[2001::1]:1234
+```
 
-
-
-
+- Use `tcpdump` or `wireshark` to verify that `smplayer` uses IPv6:
+```bash
+sudo tcpdump -i ens33 ip6
+sudo wireshark
+```
 
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).
