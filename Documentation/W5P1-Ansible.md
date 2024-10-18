@@ -8,7 +8,7 @@
 3. [✨Exercises](#✨exercises)
     1. [👉Exercise 1: Set up basic configuration](#👉exercise-1-set-up-basic-configuration)
     2. [👉Exercise 2: Passwordless SSH](#👉exercise-2-passwordless-ssh)
-
+    3. [👉Exercise 3: Assignment config](#👉exercise-3-assignment-config)
 4. [🔗Links](#🔗links)
 
 ---
@@ -302,12 +302,10 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
         name: nginx
         state: stopped
         enabled: false
-
     - name: Remove Nginx
       ansible.builtin.apt:
         name: nginx
         state: absent
-
     - name: Remove custom HTML file
       ansible.builtin.file:
         path: /var/www/html/index.html
@@ -328,22 +326,6 @@ ansible-playbook /etc/ansible/remove-main.yml # On master
 ```bash
 curl http://localhost:80 # On node1
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).
