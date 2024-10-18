@@ -165,20 +165,9 @@ sudo touch /etc/ansible/hosts # On master
 sudo bash -c 'echo -e "[nodes]\nnode1" >> /etc/ansible/hosts' # On master
 ```
 
-- Create a new [playbook file](/Scripts/Ansible/playbook-main.yml).
+- Create a new [playbook-main.yml](/Scripts/Ansible/playbook-main.yml).
 ```bash
 sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Ansible/playbook-main.yml -o /etc/ansible/playbook-main.yml # On master
-```
-
-- The [playbook file](/Scripts/Ansible/playbook-main.yml) look like this:
-```yml
----
-- name: Setup Nginx
-  hosts: node1
-  become: true
-  gather_facts: true
-  tasks:
-    - import_tasks: roles/nginx/tasks/tasks-main.yml
 ```
 
 - Create a new role.
@@ -187,116 +176,14 @@ sudo mkdir /etc/ansible/roles # On master
 sudo ansible-galaxy init /etc/ansible/roles/nginx # On master
 ```
 
-- Create a new [task file](/Scripts/Ansible/tasks-/main.yml).
+- Create a new [tasks-main.yml](/Scripts/Ansible/tasks-main.yml).
 ```bash
 sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Ansible/tasks-main.yml -o /etc/ansible/roles/nginx/tasks/tasks-main.yml # On master
 ```
 
-- The [task file](/Scripts/Ansible/tasks-main.yml) look like this:
-```yml
----
-- name: Install Nginx
-  ansible.builtin.apt:
-    name: nginx
-    state: present
-
-- name: Start Nginx
-  ansible.builtin.service:
-    name: nginx
-    state: started
-    enabled: true
-
-- name: Ensure Apache2 is not installed
-  ansible.builtin.apt:
-    name: apache2
-    state: absent
-
-- name: Copy custom HTML file
-  ansible.builtin.template:
-    src: /etc/ansible/roles/nginx/templates/index.html.j2
-    dest: /var/www/html/index.html
-    mode: '0644' # File permissions
-
-- name: Check if website is running
-  ansible.builtin.shell: |
-    #!/bin/bash
-    if curl -s --head  http://localhost:80 | grep "200 OK" > /dev/null; then
-      echo "Running"
-    else
-      echo "Not Running"
-    fi
-  register: website
-  ignore_errors: true
-
-- name: Show status
-  ansible.builtin.debug:
-    msg: "Website is running"
-  when: website.rc == 0
-
-- name: Show status
-  ansible.builtin.debug:
-    msg: "Website is not running"
-  when: website.rc != 0
-```
-
-- Create a new [template file](/Scripts/Ansible/index.html.j2).
+- Create a new [index.html.j2](/Scripts/Ansible/index.html.j2).
 ```bash
 sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Ansible/index.html.j2 -o /etc/ansible/roles/nginx/templates/index.html.j2 # On master
-```
-
-- The [template file](/Scripts/Ansible/index.html.j2) look like this:
-```html
-<!DOCTYPE html>
-<!--Author Elias De Hondt-->
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f0f0f0;
-                text-align: center;
-                margin-top: 50px;
-            }
-            .container {
-                width: 50%;
-                margin: 0 auto;
-                background-color: #4F94F0;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            }
-            h1 {
-                color: #333333;
-            }
-            .eliasdh {
-                color: #ffffff;
-                text-decoration: none;
-                font-weight: bold;
-            }
-            .eliasdh:hover {
-                color: #357ac0; 
-                text-decoration: none;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Welcome</h1>
-            <p>Welcome to my cool web page!</p>
-            <br>
-            <p>IP address: {{ ansible_default_ipv4.address }}</p>
-            <p>Processor: {{ ansible_processor[1] }}</p>
-            <p>RAM: {{ ansible_memtotal_mb }} MB</p>
-            <br>
-            <p>Designed by the EliasDH Team
-            <br>Copyright &copy; <a class="eliasdh" target="_blank" href="https://eliasdh.com">EliasDH</a>
-            <br>All rights Reserved</p>
-        </div>
-    </body>
-</html>
 ```
 
 - Replace the `main.yml` file in the `meta` directory of the `nginx` role.
@@ -321,32 +208,9 @@ ansible-playbook /etc/ansible/playbooks/playbook-main.yml # On master
 curl http://localhost:80 # On node1
 ```
 
-- Create a new [playbook file](/Scripts/Ansible/remove-main.yml).
+- Create a new [remove-main.yml](/Scripts/Ansible/remove-main.yml).
 ```bash
 sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Ansible/remove-main.yml -o /etc/ansible/remove-main.yml # On master
-```
-
-- The [playbook file](/Scripts/Ansible/remove-main.yml) look like this:
-```yml
----
-- name: Remove Nginx
-  hosts: node1
-  become: true
-  gather_facts: true
-  tasks:
-    - name: Stop Nginx
-      ansible.builtin.service:
-        name: nginx
-        state: stopped
-        enabled: false
-    - name: Remove Nginx
-      ansible.builtin.apt:
-        name: nginx
-        state: absent
-    - name: Remove custom HTML file
-      ansible.builtin.file:
-        path: /var/www/html/index.html
-        state: absent
 ```
 
 - Test the yml files with `ansible-lint`.
