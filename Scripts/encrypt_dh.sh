@@ -4,6 +4,7 @@
 # @see https://eliasdh.com #
 # @since 18/10/2024        #
 ############################
+# encrypt_dh.sh: A script to encrypt and decrypt files and directories using GPG.
 
 # UI variables
 reset="\e[0m"           # Reset
