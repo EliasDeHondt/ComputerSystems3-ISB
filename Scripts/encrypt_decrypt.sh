@@ -13,15 +13,14 @@ green="\e[0;32m"        # Green
 ASCII_LOGO="
 ______   _       ___       _      _____   _____    _   _ \n
 | ____| | |     |_ _|     / \    /  ___|  |  _ \  | | | |\n
-| |_    | |      | |     /   \   |  |__   | | | | | |_| |\n
-|  _|   | |      | |    / ___ \   \___ \  | | | | |  _  |\n
+| |_    | |      | |     / _ \   |  |__   | | | | | |_| |\n
+|  _|   | |      | |    / /_\ \   \___ \  | | | | |  _  |\n
 | |___  | |___   | |   /  ___  \   ___) | | |_| | | | | |\n
 |_____| |_____| |___| /_/     \_\ |_____/ |____/  |_| |_|\n
 "
 
 error_exit() { # Function: Error handling.
-    clear
-    echo -e "- ${red}$1${reset}"
+    echo -e "${red}$1${reset}"
     exit 1
 }
 
@@ -37,7 +36,7 @@ check_dependencies() { # Function: The required dependencies are checked.
     else
         echo -e "${red}Missing dependencies:${reset}"
         for dep in "${MISSING_DEPENDENCIES[@]}"; do
-            echo -e "${red}- $dep${reset}"
+            echo -e "- ${red}$dep${reset}"
         done
         error_exit "Install the missing dependencies and try again."
     fi
