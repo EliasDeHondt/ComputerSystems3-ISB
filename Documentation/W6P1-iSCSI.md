@@ -118,7 +118,85 @@ sudo apt install openssh-server targetcli-fb # Target
 sudo apt install openssh-server open-iscsi lvm2 # Node
 ```
 
-### 👉Exercise 1:
+### 👉Exercise 1: Set up basic configuration
+
+> **Note:** `Target` and `Node` are Ubuntu Server 24.04 LTS.
+
+> **Note:** Internal IP addresses of target: `10.2.0.254` and IP of node: `10.2.0.1`.
+
+> **Note:** External IP addresses of target: `192.168.70.155` and IP of node: `192.168.70.156`.
+
+- Set time zone to `Europe/Brussels` on both servers.
+```bash
+sudo timedatectl set-timezone Europe/Brussels # On both
+```
+
+- Configure the network interfaces of the `Target` and `Node`.
+```bash
+sudo nano /etc/netplan/01-netcfg.yaml # On both
+```
+```yaml
+network:
+  version: 2
+  ethernets:
+    ens34:
+      dhcp4: no
+      dhcp6: no
+      addresses:
+        - 10.2.0.254/24 # For Target
+        - 10.2.0.1/24 # For Node
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+```
+```bash
+sudo chmod 600 /etc/netplan/01-netcfg.yaml # On both
+sudo netplan apply # On both
+```
+
+- No IPv6 on the servers.
+```bash
+echo "net.ipv6.conf.all.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf > /dev/null # On both
+sudo sysctl -p # On both
+```
+
+- Set the hostname of the Target to `Target` and the hostname of the Node to `Node`.
+```bash
+sudo hostnamectl set-hostname target # On Target
+sudo hostnamectl set-hostname node # On Node
+```
+
+- Add the hostnames to the `/etc/hosts` file.
+```bash
+echo -e "127.0.0.1 localhost\n10.2.0.254 target\n10.2.0.1 node" | sudo tee /etc/hosts > /dev/null # On both
+```
+
+- Restart the SSH service and enable it to start on boot.
+```bash
+sudo systemctl restart ssh # On both
+sudo systemctl enable ssh # On both
+```
+
+- Open the firewall for SSH.
+```bash
+sudo ufw allow 22/tcp # On both
+sudo ufw enable # On both
+sudo ufw reload # On both
+```
+
+- Reboot the servers.
+```bash
+sudo reboot # On both
+```
+
+### 👉Exercise 2: Set up iSCSI Target
+
+
+
+
+
+
 
 
 
