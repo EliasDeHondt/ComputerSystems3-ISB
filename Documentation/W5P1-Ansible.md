@@ -38,6 +38,11 @@
 
 > **Note:** External IP addresses of the master: `192.168.70.151` and IP of the node1: `192.168.70.152`.
 
+- Set time zone to `Europe/Brussels` on both servers.
+```bash
+sudo timedatectl set-timezone Europe/Brussels # On both
+```
+
 - Update and upgrade the systems:
 ```bash
 sudo apt update -y && sudo apt upgrade -y # On both
@@ -53,6 +58,7 @@ network:
   ethernets:
     ens34:
       dhcp4: no
+      dhcp6: no
       addresses:
         - 10.0.0.254/24 # For master
         - 10.0.0.1/24   # For node1
