@@ -7,6 +7,7 @@
 2. [📝Assignment](#📝assignment)
 3. [✨Exercises](#✨exercises)
     1. [👉Exercise 0: Install necessary software packages](#👉exercise-0-install-necessary-software-packages)
+    2. [👉Exercise 1: Set up basic configuration](#👉exercise-1-set-up-basic-configuration)
 
 4. [🔗Links](#🔗links)
 
