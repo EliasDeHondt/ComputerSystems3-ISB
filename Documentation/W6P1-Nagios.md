@@ -68,7 +68,7 @@
     - Test uit of je de server02 gegevens kan opvragen via http://localhost/nagios4/ op server01. Kies links services om te kijken of alle checks werden uitgevoerd.
     - Handige commando's en logs:
     ```bash
-    sudo nagios4 -v /etc/nagios4/nagios.cfg                      # Config check!
+    sudo nagios4 -v /etc/nagios4/nagios.cfg
     sudo systemctl restart nagios4
     sudo systemctl status nagios4
     sudo cat /var/log/nagios4/nagios.log
@@ -179,6 +179,11 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
 sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Nagios/server02.cfg -o /etc/nagios4/conf.d/server02.cfg # On server01
 ```
 
+- Curl from GitHub the `commands.cfg` file.
+```bash
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Nagios/commands.cfg -o /etc/nagios4/commands.cfg # On server01
+```
+
 - Restart the `nagios` and `apache2` services.
 ```bash
 sudo systemctl restart nagios4 # On server01
@@ -215,35 +220,8 @@ sudo systemctl status nagios-nrpe-server # On server02
 
 - Create a Python script that checks if the `http` and `ssh` services are running.
 ```bash
-sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Nagios/check_services.py -o /usr/lib/nagios/plugins/check_services.py # On server02
-sudo chmod +x /usr/lib/nagios/plugins/check_services.py # On server02
-```
-
-```python
-#!/usr/bin/env python3
-############################
-# @author Elias De Hondt   #
-# @see https://eliasdh.com #
-# @since 24/10/2024        #
-############################
-import subprocess
-
-def check_services():
-    http = subprocess.run(["systemctl", "is-active", "apache2"], capture_output=True)
-    ssh = subprocess.run(["systemctl", "is-active", "ssh"], capture_output=True)
-
-    if http.returncode == 0 and ssh.returncode == 0:
-        print("OK")
-        exit(0)
-    elif http.returncode == 0 and ssh.returncode != 0:
-        print("WARNING")
-        exit(1)
-    else:
-        print("CRITICAL")
-        exit(2)
-
-if __name__ == "__main__":
-    check_services()
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Nagios/check_services.py -o /usr/lib/nagios/plugins/check_services.py # On server01
+sudo chmod +x /usr/lib/nagios/plugins/check_services.py # On server01
 ```
 
 - Add the following line to the `/etc/nagios/nrpe.cfg` file.
