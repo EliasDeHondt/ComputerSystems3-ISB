@@ -340,6 +340,12 @@ sudo umount /var/www/html/ # On Node
 curl -s http://10.2.0.1 # On Node (This should not work)
 ```
 
+- How to automatically mount the disk on boot.
+```bash
+echo "/dev/sdb /var/www/html ext4 defaults 0 0" | sudo tee -a /etc/fstab > /dev/null # On Node
+sudo reboot # On Node
+```
+
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).
 - 📫 How to reach us elias.dehondt@outlook.com
