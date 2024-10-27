@@ -60,12 +60,9 @@
 
 3. TESTSCRIPT WEBSERVER
     - Schrijf een script dat om de 2 seconden de inhoud van een website opvraagt en dit toont op het scherm.
-    - Wanneer `index.html` op node 1 `Webserver 1` en op node 2 `Webserver 2` bevat, toont het script:
-    - `Webserver 1`
-    - `Webserver 2`
+    - Wanneer `index.html` op `Webserver 1` en op `Webserver 2` bevat, toont het script de naam van de webserver waarvan de inhoud komt.
     - Ga er van uit dat er html code (en niet enkel tekst) staat in het bestand index.html.
-    - Bij falen toont het script volgende foutboodschap:
-        "Verbinding mislukt"
+    - Bij falen toont het script volgende foutboodschap op het scherm: `Webserver 1 is down, Webserver 2 is down`.
     - Test het script uit op je APACHE PROXY BALANCER, tijdens het afwisselend uitschakelen van `webserver1` en `webserver2`.
 
 ## ✨Exercises
@@ -178,11 +175,8 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
 
 - Create the [index.html](/Html/index.html) file.
 ```bash
-sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Html/index.html -o /var/www/index.html # On webserver1 and webserver2
-
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Html/index.html -o /var/www/index.html # On webserver1 and webserver2
 ```
-
-
 
 - Enable the sites and restart Apache.
 ```bash
@@ -191,8 +185,12 @@ sudo a2ensite webserver2 # On webserver2
 sudo systemctl restart apache2 # On webserver1 and webserver2
 ```
 
+### 👉Exercise 4: Create a script to test the load balancer
 
-
+- Create the [test.sh](/Scripts/Loadbalancing/test_loadbalancer.sh) script.
+```bash
+bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Loadbalancing/test_loadbalancer.sh)
+```
 
 
 
