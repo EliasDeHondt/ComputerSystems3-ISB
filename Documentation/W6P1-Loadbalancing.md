@@ -179,6 +179,7 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
 - Create the [index.html](/Html/index.html) file.
 ```bash
 sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Html/index.html -o /var/www/index.html # On webserver1 and webserver2
+
 ```
 
 
