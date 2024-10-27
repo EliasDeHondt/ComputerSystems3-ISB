@@ -20,17 +20,9 @@
 
 - **NODIG:** 1 linux loadbalancer, 2 linux nodes
 
-- Maak virtueel een kleine linux aan zonder grafische interface.
-- Installeer een standaard apache2 server op de nodes.
-- Voorzie een NAT en een Host-Only interface.
-- Maak 2 linked Clones aan van de machine. Deze 2 clones worden de nodes. Zorg dat het Mac adres van de clone niet hetzelfde is als de originele machine.
-- Pas de hostname aan in de machine. Dit doe je met volgende commando's: `hostnamectl set-hostname webserver1`.
-- Pas ook in het bestand `/etc/hosts` de vorige naam aan naar de nieuwe naam.
-- Log even uit en log terug in.
-- Bekijk de ip adressen van je loadbalancer en je node.
-- Kijk na of je kan pingen tussen de 3 machines.
+1. Maak 3 virtuele machines, 1 loadbalancer en 2 nodes (webserver). Elke virtuele machine heeft een extern IP adres en ook een intern IP adres.
 
-1. APACHE MOD PROXY BALANCER
+2. APACHE MOD PROXY BALANCER
     - Installeer de apache module mod-proxy-html
     - Activeer de apache modules proxy proxy_http headers proxy_balancer
     - Voeg volgende configuratie toe aan je apache server:
@@ -56,7 +48,7 @@
         BalancerMember http://192.168.56.103:80 route=server2
     </Proxy>
 
-    #Do not proxy balancer-manager
+    # Do not proxy balancer-manager
     ProxyPass /balancer-manager !
     # The actual ProxyPass
     ProxyPass / balancer://192.168.56.101/ stickysession=BALANCEID nofailover=Off
@@ -66,7 +58,7 @@
     ```
 
 
-2. TESTSCRIPT WEBSERVER
+3. TESTSCRIPT WEBSERVER
     - Schrijf een script dat om de 2 seconden de inhoud van een website opvraagt en dit toont op het scherm.
     - Wanneer `index.html` op node 1 `Webserver 1` en op node 2 `Webserver 2` bevat, toont het script:
     - `Webserver 1`
@@ -83,8 +75,10 @@
 - Install the necessary software packages
 ```bash
 sudo apt-get update -y && sudo apt-get upgrade -y # On both
-sudo apt-get install apache2 nano iputils-ping -y # On both
+sudo apt-get install apache2 nano iputils-ping libapache2-mod-proxy-html -y # On loadbalancer1
 ```
+
+> **Note:** In the latest Ubuntu versions, load balancing packages are automatically installed when you install Apache2.
 
 ### 👉Exercise 1: Set up basic configuration
 
@@ -142,9 +136,59 @@ sudo hostnamectl set-hostname webserver2 # On webserver2
 echo -e "127.0.0.1 localhost\n10.1.0.254 loadbalancer1\n10.1.0.1 webserver1\n10.1.0.2 webserver2" | sudo tee /etc/hosts > /dev/null # On both
 ```
 
+### 👉Exercise 2: Configure load balancer
+
+- Enable the necessary modules on the load balancer.
+```bash
+sudo a2enmod proxy proxy_http headers proxy_balancer # On loadbalancer1
+sudo systemctl restart apache2 # On loadbalancer1
+```
+
+- Remove useless directories.
+```bash
+sudo rm -r /etc/apache2/sites-available/* # On loadbalancer1
+sudo rm -r /etc/apache2/sites-enabled/* # On loadbalancer1
+sudo rm -r /var/www/* # On loadbalancer1
+```
+- Configure the load balancer.
+```bash
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/loadbalancer1.conf -o /etc/apache2/sites-available/loadbalancer1.conf
+```
+
+- Enable the site and restart Apache.
+```bash
+sudo a2ensite loadbalancer1 # On loadbalancer1
+sudo systemctl restart apache2 # On loadbalancer1
+```
+
+### 👉Exercise 3: Configure web servers
+
+- Remove useless directories
+```bash
+sudo rm -r /etc/apache2/sites-available/* # On webserver1 and webserver2
+sudo rm -r /etc/apache2/sites-enabled/* # On webserver1 and webserver2
+sudo rm -r /var/www/* # On webserver1 and webserver2
+```
+
+- Configure the web servers.
+```bash
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/webserver1.conf -o /etc/apache2/sites-available/webserver1.conf # On webserver1
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/webserver2.conf -o /etc/apache2/sites-available/webserver2.conf # On webserver2
+```
+
+- Create the [index.html](/Html/index.html) file.
+```bash
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Html/index.html -o /var/www/index.html # On webserver1 and webserver2
+```
 
 
 
+- Enable the sites and restart Apache.
+```bash
+sudo a2ensite webserver1 # On webserver1
+sudo a2ensite webserver2 # On webserver2
+sudo systemctl restart apache2 # On webserver1 and webserver2
+```
 
 
 

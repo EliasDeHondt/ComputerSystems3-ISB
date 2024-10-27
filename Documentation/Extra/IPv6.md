@@ -77,8 +77,8 @@ ssh root@::1
 sudo systemctl stop apache2
 sudo rm /etc/apache2/sites-available/000-default.conf
 sudo rm /etc/apache2/sites-available/default-ssl.conf
-sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/html/index.html -o /var/www/html/index.html
-sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/source/ipv6-apache2.conf -o /etc/apache2/sites-available/ipv6-apache2.conf
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Html/index.html -o /var/www/html/index.html
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Source/ipv6-apache2.conf -o /etc/apache2/sites-available/ipv6-apache2.conf
 sudo a2ensite ipv6-apache2.conf
 sudo systemctl start apache2
 ```
@@ -127,7 +127,7 @@ sudo ip6tables -I INPUT -s 2001::2/64 -p icmpv6 -j DROP
 - Download a movie:
 ```bash
 sudo mkdir -p /etc/vlc
-sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/videos/disney_bitconnect.mp4 -o /etc/vlc/disney_bitconnect.mp4
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Videos/disney_bitconnect.mp4 -o /etc/vlc/disney_bitconnect.mp4
 ```
 
 - Let VLC stream a movie over http (IPv6):

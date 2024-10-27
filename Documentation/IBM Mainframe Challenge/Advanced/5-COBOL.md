@@ -81,7 +81,7 @@ Else
 //RUNPROG   EXEC PGM=CBLJSON,PARM=('HTML')
 ```
 - [CBLCBL.cbl](/Scripts/CBLJSON.cbl)
-- [cobol.html](/html/cobol.html)
+- [cobol.html](/Html/cobol.html)
 
 - Right-click your JCL member `JSONJCL` and select `Submit Job`.
 - Copy the output from the job in `cobol.html` in the home directory of your USS.

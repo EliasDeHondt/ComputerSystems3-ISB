@@ -58,7 +58,7 @@
 - Create a simple HTML file:
     ```bash
     sudo rm /var/www/html/index.html
-    sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/html/index.html -o /var/www/index.html
+    sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Html/index.html -o /var/www/index.html
     ```
 
 - Create a configuration file and enable:

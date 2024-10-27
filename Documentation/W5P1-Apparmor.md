@@ -72,7 +72,7 @@ sudo apt-get install apparmor-utils auditd mono-complete curl -y
 - Download the mono program getstuff
 ```bash
 sudo mkdir /usr/lib/getstuff
-sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/source/getstuff.exe -o /usr/lib/getstuff/getstuff.exe
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Source/getstuff.exe -o /usr/lib/getstuff/getstuff.exe
 sudo chmod +x /usr/lib/getstuff/getstuff.exe
 ```
 
@@ -140,7 +140,7 @@ sudo aa-logprof # Allow all the necessary permissions
 - Download the httpserver.py file
 ```bash
 sudo mkdir /usr/lib/httpserver
-sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/source/httpserver.py -o /usr/lib/httpserver/httpserver.py
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Source/httpserver.py -o /usr/lib/httpserver/httpserver.py
 sudo chmod +x /usr/lib/httpserver/httpserver.py
 ```
 

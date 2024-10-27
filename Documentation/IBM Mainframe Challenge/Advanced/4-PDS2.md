@@ -26,9 +26,9 @@
 ### 👉Step 1: Upload the rocks
 
 - Download the following files:
-  - [Rocks 1](/source/rocks1.txt)
-  - [Rocks 2](/source/rocks2.txt)
-  - [Rocks 3](/source/rocks3.txt)
+  - [Rocks 1](/Source/rocks1.txt)
+  - [Rocks 2](/Source/rocks2.txt)
+  - [Rocks 3](/Source/rocks3.txt)
 
 - Now upload these files into your dataset collection.
 - Right-click on the `SOURCE` dataset and select `Upload member…`.

@@ -85,7 +85,7 @@ sudo cp localhost.key /etc/ssl/private/localhost.key
 sudo apt-get update && sudo apt-get upgrade -y
 sudo apt-get remove apache2 -y # Remove Apache2
 sudo apt-get remove nginx -y
-sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/html/index.html -o /var/www/html/index.html
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Html/index.html -o /var/www/html/index.html
 sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/http3/nginx.conf -o /etc/nginx/sites-available/default
 sudo service nginx stop && sudo service nginx start
 ```

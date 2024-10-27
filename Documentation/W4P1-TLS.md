@@ -107,9 +107,9 @@ sudo a2enmod ssl
 </VirtualHost>
 ```
 
-- Copy the the [index.html](/html/index.html) file to the `/var/www/` directory
+- Copy the the [index.html](/Html/index.html) file to the `/var/www/` directory
 ```bash
-sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/html/index.html -o /var/www/index.html
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Html/index.html -o /var/www/index.html
 ```
 
 - Enable the new site

@@ -326,7 +326,7 @@ sudo iscsiadm --mode node --targetname iqn.2024-10.be.kdg:webdisk --portal 10.2.
 sudo mkfs.ext4 /dev/sdb # On Node
 sudo mkdir /etc/www/html/ # On Node
 sudo mount /dev/sdb /var/www/html/ # On Node
-sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/html/index.html -o /var/www/html/index.html
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Html/index.html -o /var/www/html/index.html
 ```
 
 - Open the web server.

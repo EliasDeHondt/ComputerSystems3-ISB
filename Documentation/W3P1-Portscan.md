@@ -22,7 +22,7 @@
 ### 📝Assignment 
 > NOTE This is in Dutch
 
-1. Hoe werd het binaire logbestand [Portscan-2021.pcap](/source/Portscan-2021.pcap) aangemaakt?
+1. Hoe werd het binaire logbestand [Portscan-2021.pcap](/Source/Portscan-2021.pcap) aangemaakt?
 
 2. Wat is het IP adres van de aanvaller? (De persoon die SYN packets stuurt naar de target)
 
@@ -52,7 +52,7 @@ sudo apt-get install snort -y # In the UI select the network interface
 sudo apt install p0f -y
 ```
 
-The binary log file [Portscan-2021.pcap](/source/Portscan-2021.pcap) was created using the following command:
+The binary log file [Portscan-2021.pcap](/Source/Portscan-2021.pcap) was created using the following command:
 
 ```bash
 sudo tcpdump -i ens18 -w Portscan-2021.pcap # ens18 is the network interface (So not the same for your machine)

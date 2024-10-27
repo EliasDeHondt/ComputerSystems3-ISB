@@ -104,7 +104,7 @@ class MyServer(BaseHTTPRequestHandler):
             self.wfile.write(file.read().encode("utf-8"))
 ```
 
-> **NOTE:** Make sure you have an [index.html](/html/index.html) file in the `/var/www/` directory as the [basisserver3.py](/Scripts/basisserver3.py) file.
+> **NOTE:** Make sure you have an [index.html](/Html/index.html) file in the `/var/www/` directory as the [basisserver3.py](/Scripts/basisserver3.py) file.
 
 - Run the webserver with the following command
 ```bash

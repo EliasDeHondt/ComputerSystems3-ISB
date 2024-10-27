@@ -75,7 +75,7 @@ zowe zos-files list ds "Z58577.VSAMDS" -a
     - You will need leading zeroes for keys, otherwise VSAM may not see them as being in order when you try to import.
     - Make sure this new input data is stored in a zOS sequential dataset or a PDS member.
 - Download the sample `REPRO` member from the `ZXP.PUBLIC.JCL` dataset to your personal workstation, placing it in the directory you’re currently working from.
-- Name your `REPRO` file as [repro.txt](/source/repro.txt).
+- Name your `REPRO` file as [repro.txt](/Source/repro.txt).
 ```powershell
 zowe jobs submit local-file "repro.txt"
 ```
