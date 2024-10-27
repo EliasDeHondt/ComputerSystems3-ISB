@@ -8,7 +8,9 @@
 3. [✨Exercises](#✨exercises)
     1. [👉Exercise 0: Install necessary software packages](#👉exercise-0-install-necessary-software-packages)
     2. [👉Exercise 1: Set up basic configuration](#👉exercise-1-set-up-basic-configuration)
-
+    3. [👉Exercise 2: Configure load balancer](#👉exercise-2-configure-load-balancer)
+    4. [👉Exercise 3: Configure web servers](#👉exercise-3-configure-web-servers)
+    5. [👉Exercise 4: Create a script to test the load balancer](#👉exercise-4-create-a-script-to-test-the-load-balancer)µ
 4. [🔗Links](#🔗links)
 
 ---
@@ -192,11 +194,7 @@ sudo systemctl restart apache2 # On webserver1 and webserver2
 bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Loadbalancing/test_loadbalancer.sh)
 ```
 
-
-
-
-
-
+- You can also go to the Internet browser on your host computer and go to the public IP address of your load balancer in this case `192.168.70.157`.
 
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).
