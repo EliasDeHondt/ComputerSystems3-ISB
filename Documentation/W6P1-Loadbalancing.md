@@ -59,7 +59,6 @@
     ProxyPassReverse / http://192.168.56.103/
     ```
 
-
 3. TESTSCRIPT WEBSERVER
     - Schrijf een script dat om de 2 seconden de inhoud van een website opvraagt en dit toont op het scherm.
     - Wanneer `index.html` op `Webserver 1` en op `Webserver 2` bevat, toont het script de naam van de webserver waarvan de inhoud komt.
@@ -139,7 +138,7 @@ echo -e "127.0.0.1 localhost\n10.1.0.254 loadbalancer1\n10.1.0.1 webserver1\n10.
 
 - Enable the necessary modules on the load balancer.
 ```bash
-sudo a2enmod proxy proxy_http headers proxy_balancer # On loadbalancer1
+sudo a2enmod proxy proxy_http headers proxy_balance lbmethod_byrequests # On loadbalancer1
 sudo systemctl restart apache2 # On loadbalancer1
 ```
 
@@ -156,6 +155,7 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
 
 - Enable the site and restart Apache.
 ```bash
+echo "ServerName localhost" | sudo tee -a /etc/apache2/apache2.conf > /dev/null # On loadbalancer1
 sudo a2ensite loadbalancer1 # On loadbalancer1
 sudo systemctl restart apache2 # On loadbalancer1
 ```
@@ -191,7 +191,7 @@ sudo systemctl restart apache2 # On webserver1 and webserver2
 
 - Create the [test.sh](/Scripts/Loadbalancing/test_loadbalancer.sh) script.
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Loadbalancing/test_loadbalancer.sh)
+bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Loadbalancing/test_loadbalancer.sh) # On loadbalancer1
 ```
 
 - You can also go to the Internet browser on your host computer and go to the public IP address of your load balancer in this case `192.168.70.157`.
