@@ -97,6 +97,8 @@ Good luck!
 
 > The deadline for submission: **2024-12-31 23:49:00 UTC**.
 
+- How to log in USS: `ssh z58577@204.90.115.200` - `Password: xxxxxxxxxx`
+
 ### ✨Setup
 
 ```bash
