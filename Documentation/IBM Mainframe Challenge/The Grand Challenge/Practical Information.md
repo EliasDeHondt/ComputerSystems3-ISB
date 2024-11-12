@@ -100,13 +100,8 @@ Good luck!
 ### ✨Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/EliasDeHondt/ComputerSystems3-ISB.git
-cd ComputerSystems3-ISB/Documentation/IBM\ Mainframe\ Challenge/The\ Grand\ Challenge/
-
-# Run the application
-sudo chmod +x dashboard.sh
-./dashboard.sh
+# Run the following script to start the dashboard
+bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Documentation/IBM%20Mainframe%20Challenge/The%20Grand%20Challenge/dashboard.sh)
 ```
 
 ## 🔗Links
