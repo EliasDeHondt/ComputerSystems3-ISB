@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 ############################
 # @author Elias De Hondt   #
 # @see https://eliasdh.com #
@@ -7,104 +7,130 @@
 # dashboard.sh
 
 # UI variables
-reset="\e[0m"                                                               # Reset
-red="\e[0;31m"                                                              # Red
-blue="\e[0;34m"                                                             # Blue
-yellow="\e[0;33m"                                                           # Yellow
-green="\e[0;32m"                                                            # Green
-global_staps=21                                                             # Number of steps
+reset="\e[0m"                                           # Reset
+red="\e[0;31m"                                          # Red
+green="\e[0;32m"                                        # Green
 
+# ASCII logo
+ASCII_LOGO="
+______   _       ___       _      _____   _____    _   _ \n
+| ____| | |     |_ _|     / \    /  ___|  |  _ \  | | | |\n
+| |_    | |      | |     / _ \   |  |__   | | | | | |_| |\n
+|  _|   | |      | |    / /_\ \   \___ \  | | | | |  _  |\n
+| |___  | |___   | |   /  ___  \   ___) | | |_| | | | | |\n
+|_____| |_____| |___| /_/     \_\ |_____/ |____/  |_| |_|\n
+\n
+This script is executed locally on this machine. EliasDH is not responsible for any damages.\n
+\n
+Privacy Policy: https://eliasdh.com/assets/pages/privacy-policy.html\n
+\n
+Legal Guidelines: https://eliasdh.com/assets/pages/legal-guidelines.html\n
+"
 
 function error_exit() { # Functie: Error afhandeling.
-    echo -e "\n*\n* ${red}$1${reset}\n*\n* Exiting script.\n${line}"
+    dialog --title "Error" --msgbox "\n$1\n" 10 20
+    clear
     exit 1
 }
 
 function success_exit() { # Functie: Succes afhandeling.
-    echo -e "*\n* ${green}$1${reset}\n*\n${line}"
+    dialog --title "Success" --msgbox "\n$1\n" 10 20
+    clear
     exit 0
 }
 
-function success() { # Functie: Succes afhandeling.
-    echo -e "\n*\n* ${green}$1${reset}\n*"
+function check_privileges() { # Function: Check that the script is not executed with elevated privileges.
+    if [ "$EUID" -eq 0 ]; then error_exit "Do not run this script as root."; fi
 }
 
-function skip() { # Functie: Skip afhandeling.
-    echo -e "\n*\n* ${yellow}$1${reset}\n*"
-}
-
-function banner_message() { # Functie: Banner message.
-    clear
-    local MESSAGE="$1"
-    local LENGTH=$(( ${#MESSAGE} + 2 ))
-    line="*$(printf "%${LENGTH}s" | tr ' ' '*')*"
-    local LINE1="*$(printf "%${LENGTH}s" | tr ' ' ' ')*"
-    echo "$line" && echo "$LINE1"
-    echo -e "* ${blue}$MESSAGE${reset} *"
-    echo "$LINE1" && echo "$line"
-}
-
-function options_check() { # Functie: Checks if there were any options given to the script.
+function check_options() { # Functie: Checks if there were any options given to the script.
     case "$1" in
-        --help) echo -e "*\n* ${yellow}Usage:${reset}\n*   ./dashboard.sh [OPTION]\n*"
+        --help|-h) echo -e "*\n* ${yellow}Usage:${reset}\n*   ./dashboard.sh [OPTION]\n*"
         success_exit;;
-        -h) echo -e "*\n* ${yellow}Usage:${reset}\n*   ./dashboard.sh [OPTION]\n*"
-        success_exit;;
-        *) error_exit "Invalid option. Use --help for more information.";;
     esac
 }
 
-function bash_validation() { # Functie: Bash validatie.
+function check_dependencies() { # Function: Check for required dependencies.
+    local REQUIRED_DEPENDENCIES=("$@")
+    local MISSING_DEPENDENCIES=()
+
     if [ ! -f "./dashboard-script.log" ]; then touch ./dashboard-script.log; fi
-}
 
-function loading_icon() { # Functie: Print the loading icon.
-    local load_interval="${1}"
-    local loading_message="${2}"
-    local elapsed=0
-    local loading_animation=( '⠾' "⠷" '⠯' '⠟' '⠻' '⠽' )
-    echo -n "${loading_message} "
-    tput civis
-    trap "tput cnorm" EXIT
-    while [ "${load_interval}" -ne "${elapsed}" ]; do
-        for frame in "${loading_animation[@]}" ; do
-            printf "%s\b" "${frame}"
-            sleep 0.25
-        done
-        elapsed=$(( elapsed + 1 ))
+    for dep in "${REQUIRED_DEPENDENCIES[@]}"; do
+        if ! command -v "$dep" &> /dev/null; then
+            MISSING_DEPENDENCIES+=("$dep")
+        fi
     done
-    printf " \b"
-    exit 1
+
+    if [ ${#MISSING_DEPENDENCIES[@]} -eq 0 ]; then
+        echo -e "${green}All required dependencies are installed!${reset}"
+    else
+        echo -e "${red}Missing dependencies:${reset}"
+        for dep in "${MISSING_DEPENDENCIES[@]}"; do
+            echo -e "- ${red}$dep${reset}"
+        done
+        error_exit "Install the missing dependencies and try again."
+    fi
 }
 
-function statistics { # Functie: Collects statistics
-    
+function wait_for_job() { # Functie: Wacht tot de job klaar is.
+    local JOB_ID="$1"
+    local JOB_STATUS=""
+
+    while [ "$JOB_STATUS" != "OUTPUT" ] && [ "$JOB_STATUS" != "ABEND" ] && [ "$JOB_STATUS" != "ENDED" ]; do
+        JOB_STATUS=$(zowe jobs view job-status-by-jobid "$JOB_ID" --rff status --rft string)
+        sleep 5
+    done
+
+    if [ "$JOB_STATUS" == "ABEND" ]; then
+        error_exit "The job ended with an error."
+    fi
 }
+
+function statistics() { # Functie: Collects statistics from mainframe.
+    #local IBM_USER=$(jq -r '.profiles.zosmf.properties.user' ~/.zowe/zowe.config.json)
+    #local IBM_PASSWORD=$(jq -r '.profiles.zosmf.properties.password' ~/.zowe/zowe.config.json)
+    local JOB_OUTPUT_FILE="job_output.txt"
+
+
+    # Submit JCL job to collect statistics en get id
+    local JOB_ID=$(zowe jobs submit data-set "Z58577.JCL(STATS)" --rff jobid --rft string)
+
+    wait_for_job "$JOB_ID"
+
+    # Get job output
+    zowe jobs dl output "$JOB_ID"
+
+    # TODO: Create a JCL that gives statistics back from Mainframe
+}
+
+
+
+
+
+
+
+
 
 function credits() { # Functie: Credits of the developers.
-    local COLOR_ELIAS_DE_HONDT="\033[96m"             # Light cyan
-    local GITGUB_URL_ELIAS_DE_HONDT="https://github.com/EliasDeHondt"
-    banner_message "          Credits          "
-    echo -e "*\n* ${COLOR_ELIAS_DE_HONDT}Elias De Hondt${reset}"
-    echo -e "*   | ${COLOR_ELIAS_DE_HONDT}GitHub: ${GITGUB_URL_ELIAS_DE_HONDT}${reset}"
-    echo -e "${line}"
-    sleep 10
+    dialog --title "Credits" --msgbox "\n\nDeveloped by:\n    Elias De Hondt\n      https://github.com/EliasDeHondt" 10 62
     main
 }
 
 function main() { # Functie: Main functie.
-    banner_message "Welcome to The Grand Challenge!"
-    bash_validation
-    options_check "$1"
+    check_privileges
+    check_options "$1"
+    check_dependencies "dialog" "curl"
 
-    echo -e "*\n* ${blue}[1]${reset} View statistics\n* ${blue}[2]${reset} Credits\n* ${blue}[3]${reset} Exit"
-    read -p "* Enter the number of your choice: " choice
-    echo -e "*"
-    case "$choice" in
-        1)
-        banner_message "Statistics"
-        statistics
-        ;;
+    dialog --title "Welcome to The Grand Challenge" --msgbox "\n$ASCII_LOGO\n" 20 62
+
+    local CHOICE=$(dialog --title "Select an option" --menu "Choose one of the following options:" 15 50 3 \
+        1 "View statistics" \
+        2 "Credits" \
+        3 "Exit" 3>&1 1>&2 2>&3)
+
+    case "$CHOICE" in
+        1) statistics;;
         2) credits;;
         3) success_exit "Exiting script.";;
         *) error_exit "Invalid choice.";;

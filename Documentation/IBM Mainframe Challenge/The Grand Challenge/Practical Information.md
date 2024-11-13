@@ -103,8 +103,24 @@ Good luck!
 
 ```bash
 # Run the following script to start the dashboard
-bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Documentation/IBM%20Mainframe%20Challenge/The%20Grand%20Challenge/dashboard.sh)
+bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Documentation/IBM%20Mainframe%20Challenge/The%20Grand%20Challenge/dashboard.sh) # On host not the mainframe
 ```
+
+> When you wanna run this script, make sure that your environment is set.
+- `.zone/zowe.config.json` file is present. Your username and password must be included. Example:
+```json
+"profiles": {
+    "zosmf": {
+        "type": "zosmf",
+        "properties": {
+            "host": "204.90.115.200",
+            "port": 10443,
+            "user": "xxxxx",
+            "password": "xxxxx"
+        },
+        "secure": []
+    },
+```	
 
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).
