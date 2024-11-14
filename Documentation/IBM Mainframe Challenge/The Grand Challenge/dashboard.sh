@@ -10,6 +10,7 @@
 reset="\e[0m"                                           # Reset
 red="\e[0;31m"                                          # Red
 green="\e[0;32m"                                        # Green
+yellow="\e[0;33m"                                       # Yellow
 
 # ASCII logo
 ASCII_LOGO="
@@ -27,14 +28,26 @@ Privacy Policy: https://eliasdh.com/assets/pages/privacy-policy.html\n
 Legal Guidelines: https://eliasdh.com/assets/pages/legal-guidelines.html\n
 "
 
+function create_log() { # Functie: Create log file.
+    local LOG_FILE="./dashboard-script.log"
+    local DATE=$(date)
+    local MESSAGE="$1"
+
+    if [ ! -f "$LOG_FILE" ]; then touch "$LOG_FILE"; fi
+    echo -e "[$DATE] $MESSAGE" >> "$LOG_FILE"
+}
+
+
 function error_exit() { # Functie: Error afhandeling.
     dialog --title "Error" --msgbox "\n$1\n" 10 20
+    create_log "$1"
     clear
     exit 1
 }
 
 function success_exit() { # Functie: Succes afhandeling.
     dialog --title "Success" --msgbox "\n$1\n" 10 20
+    create_log "$1"
     clear
     exit 0
 }
@@ -44,10 +57,19 @@ function check_privileges() { # Function: Check that the script is not executed 
 }
 
 function check_options() { # Functie: Checks if there were any options given to the script.
+    printf "%.0s*" {1..40}
     case "$1" in
-        --help|-h) echo -e "*\n* ${yellow}Usage:${reset}\n*   ./dashboard.sh [OPTION]\n*"
-        success_exit;;
+        --help|-h)
+        echo -e "\n*\n* ${yellow}Usage:${reset}\n*   ./dashboard.sh [OPTION]\n*"
+        echo -e "* ${yellow}Options:${reset}\n*   ${green}--help${reset},       ${green}-h${reset}   Display this help message\n*   ${green}--statistics${reset}, ${green}-s${reset}   Collect statistics from mainframe\n*   ${green}--logs${reset},       ${green}-l${reset}   View logs\n*   ${green}--credits${reset},    ${green}-c${reset}   View credits\n*";;
+        --statistics|-s) statistics;;
+        --logs|-l) logs;;
+        --credits|-c) credits;;
+        *) return;;
     esac
+    printf "%.0s*" {1..40}
+    echo -e
+    exit 0
 }
 
 function check_dependencies() { # Function: Check for required dependencies.
@@ -104,13 +126,10 @@ function statistics() { # Functie: Collects statistics from mainframe.
     # TODO: Create a JCL that gives statistics back from Mainframe
 }
 
-
-
-
-
-
-
-
+function logs() { # Functie: View logs.
+    dialog --title "Logs" --textbox "./dashboard-script.log" 20 62
+    main
+}
 
 function credits() { # Functie: Credits of the developers.
     dialog --title "Credits" --msgbox "\n\nDeveloped by:\n    Elias De Hondt\n      https://github.com/EliasDeHondt" 10 62
@@ -126,13 +145,15 @@ function main() { # Functie: Main functie.
 
     local CHOICE=$(dialog --title "Select an option" --menu "Choose one of the following options:" 15 50 3 \
         1 "View statistics" \
-        2 "Credits" \
-        3 "Exit" 3>&1 1>&2 2>&3)
+        2 "View logs" \
+        3 "Credits" \
+        4 "Exit" 3>&1 1>&2 2>&3)
 
     case "$CHOICE" in
         1) statistics;;
-        2) credits;;
-        3) success_exit "Exiting script.";;
+        2) logs;;
+        3) credits;;
+        4) success_exit "Exiting script.";;
         *) error_exit "Invalid choice.";;
     esac
 }
