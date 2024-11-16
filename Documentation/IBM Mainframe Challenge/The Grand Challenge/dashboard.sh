@@ -61,6 +61,7 @@ function check_options() { # Functie: Checks if there were any options given to 
         --help|-h)
         echo -e "\n*\n* ${yellow}Usage:${reset}\n*   ./dashboard.sh [OPTION]\n*"
         echo -e "* ${yellow}Options:${reset}\n*   ${green}--help${reset},       ${green}-h${reset}   Display this help message\n*   ${green}--statistics${reset}, ${green}-s${reset}   Collect statistics from mainframe\n*   ${green}--logs${reset},       ${green}-l${reset}   View logs\n*   ${green}--credits${reset},    ${green}-c${reset}   View credits\n*";;
+        --submit-job|-j) submit_job;;
         --statistics|-s) statistics;;
         --logs|-l) logs;;
         --credits|-c) credits;;
@@ -115,13 +116,13 @@ function statistics() { # Functie: Collects statistics from mainframe.
 
     local IBM_USER=$(jq -r '.profiles.zosmf.properties.user' ~/.zowe/zowe.config.json)
     local IBM_USER_LOWERCASE=$(echo "$IBM_USER" | tr '[:upper:]' '[:lower:]')
-    local JOB_ID=$(zowe jobs submit data-set "Z58577.JCL(STATS)" --rff jobid --rft string)
+    local JOB_ID=$(zowe jobs submit data-set "$IBM_USER.JCL(STATS)" --rff jobid --rft string)
 
     wait_for_job "$JOB_ID"
 
     zowe files download data-set "$IBM_USER.METRICS"
 
-    if [ ! -f $IBM_USER_LOWERCASE/metrics.txt ]; then error_exit "Download failed."; fi
+    if [ ! -f "$IBM_USER_LOWERCASE/metrics.txt" ]; then error_exit "Download failed."; fi
 
     local METRICS=$(cat $IBM_USER_LOWERCASE/metrics.txt)
     rm -r $IBM_USER_LOWERCASE
@@ -155,7 +156,6 @@ function submit_job() { # Functie: Submit job to mainframe.
 
     wait_for_job "$JOB_ID"
 
-    dialog --title "Job Status" --msgbox "The job has ended successfully.\nPress OK to continue." 8 50
     main
 }
 

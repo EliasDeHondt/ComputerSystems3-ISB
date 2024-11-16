@@ -1,0 +1,27 @@
+CPU STATISTIEKEN:
+  Aantal CPU's: 8
+  Gemiddelde CPU-belasting: 75%
+  Maximale CPU-belasting: 95%
+  Minimale CPU-belasting: 30%
+
+RAM STATISTIEKEN:
+  Totale RAM: 64 GB
+  Beschikbaar RAM: 12 GB
+  Gebruikt RAM: 52 GB
+  Gemiddeld RAM-gebruik: 81%
+
+DISK STATISTIEKEN:
+  Totaal schijfruimte: 2 PB
+  Beschikbare schijfruimte: 450 TB
+  Gebruikte schijfruimte: 1.55 PB
+  Gemiddeld schijfgebruik: 78%
+
+NETWERK STATISTIEKEN:
+  Verkeer inkomend: 300 Mbps
+  Verkeer uitgaand: 150 Mbps
+  Gemiddelde vertraging: 25 ms
+  Pakketverlies: 0.2%
+
+SYSTEEM OPERATIE STATISTIEKEN:
+  Uptime: 247 dagen, 13 uur
+  Aantal herstarts: 2
