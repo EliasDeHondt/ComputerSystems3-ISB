@@ -37,7 +37,6 @@ function create_log() { # Functie: Create log file.
     echo -e "[$DATE] $MESSAGE" >> "$LOG_FILE"
 }
 
-
 function error_exit() { # Functie: Error afhandeling.
     dialog --title "Error" --msgbox "\n$1\n" 10 20
     create_log "$1"
@@ -107,23 +106,57 @@ function wait_for_job() { # Functie: Wacht tot de job klaar is.
     if [ "$JOB_STATUS" == "ABEND" ]; then
         error_exit "The job ended with an error."
     fi
+
+    dialog --title "Job Status" --msgbox "The job has ended successfully.\nPress OK to continue." 8 50
 }
 
 function statistics() { # Functie: Collects statistics from mainframe.
-    #local IBM_USER=$(jq -r '.profiles.zosmf.properties.user' ~/.zowe/zowe.config.json)
-    #local IBM_PASSWORD=$(jq -r '.profiles.zosmf.properties.password' ~/.zowe/zowe.config.json)
-    local JOB_OUTPUT_FILE="job_output.txt"
+    dialog --title "Statistics" --msgbox "This process may take a while.\nPress OK to continue." 8 50
 
-
-    # Submit JCL job to collect statistics en get id
+    local IBM_USER=$(jq -r '.profiles.zosmf.properties.user' ~/.zowe/zowe.config.json)
+    local IBM_USER_LOWERCASE=$(echo "$IBM_USER" | tr '[:upper:]' '[:lower:]')
     local JOB_ID=$(zowe jobs submit data-set "Z58577.JCL(STATS)" --rff jobid --rft string)
 
     wait_for_job "$JOB_ID"
 
-    # Get job output
-    zowe jobs dl output "$JOB_ID"
+    zowe files download data-set "$IBM_USER.METRICS"
 
-    # TODO: Create a JCL that gives statistics back from Mainframe
+    if [ ! -f $IBM_USER_LOWERCASE/metrics.txt ]; then error_exit "Download failed."; fi
+
+    local METRICS=$(cat $IBM_USER_LOWERCASE/metrics.txt)
+    rm -r $IBM_USER_LOWERCASE
+
+    zowe files delete data-set "$IBM_USER.METRICS" -f
+
+    dialog --title "Statistics" --msgbox "$METRICS" 35 62
+    main
+}
+
+function submit_job() { # Functie: Submit job to mainframe.
+    local IBM_USER=$(jq -r '.profiles.zosmf.properties.user' ~/.zowe/zowe.config.json)
+    local JOBS_LIST=$(zowe files list all-members "$IBM_USER.JCL")
+    local MENU_ITEMS=()
+    local COUNT=1
+
+    while IFS= read -r JOB; do
+        MENU_ITEMS+=("$COUNT" "$JOB")
+        ((COUNT++))
+    done <<< "$JOBS_LIST"
+
+    if [ ${#MENU_ITEMS[@]} -eq 0 ]; then
+        error_exit "No jobs found in $IBM_USER.JCL"
+    fi
+
+    local CHOICE=$(dialog --title "Select A Job To Submit" --menu "Choose one of the following jobs:" 15 50 3 "${MENU_ITEMS[@]}" 3>&1 1>&2 2>&3)
+
+    dialog --title "Selected Job" --msgbox "You have selected the job: ${MENU_ITEMS[$CHOICE]}\nPress OK to continue." 8 50
+
+    local JOB_ID=$(zowe jobs submit data-set "$IBM_USER.JCL(${MENU_ITEMS[$CHOICE]})" --rff jobid --rft string)
+
+    wait_for_job "$JOB_ID"
+
+    dialog --title "Job Status" --msgbox "The job has ended successfully.\nPress OK to continue." 8 50
+    main
 }
 
 function logs() { # Functie: View logs.
@@ -145,15 +178,17 @@ function main() { # Functie: Main functie.
 
     local CHOICE=$(dialog --title "Select an option" --menu "Choose one of the following options:" 15 50 3 \
         1 "View statistics" \
-        2 "View logs" \
-        3 "Credits" \
-        4 "Exit" 3>&1 1>&2 2>&3)
+        2 "Submit job" \
+        3 "View logs" \
+        4 "Credits" \
+        5 "Exit" 3>&1 1>&2 2>&3)
 
     case "$CHOICE" in
         1) statistics;;
-        2) logs;;
-        3) credits;;
-        4) success_exit "Exiting script.";;
+        2) submit_job;;
+        3) logs;;
+        4) credits;;
+        5) success_exit "Exiting script.";;
         *) error_exit "Invalid choice.";;
     esac
 }

@@ -101,8 +101,8 @@ Good luck!
 
 ### ✨Setup
 
+- Run the following script to start the dashboard
 ```bash
-# Run the following script to start the dashboard
 bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Documentation/IBM%20Mainframe%20Challenge/The%20Grand%20Challenge/dashboard.sh) # On host not the mainframe
 ```
 
@@ -120,7 +120,10 @@ bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-I
         },
         "secure": []
     },
-```	
+```
+
+- This script uses the [STATS.jcl](/Documentation/IBM%20Mainframe%20Challenge/The%20Grand%20Challenge/STATS.jcl) to get the system statistics.
+- So make sure that the JCL is present in your `(Zxxxxxx).JCL` dataset.
 
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).

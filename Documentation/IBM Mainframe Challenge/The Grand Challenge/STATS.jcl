@@ -3,7 +3,6 @@
 //SYSPRINT DD DUMMY
 //SYSIN    DD DUMMY
 //SYSUT1   DD *
-********************************************
 CPU STATISTIEKEN:
   Aantal CPU's: 8
   Gemiddelde CPU-belasting: 75%
@@ -31,12 +30,11 @@ NETWERK STATISTIEKEN:
 SYSTEEM OPERATIE STATISTIEKEN:
   Uptime: 247 dagen, 13 uur
   Aantal herstarts: 2
-********************************************
-//SYSUT2   DD DSN=&SYSUID..TESTDATA,DISP=(NEW,CATLG,DELETE),
+//SYSUT2   DD DSN=&SYSUID..METRICS,DISP=(NEW,CATLG,DELETE),
 //            SPACE=(TRK,(1,1)),UNIT=SYSDA,
 //            DCB=(DSORG=PS,RECFM=FB,LRECL=80)
-//* Due to security restrictions, it was not possible to retrieve 
-//* real-time system statistics from the mainframe. The following 
-//* statistics are simulated using technical parameters to represent 
+//* Due to security restrictions, it was not possible to retrieve
+//* real-time system statistics from the mainframe. The following
+//* statistics are simulated using technical parameters to represent
 //* typical system performance. To make this as realistic as possible,
 //* I also copied the UI from available statistic commands.
