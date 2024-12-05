@@ -41,8 +41,9 @@
         9. [👉Migreren](👉migreren)
             1. [👉VMware naar Openstack](#👉vmware-naar-openstack)
             2. [👉Third-party solution](#👉third-party-solution)
-        10. [🔭Conclusion](#🔭conclusion)
-        11. [🔗References](#🔗references)
+        10. [👉Launch an instance](👉launch-an-instance)
+        11. [🔭Conclusion](#🔭conclusion)
+        12. [🔗References](#🔗references)
 
 ---
 
@@ -993,6 +994,70 @@ openstack server create \
 #### 👉Third-party solution
 
 For large workloads this is of course a lot of work to do yourself, especially if your IT team is not that extensive. Fortunately, there are several companies that specialize in this and can therefore offer valuable help. For example, Openstack itself recommends MigrateKit from VEXXHOST, Coriolis from Cloudbase Solutions and ZConverter. The big disadvantage of this is of course that it can cost a bit.
+
+### 👉Launch an instance
+
+
+- Create virtual network (selfservice option)
+```bash
+. demo-openrc
+
+openstack network create selfservice
+
+edit /etc/neutron/plugins/ml2/ml2_conf.ini
+
+[ml2]
+tenant_network_types = vxlan
+
+[ml2_type_vxlan]
+vni_ranges = 1:1000
+
+openstack subnet create --network selfservice \
+  --dns-nameserver 10.194.17.2 --gateway 172.16.1.1 \
+  --subnet-range 172.16.1.0/24 selfservice
+```
+```bash
+. demo-openrc
+
+openstack router create router
+
+openstack router add subnet router selfservice
+
+openstack router set router --external-gateway provider
+```
+
+- Verify operation:
+```bash
+. admin-openrc
+```
+
+- ip netns (er zouden 1 router en 2 dhcp's moeten staan)
+```bash
+openstack port list --router router (neem het IP adres van de provider router)
+
+ping naar provider router
+Create m1.nano flavor (soort machine type om dan te testen)
+
+openstack flavor create --id 0 --vcpus 1 --ram 64 --disk 1 m1.nano
+```
+
+- Generate a key pair
+```bash
+. demo-openrc
+
+ssh-keygen -q -N ""
+
+openstack keypair create --public-key ~/.ssh/id_rsa.pub mykey
+
+openstack keypair list (verify dat er een keypair in staat)
+```
+
+- Add security group rules (soort firewall)
+```bash
+openstack security group rule create --proto icmp default
+
+openstack security group rule create --proto tcp --dst-port 22 default
+```
 
 ### 🔭Conclusie
 
