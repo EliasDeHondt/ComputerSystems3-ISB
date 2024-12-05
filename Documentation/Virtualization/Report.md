@@ -1,13 +1,48 @@
 ![logo](https://eliasdh.com/assets/media/images/logo-github.png)
-# 💙🤍Rapport🤍💙
+# 💙🤍Report🤍💙
 
 ## 📘Table of Contents
 
 1. [📘Table of Contents](#📘table-of-contents)
 2. [📝Executive Summary](#📝executive-summary)
 3. [✨The actual report](#✨the-actual-report)
-
-
+    1. [👉Introduction](#👉introduction)
+        1. [👉VMware](#👉vmware)
+        2. [👉The problem](#👉the-problem)
+        3. [👉The solution](#👉the-solution)
+            1. [👉Openstack](#👉openstack)
+            2. [👉Previous obstacles](#👉previous-obstacles)
+            3. [👉Current situation](#👉current-situation)
+    2. [👉Content chapters](#👉content-chapters)
+        1. [👉A basic OpenStack installation](#👉a-basic-openstack-installation)
+        2. [👉Setup](#👉setup)
+            1. [👉Ubuntu Setup](#👉ubuntu-setup)
+            2. [👉MySQL Setup](#👉mysql-setup)
+            3. [👉RabbitMQ Setup](#👉rabbitmq-setup)
+            4. [👉Memcached Setup](#👉memcached-setup)
+            5. [👉Etcd Setup](#👉etcd-setup)
+        3. [👉Keystone](#👉keystone)
+            1. [👉Installation](#👉installation)
+            2. [👉Domain, projects, users and roles](#👉domain-projects-users-and-roles)
+        4. [👉Glance](#👉glance)
+            1. [👉Installation](#👉installation-1)
+            2. [👉Verify](#👉verify)
+        5. [👉Placement](#👉placement)
+            1. [👉Installation](#👉installation-2)
+        6. [👉Nova](#👉nova)
+            1. [👉Installation (controller node)](#👉installation-controller-node)
+            2. [👉Installation (compute node)](#👉installation-compute-node)
+        7. [👉Neutron](#👉neutron)
+            1. [👉Installation (controller node)](#👉installation-controller-node-1)
+            2. [👉Installation (compute](#👉installation-compute)
+        8. [👉Horizon](#👉horizon)
+            1. [👉Installation](#👉installation)
+            2. [👉Configuration](#👉configuration)
+        9. [👉Migreren](👉migreren)
+            1. [👉VMware naar Openstack](#👉vmware-naar-openstack)
+            2. [👉Third-party solution](#👉third-party-solution)
+        10. [🔭Conclusion](#🔭conclusion)
+        11. [🔗References](#🔗references)
 
 ---
 
@@ -29,64 +64,64 @@ Bron: Sorby & Bulleit, Communicatieve vaardigheden voor technici, Pearson Educat
 
 #### 👉VMware
 
-Wanneer VMware in de wereld kwam, bood de mogelijkheid voor de nieuwe x86-servers om meerdere VM’s op één fysieke server te draaien en deze te beheren via hypervisors. Later voegden ze ook VDI (Virtual Desktop Infrastructure) en MDM (Mobile Device Management) toe aan hun assortiment. Ze waren dus pioniers in de virtualisatiesector.
+When VMware came into the world, the new x86 servers offered the possibility to run multiple VMs on one physical server and manage them via hypervisors. Later they also added VDI (Virtual Desktop Infrastructure) and MDM (Mobile Device Management) to their portfolio. So they were pioneers in the virtualization sector.
 
 #### 👉The problem
 
-VMware heeft al verschillende eigenaars gehad doorheen de geschiedenis en de recentste daarvan is Broadcom die hen aankocht voor 69 miljard dollar. Broadcom is van plan om hun focus te verleggen naar VMware Cloud Foundation, de fundering voor privé- en hybrideclouds.
+VMware has had several owners throughout its history, the most recent of which is Broadcom who acquired them for $69 billion. Broadcom plans to shift their focus to VMware Cloud Foundation, the foundation for private and hybrid clouds.
 
-Volgende beslissingen zorgden voor enorme ontevredenheid bij de klanten:
-    - Het beëindigen van bestaande partnerovereenkomsten en enkel een selectie van die partners overzetten naar eigen partnerprogramma
-    - Schrappen van voordelige academische kortingen, andere productenbundels die duurder zijn, aanpassingen licenties -> kosten schieten omhoog
-    - VMware Cloud Service Provider klanten verplichten om nieuwe minimum toewijding te accepteren, wat veel duurder, eventueel onnodig en soms gewoonweg niet haalbaar is voor kleinere bedrijven.
-    - Transitie naar subscription-only licenties door permanente licenties af te schaffen.
-    - Meer dan 2800 VMware werknemers werden ontslagen.
+The following decisions caused huge dissatisfaction among customers:
+- Terminating existing partner agreements and only moving a select few partners to their own partner program
+- Eliminating advantageous academic discounts, other product bundles that are more expensive, license adjustments -> costs skyrocket
+- ​​Requiring VMware Cloud Service Provider customers to accept new minimum commitments, which is much more expensive, possibly unnecessary and sometimes simply not feasible for smaller companies.
+- Transitioning to subscription-only licensing by eliminating perpetual licenses.
+- Laying off over 2,800 VMware employees.
 
 #### 👉The solution
 
-Een mogelijk alternatief en ook het alternatief dat in dit verslag van nader gaat onderzocht worden is Openstack. Waarom zou je voor Openstack gaan? 
+A possible alternative and also the alternative that will be examined in more detail in this report is Openstack. Why would you go for Openstack?
 
 ##### 👉Openstack
 
-Openstack is een open-source project beheerd door OpenInfra Foundation, een non-profit organisatie die werken aan een open en neutrale omgeving, opdat bedrijven, ontwikkelaars en gebruikers samen aan open-source infrastructuur software. Openstack focust vooral op het aanbieden van cloud software, die trouwens volledig gratis is.
+Openstack is an open-source project managed by the OpenInfra Foundation, a non-profit organization working on an open and neutral environment, so that companies, developers and users can collaborate on open-source infrastructure software. Openstack focuses mainly on offering cloud software, which is completely free by the way.
 
 ##### 👉Previous obstacles
 
-- **Complexiteit:** Aanvankelijk was Openstack complex om op te zetten en te beheren. Er was dus een hoge leerdrempel voor bedrijven die geen uigebreide ervaring met gelijkaardige technologieën hadden.
-- **Schaalbaarheid:** Vooral voor grotere bedrijven was het betwijfelbaar of Openstack wel goed zou schalen op vlak van performantie, beschikbaarheid en beheersbaarheid.
-- **Support voor ondernemeningen:** Vanwege het open-source karakter was er initieel een tekort aan commerciële ondersteuning en functionaliteit specifiek gericht op bedrijven.
+- **Complexity:** Initially, Openstack was complex to set up and manage. This meant that there was a high learning threshold for companies that did not have extensive experience with similar technologies.
+- **Scalability:** Especially for larger companies, it was questionable whether Openstack would scale well in terms of performance, availability and manageability.
+- **Entrepreneurial support:** Due to its open-source nature, there was initially a lack of commercial support and functionality specifically aimed at companies.
 
 ##### 👉Current situation
 
-Na 14 jaar hebben ze het dan toch onder de knie gekregen. Tegenwoordig is het een mature oplossing dat zijn vroegere zwaktepunten heeft weggewerkt. Dit valt te merken aan de verschillende magnaten die ondertussen gebruik maken van Openstack. Hierander vallen grote ondernemingen en serice providers zoals China Mobile en Walmart, vooraanstaande techbedrijven zoals Blizzard Entertainment en Paypal en openbare cloud providers zoals VEXXHOST en DreamHost. Deze grote waaier aan indrukwekkende klanten staat testament voor hun huidige kunnen. We kunnen concluderen dat Openstack zeker een waardig alternatief is geworden voor VMware.
+After 14 years they finally got it. Today it is a mature solution that has solved its former weaknesses. This is noticeable by the various magnates that now use Openstack. These include large enterprises and service providers such as China Mobile and Walmart, leading tech companies such as Blizzard Entertainment and Paypal and public cloud providers such as VEXXHOST and DreamHost. This large range of impressive customers is a testament to their current capabilities. We can conclude that Openstack has certainly become a worthy alternative to VMware.
 
 ### 👉Content chapters
 
 #### 👉A basic OpenStack installation
 
-Om een OpenStack-omgeving op te zetten met alleen de essentiële componenten, zijn de volgende services nodig. Deze vormen de kernfunctionaliteit voor het beheren van virtuele infrastructuur:
+To set up an OpenStack environment with only the essential components, the following services are required. These are the core functionality for managing virtual infrastructure:
 1. **Keystone (Identity Service)**
-    - Keystone is verantwoordelijk voor authenticatie en autorisatie binnen OpenStack. Het fungeert als een centrale identity management-service waarmee gebruikers en diensten toegang krijgen tot de OpenStack-resources.
+  - Keystone is responsible for authentication and authorization within OpenStack. It acts as a central identity management service that allows users and services to access OpenStack resources.
 2. **Glance (Image Service)**
-    - Glance beheert virtuele machine-images. Deze service maakt het mogelijk om images te uploaden, opslaan, en beheren, zodat andere services, zoals Nova, ze kunnen gebruiken om virtuele machines te starten.
+  - Glance manages virtual machine images. This service allows you to upload, store, and manage images so that other services, such as Nova, can use them to launch virtual machines.
 3. **Placement (Placement Service)**
-    - Placement helpt bij het efficiënt toewijzen van resources, zoals CPU, geheugen en schijfruimte, aan virtuele machines. Het werkt nauw samen met Nova om te bepalen welke resources beschikbaar zijn en hoe ze het beste kunnen worden benut.
+  - Placement helps efficiently allocate resources, such as CPU, memory, and disk space, to virtual machines. It works closely with Nova to determine which resources are available and how best to utilize them.
 4. Nova **(Compute Service)**
-    - Nova is de rekenmodule van OpenStack die verantwoordelijk is voor het opstarten, beheren en beëindigen van virtuele machines. Het biedt de rekenkracht binnen de cloud en is afhankelijk van andere services, zoals Neutron en Glance, voor netwerktoegang en images.
+  - Nova is the OpenStack compute engine responsible for starting, managing, and terminating virtual machines. It provides the computing power within the cloud and relies on other services, such as Neutron and Glance, for network access and images.
 5. Neutron **(Network Service)**
-    - Neutron beheert netwerkconnectiviteit binnen OpenStack. Het biedt functionaliteit zoals netwerkisolatie, routers en firewalls. Neutron is essentieel voor het opzetten van verbindingen tussen virtuele machines en externe netwerken.
+  - Neutron manages network connectivity within OpenStack. It provides functionality such as network isolation, routers, and firewalls. Neutron is essential for establishing connections between virtual machines and external networks.
 6. Horizon **(Dashboard)**
-    - Horizon biedt een grafische gebruikersinterface (GUI) waarmee gebruikers en beheerders eenvoudig toegang krijgen tot de functionaliteit van OpenStack. Dit dashboard maakt het mogelijk om resources te beheren zonder command-line tools te gebruiken.
+  - Horizon provides a graphical user interface (GUI) that allows users and administrators to easily access OpenStack functionality. This dashboard allows for resource management without using command-line tools.
 
 ![Rapport](/Images/Rapport.png)
 
-Bij het opzetten van deze minimale configuratie wordt aanbevolen de services in de volgende volgorde te installeren:
+When setting up this minimal configuration, it is recommended to install the services in the following order:
 - Keystone
 - Glance
 - Placement
-- Nova en Neutron (deze twee services zijn nauw verweven en moeten vaak parallel of iteratief worden geconfigureerd)
+- Nova and Neutron (these two services are tightly intertwined and often need to be configured in parallel or iteratively)
 - Horizon
-Dit zorgt ervoor dat alle afhankelijkheden correct worden ingesteld. Zodra deze kernservices draaien, kan OpenStack worden gebruikt voor het aanmaken en beheren van virtuele infrastructuur.
+This ensures that all dependencies are set up correctly. Once these core services are up and running, OpenStack can be used to create and manage virtual infrastructure.
 
 #### 👉Setup
 
@@ -163,12 +198,10 @@ OK, successfully used password, moving on...
 
 Switch to unix_socket authentication [Y/n] n
  ... skipping.
-
 …
 
 Change the root password? [Y/n] n
  ... skipping.
-
 …
 
 Remove anonymous users? [Y/n] y
@@ -178,7 +211,6 @@ Remove anonymous users? [Y/n] y
 
 Disallow root login remotely? [Y/n] n
  ... skipping.
-
 …
 
 Remove test database and access to it? [Y/n] y
@@ -186,12 +218,10 @@ Remove test database and access to it? [Y/n] y
  ... Success!
  - Removing privileges on test database...
  ... Success!
-
 …
 
 Reload privilege tables now? [Y/n] y
  ... Success!
-
 …
 ```
 
@@ -394,7 +424,7 @@ server1 $ service glance-api restart
 
 ##### 👉Verify
 
-- Verify glance using CirrOS, a small linux image that helps testing an openstack deployment
+- Verify glance using CirrOS, a small linux image that helps testing an openstack deployment.
 
 ```bash
 server1 $ . admin-openrc
@@ -715,8 +745,7 @@ server1 $ openstack endpoint create --region RegionOne \
   network admin "http://server:9696"
 ```
 
-- We hebben gekozen voor self-service networks in plaats van Provider networks, dit bied ons veel meer flexibiliteit.
-
+- We have chosen self-service networks instead of Provider networks, this offers us much more flexibility.
 ```bash
 server1 $ apt install neutron-server neutron-plugin-ml2 \
   neutron-openvswitch-agent neutron-l3-agent neutron-dhcp-agent \
@@ -921,11 +950,50 @@ OPENSTACK_KEYSTONE_DEFAULT_ROLE = "user"
 TIME_ZONE = "Europe/Brussels""
 ```
 
+### 👉Migreren
+
+VMware VMs usually use vmdk's (virtual machine disks). However, this type is not directly supported by Openstack. You can run a vSphere cluster via the VMware driver that Openstack provides. In that you can work as you would in a regular vSphere cluster. However, this is complex. There are many different ways to migrate.
+
+#### 👉Via Glance and Cinder
+
+It is also easy to use Openstack services itself. You can first upload your image to Glance, where behind the scenes a conversion to qcow2 or raw is also done.
+```bash
+openstack image create --disk-format vmdk --container-format bare \
+  --public --file <file_path> <name>
+```
+
+You can then use that image to create a volume in Cinder.
+```bash
+openstack volume create \
+    --image <image_name_or_id> --size <size_volume_in_GB> \
+    <name>
+```
+
+Then you can create an instance from this volume.
+```bash
+openstack server create \
+    --flavor $FLAVOR --network $NETWORK \
+    --volume <volume_name_or_id>\
+    --wait <name>
+```
+
+This way you have more control over the creation of your volume such as adding encryption, but Nova can also automatically create an instance with a volume from your image.
+```bash
+openstack server create \
+    --flavor $FLAVOR --network $NETWORK \
+    --image <image_name_or_id> --boot-from-volume <size_in_GB> \
+    --wait <name>
+```
+
+#### 👉Third-party solution
+
+For large workloads this is of course a lot of work to do yourself, especially if your IT team is not that extensive. Fortunately, there are several companies that specialize in this and can therefore offer valuable help. For example, Openstack itself recommends MigrateKit from VEXXHOST, Coriolis from Cloudbase Solutions and ZConverter. The big disadvantage of this is of course that it can cost a bit.
+
 ### 🔭Conclusie
 
-In dit verslag hebben we een basis OpenStack-installatie opgezet met alleen de essentiële componenten. We hebben de volgende services geïnstalleerd: Keystone, Glance, Placement, Nova, Neutron en Horizon. Deze services vormen de kernfunctionaliteit voor het beheren van virtuele infrastructuur. We hebben de installatie en configuratie van elke service gedetailleerd beschreven, inclusief de benodigde stappen en configuratiebestanden. Door deze stappen te volgen, kunnen gebruikers een OpenStack-omgeving opzetten en beheren voor het uitvoeren van virtuele machines en het beheren van netwerkconnectiviteit. OpenStack biedt een krachtige en flexibele cloudoplossing die kan worden aangepast aan de behoeften van verschillende organisaties. Met de juiste configuratie en beheer kunnen gebruikers profiteren van de voordelen van cloud computing, zoals schaalbaarheid, flexibiliteit en kostenefficiëntie.
+In this report, we have set up a basic OpenStack installation with only the essential components. We have installed the following services: Keystone, Glance, Placement, Nova, Neutron, and Horizon. These services provide the core functionality for managing virtual infrastructure. We have described the installation and configuration of each service in detail, including the necessary steps and configuration files. By following these steps, users can set up and manage an OpenStack environment for running virtual machines and managing network connectivity. OpenStack provides a powerful and flexible cloud solution that can be tailored to the needs of different organizations. With proper configuration and management, users can take advantage of the benefits of cloud computing, such as scalability, flexibility, and cost-efficiency.
 
-### 🔗External references
+### 🔗References
 
 - [OpenStack Documentation](https://docs.openstack.org/)
 - [OpenStack Installation Guide](https://docs.openstack.org/install-guide/)
