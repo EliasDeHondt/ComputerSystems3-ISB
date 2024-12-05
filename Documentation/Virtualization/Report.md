@@ -47,16 +47,21 @@
 ---
 
 ## 📝Executive Summary
-[Begin jouw rapport met een executive summary. Een executive summary biedt een compleet overzicht van een rapport. Het is een onafhankelijk gedeelte van het rapport en moet als zodanig los kunnen staan van de rest. De executive summary is een belangrijk onderdeel, omdat dit vaak het enige gedeelte van het rapport is dat wordt gelezen – iets wat vaak het geval is bij managers die rapporten ontvangen van verschillende ingenieurs en andere personeelsleden. Een manager op deze positie wil snel de belangrijke punten van een rapport kunnen zien en niet twintig pagina’s tekst moeten doorlezen. Al er tijdens het lezen van de executive summary specifieke vragen naar boven komen, kan hij het gehele rapport doorlezen om de noodzakelijke details op te zoeken. Als je leert om effectieve executive summaries te schrijven, dan zul je hier veel profijt van hebben in het bedrijfsleven, waar altijd weinig tijd is. Executive summaries moeten beknopt zijn omdat ze veel worden gebruikt, zowel voor interne technische rapporten, als voor rapporten die worden verspreid onder de klanten van een onderneming.
-
-- Vorm van een executive summary:
-  1. Een samenvatting van de belangrijkste punten van de inleiding, de doelen, de achterliggende materie, de procedure en de resultaten van het rapport.
-  2. Conclusies
-  3. Aanbevelingen
-
-Een executive summary is heel kort, maximum één getypte bladzijde. Een executive summary schrijf je pas nadat je het hele rapport hebt afgerond.
-Bron: Sorby & Bulleit, Communicatieve vaardigheden voor technici, Pearson Education Benelux, 2006]
-
+This report explores the possibility of migrating from VMware to OpenStack as a cloud infrastructure solution. The dissatisfaction with recent decisions by Broadcom, the current owner of VMware, has led many companies to seek alternative solutions. OpenStack, an open-source project managed by the OpenInfra Foundation, presents itself as a viable option.
+- ***Here are the key points***:
+  - **Problem**: VMware's recent changes in licensing, pricing, and partner programs have caused dissatisfaction among customers.
+  - **Solution**: OpenStack offers a free, open-source alternative with a mature feature set and a large community of users and developers and is already being utilized by large enterprises such as Walmart and Paypal for example.
+- ***Benefits of OpenStack***:
+  - **Cost-effective**: OpenStack eliminates vendor lock-in and avoids expensive licensing fees by being an open-source initiative.
+  - **Customization**: OpenStack offers greater flexibility and customization compared to proprietary solutions, not only through its open-source nature but also through its modular structure.
+  - **Scalability**: OpenStack can scale to meet the needs of large and growing organizations.
+  - **Challenges**: Setting up OpenStack is known to be more complex than managed solutions.
+- ***Report Structure***:
+  - **Introduction**: Discusses the problems with VMware and introduces OpenStack as a solution.
+  - **Content Chapters**: Details the steps involved in setting up a basic OpenStack environment and how to migrate your VMware machines to OpenStack.
+  - **Conclusion**: Summarizes the benefits of OpenStack and its suitability as a replacement for VMware.
+- ***Conclusion***:
+  - OpenStack is a strong alternative to VMware, especially for companies looking to avoid vendor lock-in and reduce costs. While the initial setup may be more complex, the long-term benefits outweigh the initial investment. This report provides a foundational understanding of OpenStack and its core components. Further research is recommended to delve deeper into specific use cases and migration strategies.
 
 ## ✨The actual report
 
