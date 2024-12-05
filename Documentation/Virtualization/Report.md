@@ -1031,7 +1031,7 @@ openstack router set router --external-gateway provider
 . admin-openrc
 ```
 
-- ip netns (er zouden 1 router en 2 dhcp's moeten staan)
+- ip netns (there should be 1 router and 2 dhcp's)
 ```bash
 openstack port list --router router (neem het IP adres van de provider router)
 
@@ -1052,7 +1052,7 @@ openstack keypair create --public-key ~/.ssh/id_rsa.pub mykey
 openstack keypair list (verify dat er een keypair in staat)
 ```
 
-- Add security group rules (soort firewall)
+- Add security group rules (type of firewall)
 ```bash
 openstack security group rule create --proto icmp default
 
