@@ -1,65 +1,37 @@
 ![logo](https://eliasdh.com/assets/media/images/logo-github.png)
 # 💙🤍Rapport🤍💙
 
-## 0. Table of Contents
+## 📘Table of Contents
 
-0. [0. Table of Contents](#0-table-of-contents)
-1. [1. Executive Summary](#1-executive-summary)
-2. [2. Het eigenlijke verslag](#2-het-eigenlijke-verslag)
-    1. [2.1. Inleiding](#21-inleiding)
-        1. [2.1.1. VMware](#211-vmware)
-        2. [2.1.2. Het probleem](#212-het-probleem)
-        3. [2.1.3. De oplossing](#213-de-oplossing)
-            1. [2.1.3.1. Openstack](#2131-openstack)
-            2. [2.1.3.2. Vorige obstakels](#2132-vorige-obstakels)
-            3. [2.1.3.3. Huidige situatie](#2133-huidige-situatie)
-    2. [2.2. Inhoudelijke hoofdstukken](#22-inhoudelijke-hoofdstukken)
-        1. [2.2.1. Een basis OpenStack-installatie](#221-een-basis-openstack-installatie)
-        2. [2.2.2. Setup](#222-setup)
-            1. [2.2.2.1. Ubuntu Setup](#2221-ubuntu-setup)
-            2. [2.2.2.2. MySQL Setup](#2222-mysql-setup)
-            3. [2.2.2.3. RabbitMQ Setup](#2223-rabbitmq-setup)
-            4. [2.2.2.5. Etcd Setup](#2225-etcd-setup)
-        3. [2.2.3. Keystone](#223-keystone)
-            1. [2.2.3.1. Installatie](#2231-installatie)
-            2. [2.2.3.2 Domain, projecten, gebruikers en rollen](#2232-domain-projecten-gebruikers-en-rollen)
-        4. [2.2.4. Glance](#224-glance)
-            1. [2.2.4.1. Installatie](#2241-installatie)
-            2. [2.2.4.2. Verify](#2242-verify)
-        5. [2.2.5. Placement](#225-placement)
-            1. [2.2.5.1. Installatie](#2251-installatie)
-        6. [2.2.6. Nova](#226-nova)
-            1. [2.2.6.1. Installatie (controller node)](#2261-installatie-controller-node)
-            2. [2.2.6.2 Installatie (compute node)](#2262-installatie-compute-node)
-        7. [2.2.7. Neutron](#227-neutron)
-            1. [2.2.7.1. Installatie (controller node)](#2271-installatie-controller-node)
-            2. [2.2.7.2. Installatie (compute node)](#2272-installatie-compute-node)
-        8. [2.2.8. Horizon](#228-horizon)
-            1. [2.2.8.1. Installatie](#2281-installatie)
-    3. [2.3. Conclusie](#23-conclusie)
-    4. [2.4. Aanbevelingen](#24-aanbevelingen)
+1. [📘Table of Contents](#📘table-of-contents)
+2. [📝Executive Summary](#📝executive-summary)
+3. [✨The actual report](#✨the-actual-report)
+
+
 
 ---
 
-## 1. Executive Summary
+## 📝Executive Summary
 [Begin jouw rapport met een executive summary. Een executive summary biedt een compleet overzicht van een rapport. Het is een onafhankelijk gedeelte van het rapport en moet als zodanig los kunnen staan van de rest. De executive summary is een belangrijk onderdeel, omdat dit vaak het enige gedeelte van het rapport is dat wordt gelezen – iets wat vaak het geval is bij managers die rapporten ontvangen van verschillende ingenieurs en andere personeelsleden. Een manager op deze positie wil snel de belangrijke punten van een rapport kunnen zien en niet twintig pagina’s tekst moeten doorlezen. Al er tijdens het lezen van de executive summary specifieke vragen naar boven komen, kan hij het gehele rapport doorlezen om de noodzakelijke details op te zoeken. Als je leert om effectieve executive summaries te schrijven, dan zul je hier veel profijt van hebben in het bedrijfsleven, waar altijd weinig tijd is. Executive summaries moeten beknopt zijn omdat ze veel worden gebruikt, zowel voor interne technische rapporten, als voor rapporten die worden verspreid onder de klanten van een onderneming.
-Vorm van een executive summary:
-1. Een samenvatting van de belangrijkste punten van de inleiding, de doelen, de achterliggende materie, de procedure en de resultaten van het rapport.
-2. Conclusies
-3. Aanbevelingen
+
+- Vorm van een executive summary:
+  1. Een samenvatting van de belangrijkste punten van de inleiding, de doelen, de achterliggende materie, de procedure en de resultaten van het rapport.
+  2. Conclusies
+  3. Aanbevelingen
+
 Een executive summary is heel kort, maximum één getypte bladzijde. Een executive summary schrijf je pas nadat je het hele rapport hebt afgerond.
 Bron: Sorby & Bulleit, Communicatieve vaardigheden voor technici, Pearson Education Benelux, 2006]
 
 
-## 2. Het eigenlijke verslag
+## ✨The actual report
 
-### 2.1. Inleiding
+### 👉Introduction
 
-#### 2.1.1. VMware
+#### 👉VMware
 
 Wanneer VMware in de wereld kwam, bood de mogelijkheid voor de nieuwe x86-servers om meerdere VM’s op één fysieke server te draaien en deze te beheren via hypervisors. Later voegden ze ook VDI (Virtual Desktop Infrastructure) en MDM (Mobile Device Management) toe aan hun assortiment. Ze waren dus pioniers in de virtualisatiesector.
 
-#### 2.1.2. Het probleem
+#### 👉The problem
 
 VMware heeft al verschillende eigenaars gehad doorheen de geschiedenis en de recentste daarvan is Broadcom die hen aankocht voor 69 miljard dollar. Broadcom is van plan om hun focus te verleggen naar VMware Cloud Foundation, de fundering voor privé- en hybrideclouds.
 
@@ -70,27 +42,27 @@ Volgende beslissingen zorgden voor enorme ontevredenheid bij de klanten:
     - Transitie naar subscription-only licenties door permanente licenties af te schaffen.
     - Meer dan 2800 VMware werknemers werden ontslagen.
 
-#### 2.1.3. De oplossing
+#### 👉The solution
 
 Een mogelijk alternatief en ook het alternatief dat in dit verslag van nader gaat onderzocht worden is Openstack. Waarom zou je voor Openstack gaan? 
 
-##### 2.1.3.1. Openstack
+##### 👉Openstack
 
 Openstack is een open-source project beheerd door OpenInfra Foundation, een non-profit organisatie die werken aan een open en neutrale omgeving, opdat bedrijven, ontwikkelaars en gebruikers samen aan open-source infrastructuur software. Openstack focust vooral op het aanbieden van cloud software, die trouwens volledig gratis is.
 
-##### 2.1.3.2. Vorige obstakels
+##### 👉Previous obstacles
 
 - **Complexiteit:** Aanvankelijk was Openstack complex om op te zetten en te beheren. Er was dus een hoge leerdrempel voor bedrijven die geen uigebreide ervaring met gelijkaardige technologieën hadden.
 - **Schaalbaarheid:** Vooral voor grotere bedrijven was het betwijfelbaar of Openstack wel goed zou schalen op vlak van performantie, beschikbaarheid en beheersbaarheid.
 - **Support voor ondernemeningen:** Vanwege het open-source karakter was er initieel een tekort aan commerciële ondersteuning en functionaliteit specifiek gericht op bedrijven.
 
-##### 2.1.3.3. Huidige situatie
+##### 👉Current situation
 
 Na 14 jaar hebben ze het dan toch onder de knie gekregen. Tegenwoordig is het een mature oplossing dat zijn vroegere zwaktepunten heeft weggewerkt. Dit valt te merken aan de verschillende magnaten die ondertussen gebruik maken van Openstack. Hierander vallen grote ondernemingen en serice providers zoals China Mobile en Walmart, vooraanstaande techbedrijven zoals Blizzard Entertainment en Paypal en openbare cloud providers zoals VEXXHOST en DreamHost. Deze grote waaier aan indrukwekkende klanten staat testament voor hun huidige kunnen. We kunnen concluderen dat Openstack zeker een waardig alternatief is geworden voor VMware.
 
-### 2.2. Inhoudelijke hoofdstukken
+### 👉Content chapters
 
-#### 2.2.1. Een basis OpenStack-installatie
+#### 👉A basic OpenStack installation
 
 Om een OpenStack-omgeving op te zetten met alleen de essentiële componenten, zijn de volgende services nodig. Deze vormen de kernfunctionaliteit voor het beheren van virtuele infrastructuur:
 1. **Keystone (Identity Service)**
@@ -116,9 +88,9 @@ Bij het opzetten van deze minimale configuratie wordt aanbevolen de services in 
 - Horizon
 Dit zorgt ervoor dat alle afhankelijkheden correct worden ingesteld. Zodra deze kernservices draaien, kan OpenStack worden gebruikt voor het aanmaken en beheren van virtuele infrastructuur.
 
-#### 2.2.2. Setup
+#### 👉Setup
 
-##### 2.2.2.1. Ubuntu Setup
+##### 👉Ubuntu Setup
 
 ```yaml
 network:
@@ -168,7 +140,7 @@ $ apt install python3-openstackclient
 server1 $ apt install mariadb-server python3-pymysql
 ```
 
-##### 2.2.2.2. MySQL Setup
+##### 👉MySQL Setup
 
 ```bash
 server1 $ vim /etc/mysql/mariadb.conf.d/99-openstack.cnf
@@ -223,7 +195,7 @@ Reload privilege tables now? [Y/n] y
 …
 ```
 
-##### 2.2.2.3. RabbitMQ Setup
+##### 👉RabbitMQ Setup
 
 ```bash
 server1 $ apt install rabbitmq-server 
@@ -232,7 +204,7 @@ server1 $ rabbitmqctl set_permissions openstack "." "." ".*"
 ```
 - Ons password voor rabbitmq is 123
 
-##### 2.2.2.4. Memcached Setup
+##### 👉Memcached Setup
 
 ```bash
 server1 $ apt install memcached python3-pymemcache 
@@ -241,7 +213,7 @@ replace -l 127.0.0.1 with -l 10.0.0.11
 server1 $ service memcached restart
 ```
 
-##### 2.2.2.5. Etcd Setup
+##### 👉Etcd Setup
 
 ```bash
 server1 $ apt install etcd
@@ -255,9 +227,9 @@ server1 $ systemctl enable etcd
 server1 $ systemctl restart etcd
 ```
 
-#### 2.2.3. Keystone
+#### 👉Keystone
 
-##### 2.2.3.1. Installatie
+##### 👉Installation
 
 ```bash
 server1 $ mysql (run as root) 
@@ -297,7 +269,7 @@ server1 $ export OS_AUTH_URL=http://server1:5000/v3
 server1 $ export OS_IDENTITY_API_VERSION=3 
 ```
 
-##### 2.2.3.2 Domain, projecten, gebruikers en rollen
+##### 👉Domain, projects, users and roles
 
 ```bash
 Create domain, projects, users and roles for the identity service:
@@ -345,9 +317,9 @@ server1 $ . admin-openrc
 server1 $ openstack token issue
 ```
 
-#### 2.2.4. Glance
+#### 👉Glance
 
-##### 2.2.4.1. Installatie
+##### 👉Installation
 
 ```bash
 server1 $ mysql
@@ -420,7 +392,7 @@ server1 $ su -s /bin/sh -c "glance-manage db_sync" glance
 server1 $ service glance-api restart
 ```
 
-##### 2.2.4.2. Verify
+##### 👉Verify
 
 - Verify glance using CirrOS, a small linux image that helps testing an openstack deployment
 
@@ -439,9 +411,9 @@ controleer of de image ingeladen werd:
 server1 $ glance image-list
 ```
 
-#### 2.2.5. Placement
+#### 👉Placement
 
-##### 2.2.5.1. Installatie
+##### 👉Installation
 
 ```bash
 server1 $ mysql
@@ -497,9 +469,9 @@ server1 $ su -s /bin/sh -c "placement-manage db sync" placement
 server1 $ service apache2 restart
 ```
 
-#### 2.2.6. Nova
+#### 👉Nova
 
-##### 2.2.6.1. Installatie (controller node)
+##### 👉Installation (controller node)
 
 ```bash
 server1 $ mysql
@@ -620,7 +592,7 @@ server1 $ service nova-conductor restart
 server1 $ service nova-novncproxy restart
 ```
 
-##### 2.2.6.2 Installatie (compute node)
+##### 👉Installation (compute node)
 
 ```bash
 server2 $ apt install nova-compute
@@ -700,9 +672,9 @@ discover nova nodes:
 server1 $ su -s /bin/sh -c "nova-manage cell_v2 discover_hosts --verbose" nova (altijd runnen wanneer je een nieuwe compute node toevoegt, anders wordt deze niet herkent)
 ```
 
-#### 2.2.7. Neutron
+#### 👉Neutron
 
-##### 2.2.7.1. Installatie (controller node)
+##### 👉Installation (controller node)
 
 ```bash
 server1 $ mysql -u root -p
@@ -860,7 +832,7 @@ server1 $ service neutron-metadata-agent restart
 server1 $ service neutron-l3-agent restart
 ```
 
-##### 2.2.7.2. Installatie (compute node)
+##### 👉Installation (compute node)
 
 ```bash
 server2 $ apt install neutron-openvswitch-agent
@@ -912,9 +884,9 @@ server2 $ service nova-compute restart
 server2 $ service neutron-openvswitch-agent restart
 ```
 
-#### 2.2.8. Horizon
+#### 👉Horizon
 
-##### 2.2.8.1. Installatie
+##### 👉Installation
 
 ```bash
 server1 $ apt install openstack-dashboard
@@ -949,11 +921,11 @@ OPENSTACK_KEYSTONE_DEFAULT_ROLE = "user"
 TIME_ZONE = "Europe/Brussels""
 ```
 
-### 2.3. Conclusie
+### 🔭Conclusie
 
 In dit verslag hebben we een basis OpenStack-installatie opgezet met alleen de essentiële componenten. We hebben de volgende services geïnstalleerd: Keystone, Glance, Placement, Nova, Neutron en Horizon. Deze services vormen de kernfunctionaliteit voor het beheren van virtuele infrastructuur. We hebben de installatie en configuratie van elke service gedetailleerd beschreven, inclusief de benodigde stappen en configuratiebestanden. Door deze stappen te volgen, kunnen gebruikers een OpenStack-omgeving opzetten en beheren voor het uitvoeren van virtuele machines en het beheren van netwerkconnectiviteit. OpenStack biedt een krachtige en flexibele cloudoplossing die kan worden aangepast aan de behoeften van verschillende organisaties. Met de juiste configuratie en beheer kunnen gebruikers profiteren van de voordelen van cloud computing, zoals schaalbaarheid, flexibiliteit en kostenefficiëntie.
 
-### 2.4. External references
+### 🔗External references
 
 - [OpenStack Documentation](https://docs.openstack.org/)
 - [OpenStack Installation Guide](https://docs.openstack.org/install-guide/)
