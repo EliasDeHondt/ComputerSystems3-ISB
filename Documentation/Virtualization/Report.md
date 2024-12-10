@@ -1059,7 +1059,7 @@ openstack security group rule create --proto icmp default
 openstack security group rule create --proto tcp --dst-port 22 default
 ```
 
-### 🔭Conclusie
+### 🔭Conclusion
 
 In this report, we have set up a basic OpenStack installation with only the essential components. We have installed the following services: Keystone, Glance, Placement, Nova, Neutron, and Horizon. These services provide the core functionality for managing virtual infrastructure. We have described the installation and configuration of each service in detail, including the necessary steps and configuration files. By following these steps, users can set up and manage an OpenStack environment for running virtual machines and managing network connectivity. OpenStack provides a powerful and flexible cloud solution that can be tailored to the needs of different organizations. With proper configuration and management, users can take advantage of the benefits of cloud computing, such as scalability, flexibility, and cost-efficiency.
 
