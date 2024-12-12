@@ -1059,6 +1059,25 @@ openstack security group rule create --proto icmp default
 openstack security group rule create --proto tcp --dst-port 22 default
 ```
 
+- Use this command to launch an instance
+```bash
+openstack server list
+```
+
+- Use this command to show vnc console
+```bash
+openstack console url show selfservice-instance
+```
+
+- if `server1` does not resolve you can add the IP to `/etc/hosts` or fill in the IP in the URL o give an `external ip` to your server you can use the following commands:
+```bash
+openstack floating ip create provider
+
+openstack server add floating ip selfservice-instance 10.134.188.19
+
+openstack server list # Verify that the floating ip is attached
+```
+
 ### 🔭Conclusion
 
 In this report, we have set up a basic OpenStack installation with only the essential components. We have installed the following services: Keystone, Glance, Placement, Nova, Neutron, and Horizon. These services provide the core functionality for managing virtual infrastructure. We have described the installation and configuration of each service in detail, including the necessary steps and configuration files. By following these steps, users can set up and manage an OpenStack environment for running virtual machines and managing network connectivity. OpenStack provides a powerful and flexible cloud solution that can be tailored to the needs of different organizations. With proper configuration and management, users can take advantage of the benefits of cloud computing, such as scalability, flexibility, and cost-efficiency.
