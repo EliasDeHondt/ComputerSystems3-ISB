@@ -112,11 +112,11 @@ To set up an OpenStack environment with only the essential components, the follo
   - Glance manages virtual machine images. This service allows you to upload, store, and manage images so that other services, such as Nova, can use them to launch virtual machines.
 3. **Placement (Placement Service)**
   - Placement helps efficiently allocate resources, such as CPU, memory, and disk space, to virtual machines. It works closely with Nova to determine which resources are available and how best to utilize them.
-4. Nova **(Compute Service)**
+4. **Nova (Compute Service)**
   - Nova is the OpenStack compute engine responsible for starting, managing, and terminating virtual machines. It provides the computing power within the cloud and relies on other services, such as Neutron and Glance, for network access and images.
-5. Neutron **(Network Service)**
+5. **Neutron (Network Service)**
   - Neutron manages network connectivity within OpenStack. It provides functionality such as network isolation, routers, and firewalls. Neutron is essential for establishing connections between virtual machines and external networks.
-6. Horizon **(Dashboard)**
+6. **Horizon (Dashboard)**
   - Horizon provides a graphical user interface (GUI) that allows users and administrators to easily access OpenStack functionality. This dashboard allows for resource management without using command-line tools.
 
 ![Rapport](/Images/Rapport.png)
@@ -133,6 +133,7 @@ This ensures that all dependencies are set up correctly. Once these core service
 
 ##### 👉Ubuntu Setup
 
+/etc/netplan/01-netcfg.cnf
 ```yaml
 network:
   version: 2
@@ -149,8 +150,13 @@ network:
     ens19: # Private adapter
       dhcp4: no
       dhcp6: no
-      addresses:
-        - 10.0.0.11/24 # Private IP address
+      optional: true
+```
+
+/etc/hosts
+```txt
+10.134.188.11 server1
+10.134.188.12 server2
 ```
 
 ```bash
@@ -163,7 +169,7 @@ vim /etc/sysctl.conf
 ```bash
 server1 $ apt install chrony
 server1 $ vim /etc/chrony/chrony.conf
-allow 10.0.0.0/27
+allow 10.134.188.0/27
 server1 $ service chrony restart 
 ```
 
@@ -186,7 +192,7 @@ server1 $ apt install mariadb-server python3-pymysql
 ```bash
 server1 $ vim /etc/mysql/mariadb.conf.d/99-openstack.cnf
 [mysqld]
-bind-address = 10.0.0.11
+bind-address = 10.134.188.11
 
 default-storage-engine = innodb
 innodb_file_per_table = on
@@ -245,7 +251,7 @@ server1 $ rabbitmqctl set_permissions openstack "." "." ".*"
 ```bash
 server1 $ apt install memcached python3-pymemcache 
 server1 $ vim /etc/memcached.conf
-replace -l 127.0.0.1 with -l 10.0.0.11 
+replace -l 127.0.0.1 with -l 10.134.188.11 
 server1 $ service memcached restart
 ```
 
@@ -257,7 +263,7 @@ server1 $ vim /etc/default/etcd
 ETCD_NAME="server1"
 ETCD_DATA_DIR="/var/lib/etcd"
 ETCD_INITIAL_CLUSTER_STATE="new"
-ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster-01" ETCD_INITIAL_CLUSTER="server1=http://10.0.0.11:2380/" ETCD_INITIAL_ADVERTISE_PEER_URLS="http://10.0.0.11:2380/" ETCD_ADVERTISE_CLIENT_URLS="http://10.0.0.11:2379/" ETCD_LISTEN_PEER_URLS="http://0.0.0.0:2380/" 
+ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster-01" ETCD_INITIAL_CLUSTER="server1=http://10.134.188.11:2380/" ETCD_INITIAL_ADVERTISE_PEER_URLS="http://10.134.188.11:2380/" ETCD_ADVERTISE_CLIENT_URLS="http://10.0.0.11:2379/" ETCD_LISTEN_PEER_URLS="http://0.0.0.0:2380/" 
 ETCD_LISTEN_CLIENT_URLS="http://10.0.0.11:2379/" 
 server1 $ systemctl enable etcd
 server1 $ systemctl restart etcd
@@ -382,7 +388,7 @@ server1 $ openstack role add --project service --user glance admin
 server1 $ apt install glance
 
 server1 $ vim /etc/glance/glance-api.conf
-"[database]
+[database]
 connection = mysql+pymysql://glance:123@server1/glance
 
 [keystone_authtoken]
@@ -419,10 +425,10 @@ password = 123
 endpoint_id = 340be3625e9b4239a6415d034e98aace
 region_name = RegionOne"
 
-Make sure that the glance account has reader access to system-scope resources:
+# Make sure that the glance account has reader access to system-scope resources:
 server1 $ openstack role add --user glance --user-domain Default --system all reader
 
-sync de database
+# sync de database
 server1 $ su -s /bin/sh -c "glance-manage db_sync" glance
 
 server1 $ service glance-api restart
@@ -430,7 +436,7 @@ server1 $ service glance-api restart
 
 ##### 👉Verify
 
-- Verify glance using CirrOS, a small linux image that helps testing an openstack deployment.
+- Verify the installation of glance by uploading CirrOS, a small linux image that helps testing an openstack deployment.
 
 ```bash
 server1 $ . admin-openrc
@@ -443,7 +449,7 @@ server1 $ glance image-create --name "cirros" \
   --disk-format qcow2 --container-format bare \
   --visibility=public
 
-controleer of de image ingeladen werd:
+# controleer of de image ingeladen werd:
 server1 $ glance image-list
 ```
 
@@ -499,7 +505,7 @@ project_name = service
 username = placement
 password = 123"
 
-sync de database met de placement config
+# sync de database met de placement config
 server1 $ su -s /bin/sh -c "placement-manage db sync" placement
 
 server1 $ service apache2 restart
@@ -536,10 +542,10 @@ MariaDB [(none)]> GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'%' \
 ```bash
 server1 $ . admin-openrc
 
-create nova user:
+# create nova user:
 server1 $ openstack user create --domain default --password-prompt nova
 
-add admin role to user:
+# add admin role to user:
 server1 $ openstack role add --project service --user nova admin
 
 create nova service entity:
@@ -555,7 +561,7 @@ server1 $ apt install nova-api nova-conductor nova-novncproxy nova-scheduler
 
 server1 $ vim /etc/nova/nova.conf
 
-"[api_database]
+[api_database]
 connection = mysql+pymysql://nova:123@server1/nova_api
 
 [database]
@@ -590,7 +596,7 @@ username = nova
 password = 123
 
 [DEFAULT]
-my_ip = 10.0.0.11
+my_ip = 10.134.188.11
 
 [vnc]
 enabled = true
@@ -664,7 +670,7 @@ username = nova
 password = 123
 
 [DEFAULT]
-my_ip = 10.0.0.12
+my_ip = 10.134.188.12
 
 [vnc]
 enabled = true
@@ -686,12 +692,13 @@ auth_type = password
 user_domain_name = Default
 auth_url = http://server1:5000/v3
 username = placement
-password = 123"
+password = 123
 ```
 
 ```bash
-check if node supports hardware accelleration
+# check if node supports hardware accelleration
 server2 $ egrep -c '(vmx|svm)' /proc/cpuinfo
+# if it returns a value of 1 or greater it the server supports hardware accel
 
 server2 $ service nova-compute restart
 ```
@@ -801,12 +808,12 @@ lock_path = /var/lib/neutron/tmp
 
 server1 $ vim /etc/neutron/plugins/ml2/openvswitch_agent.ini
 
-"[ovs]
+[ovs]
 bridge_mappings = provider:br-provider
-local_ip = ens19
+local_ip = 10.134.188.11
 
 ovs-vsctl add-br br-provider
-ovs-vsctl add-port br-provider ens18
+ovs-vsctl add-port br-provider ens19
 
 [agent]
 tunnel_types = vxlan
@@ -836,15 +843,15 @@ Configure metadata agent:
 
 server1 $ vim /etc/neutron/metadata_agent.ini
 
-"[DEFAULT]
+[DEFAULT]
 nova_metadata_host = controller
-metadata_proxy_shared_secret = 123"
+metadata_proxy_shared_secret = 123
 
 Configure the Compute service to use the Networking service:
 
 server1 $ vim /etc/nova/nova.conf
 
-"[neutron]
+[neutron]
 auth_url = http://server1:5000
 auth_type = password
 project_domain_name = Default
@@ -887,10 +894,10 @@ Edit the /etc/neutron/plugins/ml2/openvswitch_agent.ini file:
 
 [ovs]
 bridge_mappings = provider:br-provider
-local_ip = ens19
+local_ip = 10.134.188.12
 
 ovs-vsctl add-br br-provider
-ovs-vsctl add-port br-provider ens18
+ovs-vsctl add-port br-provider ens19
 
 [agent]
 tunnel_types = vxlan
@@ -899,12 +906,12 @@ l2_population = true
 [securitygroup]
 enable_security_group = true
 firewall_driver = openvswitch
-#firewall_driver = iptables_hybrid"
+#firewall_driver = iptables_hybrid
 
 Configure the Compute service to use the Networking service:
 server2 $ vim /etc/nova/nova.conf file
 
-"[neutron]
+[neutron]
 auth_url = http://server1:5000
 auth_type = password
 project_domain_name = Default
@@ -1039,6 +1046,7 @@ ping naar provider router
 Create m1.nano flavor (soort machine type om dan te testen)
 
 openstack flavor create --id 0 --vcpus 1 --ram 64 --disk 1 m1.nano
+openstack flavor create --id 1 --vcpus 2 --ram 2048 --disk 10 m1.medium
 ```
 
 - Generate a key pair
