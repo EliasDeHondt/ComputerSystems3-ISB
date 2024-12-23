@@ -1,5 +1,5 @@
 ![logo](https://eliasdh.com/assets/media/images/logo-github.png)
-# 💙🤍W1P1 Linux Tuning🤍💙
+# 💙🤍W1P1 Linux Tuning Global🤍💙
 
 ## 📘Table of Contents
 
