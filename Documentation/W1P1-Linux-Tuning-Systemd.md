@@ -94,7 +94,7 @@ dpkg -L chkservice
 
 - Install nginx
 ```bash
-sudo apt install nginx
+sudo apt install nginx -y
 ```
 
 - Or `chkservice` can be used to disable nginx from starting automatically
@@ -133,13 +133,13 @@ sudo journalctl -u nginx
 
 ### 👉Exercise 5: Create a service that displays "Hello World" every 10 seconds
 
-- Create a script that displays "Hello World" every 10 seconds in the color blue in a log file [Script/helloworldd.sh](helloworldd.sh)
+- Create a script that displays "Hello World" every 10 seconds in the color blue in a log file [helloworldd.sh](/Scripts/helloworldd.sh)
 ```bash
 echo -e '#!/bin/bash\nwhile true; do echo "Hello World $(date)" >> /var/log/helloworld.log; sleep 10; done' | sudo tee /usr/local/sbin/helloworldd
 sudo chmod +x /usr/local/sbin/helloworldd
 ```
 
-- Create a service that starts the script [Service/helloworldd.service](helloworldd.service)
+- Create a service that starts the script [helloworldd.service](/Scripts/helloworldd.service)
 ```bash
 echo -e '[Unit]\nDescription=Hello World Service - Making the world a better place, one hello at a time!\n\n[Service]\nExecStartPost=/bin/bash -c 'echo "Service started: Hello World is on duty!"'\nExecStart=/usr/local/sbin/helloworldd\nExecStartPost=/bin/bash -c 'echo "Service is running like a well-oiled machine!"'\nType=simple\n\n[Install]\nWantedBy=multi-user.target' | sudo tee /etc/systemd/system/helloworldd.service
 ```
@@ -167,13 +167,14 @@ sudo systemctl daemon-reload
 
 ### 👉Exercise 6: Create a firewalld service
 
-- Create a script that stops and starts the firewall [Script/firewalld.sh](firewalld.sh)
+- Create a script that stops and starts the firewall [firewalld.sh](/Scripts/firewalld.sh)
 ```bash
-echo -e '#!/bin/bash; firewalld_stop() { iptables -F; iptables -X; iptables -P INPUT ACCEPT; iptables -P FORWARD ACCEPT; iptables -P OUTPUT ACCEPT; echo "Firewall stopped: All rules flushed and all traffic allowed."; }; firewalld_start() { iptables -F; iptables -X; iptables -P INPUT ACCEPT; iptables -P FORWARD ACCEPT; iptables -P OUTPUT ACCEPT; iptables -A INPUT -p icmp -j DROP; iptables -A OUTPUT -p icmp -j DROP; echo "Firewall started: ICMP packets dropped."; }; firewalld_reload() { firewalld_stop; firewalld_start; echo "Firewall reloaded."; }; firewalld_restart() { firewalld_stop; firewalld_start; echo "Firewall restarted."; }; case "$1" in start) firewalld_start ;; stop) firewalld_stop ;; restart) firewalld_restart ;; reload) firewalld_reload ;; *) echo "Usage: $0 {start|stop|restart|reload}"; exit 1 ;; esac' | sudo tee /usr/local/sbin/firewalld
+echo -e '#!/bin/bash\n############################\n# @author Elias De Hondt\n# @see https://eliasdh.com\n# @since 19/09/2024\n############################\n\nfirewalld_stop() { iptables -F; iptables -X; iptables -P INPUT ACCEPT; iptables -P FORWARD ACCEPT; iptables -P OUTPUT ACCEPT; echo "Firewall stopped: All rules flushed and all traffic allowed."; }\n\nfirewalld_start() { iptables -F; iptables -X; iptables -P INPUT ACCEPT; iptables -P FORWARD ACCEPT; iptables -P OUTPUT ACCEPT; iptables -A INPUT -p icmp -j DROP; iptables -A OUTPUT -p icmp -j DROP; echo "Firewall started: ICMP packets dropped."; }\n\nfirewalld_restart() { firewalld_stop; firewalld_start; echo "Firewall restarted."; }\n\nfirewalld_reload() { firewalld_stop; firewalld_start; echo "Firewall reloaded."; }\n\ncase "$1" in start) firewalld_start ;; stop) firewalld_stop ;; restart) firewalld_restart ;; reload) firewalld_reload ;; *) echo "Usage: $0 {start|stop|restart|reload}"; exit 1 ;; esac' | sudo tee /usr/local/sbin/firewalld > /dev/null
+
 sudo chmod +x /usr/local/sbin/firewalld
 ```
 
-- Create a service that starts the script [Service/firewalld.service](firewalld.service)
+- Create a service that starts the script [firewalld.service](/Scripts/firewalld.service)
 ```bash
 echo -e '[Unit]\nDescription=Firewall Service - Protecting the world from the dangers of the internet!\n\n[Service]\nExecStartPost=/bin/bash -c 'echo "Service started: Firewall is up and running!"'\nExecStart=/usr/local/sbin/firewalld start\nExecStartPost=/bin/bash -c 'echo "Service is running like a well-oiled machine!"'\nType=simple\n\n[Install]\nWantedBy=multi-user.target' | sudo tee /etc/systemd/system/firewalld.service
 ```
