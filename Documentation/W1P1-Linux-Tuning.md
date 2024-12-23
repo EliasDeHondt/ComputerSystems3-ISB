@@ -119,7 +119,7 @@ vmstat 2 10
 
 # How many processes are waiting to run at most?
 # How many processes are waiting for I/O at most?
-vmstat 2 10 | awk 'NR>2 { if($1>max_r) max_r=$1; if($2>max_b) max_b=$2 } END { print "Max processes waiting to run:", max_r; print "Max processes waiting for I/O:", (max_b=="" ? 0 : max_b) }'
+vmstat 2 10 | awk 'NR>2 { if($1>max_r) max_r=$1; if($2>max_b) max_b=$2 } END { print "Max processes waiting to run:", max_r; print "Max processes waiting for I/O:", (max_b=="" ? 0 : max_b) }' # This takes 20 seconds :)
 ```
 
 ### 👉Exercise 4: Kernel cache
