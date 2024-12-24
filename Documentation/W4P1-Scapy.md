@@ -315,7 +315,7 @@ sudo nano 02_send.py
 # @see https://eliasdh.com #
 # @since 09/10/2024        #
 ############################
-from scapy.all import *
+from scapy.all import send, sendp, IP, ICMP, Ether
 
 # Send an ICMP packet at layer 4
 send(IP(dst="127.0.0.1")/ICMP())
@@ -347,7 +347,7 @@ sudo nano 03_sendreceive.py
 # @see https://eliasdh.com #
 # @since 09/10/2024        #
 ############################
-from scapy.all import *
+from scapy.all import sr, sr1, IP, ICMP
 
 # Send an ICMP packet to the destination IP address
 ans, unans = sr(IP(dst="192.168.1.99", ttl=5)/ICMP())
@@ -448,7 +448,7 @@ sudo nano 06_ping_range.py
 # @see https://eliasdh.com #
 # @since 09/10/2024        #
 ############################
-from scapy.all import sniff
+from scapy.all import sr, IP, ICMP
 import sys
 import logging
 
@@ -457,7 +457,7 @@ if len(sys.argv) != 2:
     print("Usage: " + sys.argv[0] + " <network>")
     print(" eg:"+ sys.argv[0] + " 192.168.1.0/24 \n")
     print(" eg:"+ sys.argv[0] + " 192.168.1.101-103")
-sys.exit(1)
+    sys.exit(1)
 ans,unans=sr(IP(dst=sys.argv[1])/ICMP(),timeout=1)
 print("<html><ol>")
 for s,r in ans:
@@ -468,7 +468,7 @@ print("</ol></html>")
 - Make the file executable and run it as root user:
 ```bash
 sudo chmod +x 06_ping_range.py
-sudo ./06_ping_range.py
+sudo ./06_ping_range.py 192.168.1.1-200
 ```
 
 ### 👉Exercise 7: Graphical traceroute
@@ -486,7 +486,7 @@ sudo nano 07_graphical_traceroute.py
 # @see https://eliasdh.com #
 # @since 09/10/2024        #
 ############################
-from scapy.all import *
+from scapy.all import traceroute
 
 __description__ = "Graphical Traceroute Script"
 __output__ = "traceroute_graph.svg"  # The output file for the graph
@@ -517,7 +517,7 @@ sudo nano 08_dhcp_request.py
 # @see https://eliasdh.com #
 # @since 09/10/2024        #
 ############################
-from scapy.all import *
+from scapy.all import sniff, sendp, Ether, IP, UDP, BOOTP, DHCP
 import time
 
 found_servers = set()
@@ -572,7 +572,7 @@ sudo nano xmas_scan.py
 # @see https://eliasdh.com #
 # @since 09/10/2024        #
 ############################
-from scapy.all import *
+from scapy.all import srp, Ether, IP, TCP
 import time
 
 def xmas_scan(target):
@@ -616,7 +616,7 @@ sudo nano syn_scan.py
 # @see https://eliasdh.com #
 # @since 09/10/2024        #
 ############################
-from scapy.all import *
+from scapy.all import IP, TCP, sr
 import time
 
 def syn_scan(target):
@@ -662,8 +662,8 @@ sudo nano 10_write_pcap.py
 # @see https://eliasdh.com #
 # @since 09/10/2024        #
 ############################
-
-from scapy.all import *
+import sys
+from scapy.all import sniff, wrpcap
 import sys
 
 def write_pcap(filename):
@@ -692,15 +692,32 @@ sudo ./10_write_pcap.py demo.pcap
 - [UDP Scan](/Scripts/Scan/udp_scan.py):
 
 
+- Download all scripts:
+```bash
+mkdir Scripts && cd Scripts
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/01_sniff.py
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/01b_sniff.py
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/02_send.py
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/03_sendreceive.py
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/04_sr_arg.py
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/05_sniff_arp.py
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/06_ping_range.py
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/07_graphical_traceroute.py
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/08_dhcp_request.py
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/10_write_pcap.py
 
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/Scan/xmas_scan.py
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/Scan/syn_scan.py
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/Scan/ack_scan.py
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/Scan/fin_scan.py
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/Scan/null_scan.py
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/Scan/udp_scan.py
+```
 
-
-
-
-
-
-
-
+- Make all scripts executable:
+```bash
+chmod +x 01_sniff.py 01b_sniff.py 02_send.py 03_sendreceive.py 04_sr_arg.py 05_sniff_arp.py 06_ping_range.py 07_graphical_traceroute.py 08_dhcp_request.py 10_write_pcap.py xmas_scan.py syn_scan.py ack_scan.py fin_scan.py null_scan.py udp_scan.py
+```
 
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).

@@ -421,24 +421,33 @@ python3 basisserver3.py
 > **NOTE:** This will only work on a GUI environment.
 
 ```bash
-# Download the necessary files
-curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/complexserver3.py
-curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Html/index.html
-curl -O https://eliasdh.com/assets/media/images/logo.png
-
 # Install the necessary software packages
 sudo apt-get update -y && sudo apt-get upgrade -y
-sudo apt-get install python3-easygui python3-pip python3-venv lynx -y
-
-# Move the files to the correct directories
-sudo mv complexserver3.py /home/$(whoami)/complexserver3.py
-sudo mv index.html /var/www/index.html
-sudo mv logo.png /var/www/logo.png
+sudo apt-get install python3-easygui python3-pip python3-venv lynx curl -y
 
 # Create a virtual environment and install the necessary packages
 python3 -m venv ~/my_venv
 source ~/my_venv/bin/activate
 pip3 install easygui psutil
+
+# Download the necessary files
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/complexserver3.py
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Html/index.html
+curl -O https://eliasdh.com/assets/media/images/logo.png
+
+# Move the files to the correct directories
+sudo mkdir -p /var/www
+sudo mv complexserver3.py /home/$(whoami)/complexserver3.py
+sudo mv index.html /var/www/index.html
+sudo mv logo.png /var/www/logo.png
+
+# Allow the web server to access the files
+sudo chmod 644 /var/www/index.html
+sudo chmod 644 /var/www/logo.png
+sudo chmod 755 /var/www/
+
+# Allow 1234 port
+sudo ufw allow 1234
 
 # Run the webserver
 python3 /home/$(whoami)/complexserver3.py

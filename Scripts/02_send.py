@@ -4,7 +4,7 @@
 # @see https://eliasdh.com #
 # @since 09/10/2024        #
 ############################
-from scapy.all import *
+from scapy.all import send, sendp, IP, ICMP, Ether
 
 # Send an ICMP packet at layer 4
 send(IP(dst="127.0.0.1")/ICMP())

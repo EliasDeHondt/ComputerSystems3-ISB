@@ -4,7 +4,7 @@
 # @see https://eliasdh.com #
 # @since 09/10/2024        #
 ############################
-from scapy.all import *
+from scapy.all import sr1, IP, TCP
 
 target_ip = "192.168.1.1"  # Replace with your target IP
 ports = [80, 443, 22, 25]  # Replace with the ports you want to scan

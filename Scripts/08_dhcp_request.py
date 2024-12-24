@@ -4,7 +4,7 @@
 # @see https://eliasdh.com #
 # @since 09/10/2024        #
 ############################
-from scapy.all import *
+from scapy.all import sniff, sendp, Ether, IP, UDP, BOOTP, DHCP
 import time
 
 found_servers = set()

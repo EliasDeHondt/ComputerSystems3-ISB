@@ -5,7 +5,7 @@
 # @since 09/10/2024        #
 ############################
 import sys
-from scapy.all import *
+from scapy.all import sniff, wrpcap
 
 def save_packets(filename):
     packets = sniff(count=10)

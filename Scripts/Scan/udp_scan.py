@@ -4,7 +4,7 @@
 # @see https://eliasdh.com #
 # @since 09/10/2024        #
 ############################
-from scapy.all import *
+from scapy.all import sr1, IP, UDP, ICMP
 
 target_ip = "192.168.1.1"  # Replace with your target IP
 ports = [53, 69, 123, 161]  # Replace with the UDP ports you want to scan
