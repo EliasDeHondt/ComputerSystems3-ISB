@@ -6,6 +6,7 @@
 ############################
 import sys
 from scapy.all import sniff, wrpcap
+import os
 
 def save_packets(filename):
     packets = sniff(count=10)

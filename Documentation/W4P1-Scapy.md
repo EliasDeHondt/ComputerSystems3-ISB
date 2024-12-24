@@ -223,7 +223,7 @@ wel een actieve DHCP server staan.
 - Install the necessary software packages
 ```bash
 sudo apt-get update -y && sudo apt-get upgrade -y
-sudo apt-get install python3-venv tcpdump python3-scapy python3-cryptography ipython3 python3 graphviz imagemagick -y
+sudo apt-get install python3-venv tcpdump python3-scapy python3-cryptography ipython3 python3 graphviz imagemagick wireshark tshark -y
 ```
 
 - Create a virtual environment and install the necessary packages
@@ -455,8 +455,7 @@ import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 if len(sys.argv) != 2:
     print("Usage: " + sys.argv[0] + " <network>")
-    print(" eg:"+ sys.argv[0] + " 192.168.1.0/24 \n")
-    print(" eg:"+ sys.argv[0] + " 192.168.1.101-103")
+    print(" eg:"+ sys.argv[0] + " 192.168.1.0")
     sys.exit(1)
 ans,unans=sr(IP(dst=sys.argv[1])/ICMP(),timeout=1)
 print("<html><ol>")
@@ -468,7 +467,7 @@ print("</ol></html>")
 - Make the file executable and run it as root user:
 ```bash
 sudo chmod +x 06_ping_range.py
-sudo ./06_ping_range.py 192.168.1.1-200
+sudo ./06_ping_range.py 192.168.1.1
 ```
 
 ### 👉Exercise 7: Graphical traceroute
@@ -572,36 +571,48 @@ sudo nano xmas_scan.py
 # @see https://eliasdh.com #
 # @since 09/10/2024        #
 ############################
-from scapy.all import srp, Ether, IP, TCP
+import argparse
 import time
+from scapy.all import sr1, IP, TCP
 
 def xmas_scan(target):
+    print(f"Starting XMAS scan on {target}")
+    start_time_total = time.time()
+
     for port in range(1, 65536):
-        pkt = Ether(dst="ff:ff:ff:ff:ff:ff") / IP(dst=target) / TCP(dport=port, flags="FPU")
         start_time = time.time()
-        ans, _ = srp(pkt, timeout=1, verbose=0)
+        pkt = IP(dst=target) / TCP(dport=port, flags="FPU")
+        response = sr1(pkt, timeout=1, verbose=0)
 
-        if ans:
-            for snd, rcv in ans:
-                elapsed_time = time.time() - start_time
-                print(f"Datum/tijd: {time.strftime('%Y-%m-%d %H:%M:%S')}")
-                print(f"Elapsed time: {elapsed_time:.3f} seconds")
-                if rcv.haslayer(Ether):
-                    print(f"MAC Address: {rcv[Ether].src}")
-                print(f"Source IP: {rcv[IP].src}")
-                print(f"Destination IP: {rcv[IP].dst}")
-                print(f"Port {port}: Open")
+        elapsed_time = time.time() - start_time
+        print(f"Datum/tijd: {time.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"Elapsed time: {elapsed_time:.3f} seconds")
+
+        if response:
+            if response.haslayer(TCP):
+                if response[TCP].flags == "RA":
+                    print(f"Port {port}: Closed")
+                else:
+                    print(f"Port {port}: Filtered/Unknown")
+            elif response.haslayer(IP):
+                print(f"Port {port}: No response but IP reply received.")
         else:
-            print(f"Port {port}: Closed/Filtered")
+            print(f"Port {port}: No response (Open|Filtered)")
 
-target_ip = "192.168.1.1"
+    total_elapsed = time.time() - start_time_total
+    print(f"Scan completed in {total_elapsed:.3f} seconds.")
 
-xmas_scan(target_ip)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Perform a XMAS scan on a target IP.")
+    parser.add_argument("target", help="Target IP address to scan")
+    args = parser.parse_args()
+
+    xmas_scan(args.target)
 ```
 - Make the file executable and run it as root user:
 ```bash
 sudo chmod +x xmas_scan.py
-sudo ./xmas_scan.py
+sudo ./xmas_scan.py 192.168.1.1
 ```
 
 - This script will perform a SYN scan [syn_scan.py](/Scripts/scan/syn_scan.py):
@@ -616,36 +627,50 @@ sudo nano syn_scan.py
 # @see https://eliasdh.com #
 # @since 09/10/2024        #
 ############################
-from scapy.all import IP, TCP, sr
+import argparse
 import time
+from scapy.all import sr1, IP, TCP
 
 def syn_scan(target):
+    print(f"Starting SYN scan on {target}")
+    start_time_total = time.time()
+
     for port in range(1, 65536):
-        pkt = IP(dst=target)/TCP(dport=port, flags="S")
         start_time = time.time()
-        ans, _ = sr(pkt, timeout=1, verbose=0)
+        pkt = IP(dst=target) / TCP(dport=port, flags="S")
+        response = sr1(pkt, timeout=1, verbose=0)
 
-        if ans:
-            for _, rcv in ans:
-                elapsed_time = time.time() - start_time
-                print(f"Datum/tijd: {time.strftime('%Y-%m-%d %H:%M:%S')}")
-                print(f"Elapsed time: {elapsed_time:.3f} seconds")
-                if hasattr(rcv, 'src'):
-                    print(f"IP Address: {rcv.src}")
-                else:
-                    print("MAC Address: Not available")
-                print(f"Port {port}: Open")
-        else:
-            print(f"Port {port}: Closed/Filtered")
+        elapsed_time = time.time() - start_time
+        print(f"Datum/tijd: {time.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"Elapsed time: {elapsed_time:.3f} seconds")
 
-target_ip = "192.168.1.1"
+        if response:
+            if response.haslayer(TCP):
+                if response[TCP].flags == "SA": # Response: Syn-Ack
+                    print(f"Port {port}: Open")
+                    rst_pkt = IP(dst=target) / TCP(dport=port, flags="R")
+                    sr1(rst_pkt, timeout=1, verbose=0)
+                elif response[TCP].flags == "RA": # Response: Reset-Ack
+                    print(f"Port {port}: Closed")
+            elif response.haslayer(IP): # Response: IP
+                print(f"Port {port}: Filtered (No TCP response)")
+        else: # No response
+            print(f"Port {port}: Filtered/No response")
 
-syn_scan(target_ip)
+    total_elapsed = time.time() - start_time_total
+    print(f"Scan completed in {total_elapsed:.3f} seconds.")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Perform a SYN scan on a target IP.")
+    parser.add_argument("target", help="Target IP address to scan")
+    args = parser.parse_args()
+
+    syn_scan(args.target)
 ```
 - Make the file executable and run it as root user:
 ```bash
 sudo chmod +x syn_scan.py
-sudo ./syn_scan.py
+sudo ./syn_scan.py 192.168.1.1
 ```
 
 ### 👉Exercise 10: Writing PCAP
@@ -664,7 +689,7 @@ sudo nano 10_write_pcap.py
 ############################
 import sys
 from scapy.all import sniff, wrpcap
-import sys
+import os
 
 def write_pcap(filename):
     packets = sniff(count=10)
@@ -682,15 +707,27 @@ sudo chmod +x 10_write_pcap.py
 sudo ./10_write_pcap.py demo.pcap
 ```
 
+- Open the PCAP file with Wireshark:
+```bash
+wireshark demo.pcap
+```
+
 ## 📦Extra
 
-- [XMAS Scan](/Scripts/Scan/xmas_scan.py): 
-- [SYN Scan](/Scripts/Scan/syn_scan.py):
-- [ACK Scan](/Scripts/Scan/ack_scan.py):
-- [FIN Scan](/Scripts/Scan/fin_scan.py):
-- [NULL Scan](/Scripts/Scan/null_scan.py):
-- [UDP Scan](/Scripts/Scan/udp_scan.py):
+- [XMAS Scan](/Scripts/Scan/xmas_scan.py)
+    - A XMAS scan is a type of TCP scan that sends packets with the FIN, URG, and PSH flags set to the target machine.
+- [SYN Scan](/Scripts/Scan/syn_scan.py)
+    - A SYN scan is a type of TCP scan that sends SYN packets to the target machine.
+- [ACK Scan](/Scripts/Scan/ack_scan.py)
+    - An ACK scan is a type of TCP scan that sends ACK packets to the target machine.
+- [FIN Scan](/Scripts/Scan/fin_scan.py)
+    - A FIN scan is a type of TCP scan that sends FIN packets to the target machine.
+- [NULL Scan](/Scripts/Scan/null_scan.py)
+    - A NULL scan is a type of TCP scan that sends packets with no flags set to the target machine.
+- [UDP Scan](/Scripts/Scan/udp_scan.py)
+    - A UDP scan is a type of scan that sends UDP packets to the target machine.
 
+> The goal is to determine which ports are open on the target machine.
 
 - Download all scripts:
 ```bash
