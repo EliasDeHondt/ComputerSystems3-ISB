@@ -15,7 +15,8 @@
     7. [👉Exercise 6: Create a filelist with the files in the startup directory](#👉exercise-6-create-a-filelist-with-the-files-in-the-startup-directory)
     8. [👉Exercise 7: Create a simple graphical interface](#👉exercise-7-create-a-simple-graphical-interface)
     9. [👉Exercise 8: Get the status of Apache](#👉exercise-8-get-the-status-of-apache)
-4. [🔗Links](#🔗links)
+4. [⏱️Setup web server in one second](#⏱️setup-web-server-in-one-second)
+5. [🔗Links](#🔗links)
 
 ---
 
@@ -59,7 +60,7 @@
 - Install the necessary software packages
 ```bash
 sudo apt-get update -y && sudo apt-get upgrade -y
-sudo apt-get install python3-easygui python3-pip python3-venv -y
+sudo apt-get install python3-easygui python3-pip python3-venv lynx -y
 ```
 
 - Create a virtual environment and install the necessary packages
@@ -77,7 +78,15 @@ deactivate
 ### 👉Exercise 1: Basis webserver
 
 - In the file [basisserver3.py](/Scripts/basisserver3.py) you can find the basic webserver code.
+```bash
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/basisserver3.py
+```
+
 - Modify the line `hostPort = 8080` to `hostPort = 1234`.
+```bash
+sed -i 's/hostPort = 8080/hostPort = 1234/g' basisserver3.py
+```
+
 - Run the webserver with the following command
 ```bash
 python3 basisserver3.py
@@ -86,13 +95,17 @@ python3 basisserver3.py
 - Open a new terminal and test the webserver with the following command
 ```bash
 lynx http://localhost:1234
-# or
+# Or
 lynx http://127.0.0.1:1234
 ```
 
 ### 👉Exercise 2: Small modifications code
 
 - Modify the line `hostName = "localhost"` to `hostName = "127.0.0.1"`.
+```bash
+sed -i 's/hostName = "localhost"/hostName = "127.0.0.1"/g' basisserver3.py
+```
+
 - To open an HTML document (`index.html`) instead of statically defining the HTML content, You need to modify the `class MyServer` as follows:
 ```python
 class MyServer(BaseHTTPRequestHandler):
@@ -104,7 +117,11 @@ class MyServer(BaseHTTPRequestHandler):
             self.wfile.write(file.read().encode("utf-8"))
 ```
 
-> **NOTE:** Make sure you have an [index.html](/Html/index.html) file in the `/var/www/` directory as the [basisserver3.py](/Scripts/basisserver3.py) file.
+- Get the [index.html](/Html/index.html) file from the repository.
+```bash
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Html/index.html
+sudo mv index.html /var/www/index.html
+```
 
 - Run the webserver with the following command
 ```bash
@@ -136,7 +153,8 @@ class MyServer(BaseHTTPRequestHandler):
 
 - For testing purposes, we will download an image in the web server directory.
 ```bash
-wget https://eliasdh.com/assets/media/images/logo.png -O /var/www/eliasdh-logo.png
+curl -O https://eliasdh.com/assets/media/images/logo.png
+sudo mv logo.png /var/www/eliasdh-logo.png
 ```
 
 - Run the webserver with the following command
@@ -157,9 +175,15 @@ lynx http://127.0.0.1:1234/eliasdh-logo.png
 sudo apt-get install fim -y # Install the fim tool
 wget http://127.0.0.1:1234/eliasdh-logo.png -O eliasdh-logo.png # Download the image in the current directory
 fim ./eliasdh-logo.png # View the image
+rm eliasdh-logo.png # Remove the image
 ```
 
 ### 👉Exercise 4: Check if the client is from localhost
+
+- Modify the line `hostName = "127.0.0.1"` to `hostName = "0.0.0.0"`.
+```bash
+sed -i 's/hostName = "127.0.0.1"/hostName = "0.0.0.0"/g' basisserver3.py
+```
 
 - Modify the `class MyServer` as follows:
 ```python
@@ -188,6 +212,7 @@ python3 basisserver3.py
 - Open a new terminal and test the webserver with the following command
 ```bash
 lynx http://localhost:1234/index.html # This should work (200 OK)
+# Or
 lynx http://127.0.0.1:1234/index.html # This should work (200 OK)
 
 # To make this work you need to expose your web server to external clients.
@@ -239,6 +264,7 @@ python3 basisserver3.py
 - Open a new terminal and test the webserver with the following command
 ```bash
 lynx http://localhost:1234/ps.cgi
+# Or
 lynx http://127.0.0.1:1234/ps.cgi
 ```
 
@@ -290,6 +316,7 @@ python3 basisserver3.py
 - Open a new terminal and test the webserver with the following command
 ```bash
 lynx http://localhost:1234/filelist.cgi
+# Or
 lynx http://127.0.0.1:1234/filelist.cgi
 ```
 
@@ -297,6 +324,9 @@ lynx http://127.0.0.1:1234/filelist.cgi
 
 - Modify the `class MyServer` as follows:
 ```python
+import easygui
+import subprocess
+
 class MyServer(BaseHTTPRequestHandler):
     server_instance = None # Class variable to store the server instance
 
@@ -353,7 +383,7 @@ class MyServer(BaseHTTPRequestHandler):
                     self.wfile.write(file.read())
 ```
 
-- Add the following code at the end of the file
+- At the following line of code behind `myServer = HTTPServer((hostName, hostPort), MyServer)`
 ```python
 MyServer.set_server_instance(myServer)
 ```
@@ -384,6 +414,35 @@ python3 basisserver3.py
 ![Image](/Images/W4P1-Python-2.png)
 
 ![Image](/Images/W4P1-Python-3.png)
+
+
+## ⏱️Setup web server in one second
+
+> **NOTE:** This will only work on a GUI environment.
+
+```bash
+# Download the necessary files
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/complexserver3.py
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Html/index.html
+curl -O https://eliasdh.com/assets/media/images/logo.png
+
+# Install the necessary software packages
+sudo apt-get update -y && sudo apt-get upgrade -y
+sudo apt-get install python3-easygui python3-pip python3-venv lynx -y
+
+# Move the files to the correct directories
+sudo mv complexserver3.py /home/$(whoami)/complexserver3.py
+sudo mv index.html /var/www/index.html
+sudo mv logo.png /var/www/logo.png
+
+# Create a virtual environment and install the necessary packages
+python3 -m venv ~/my_venv
+source ~/my_venv/bin/activate
+pip3 install easygui psutil
+
+# Run the webserver
+python3 /home/$(whoami)/complexserver3.py
+```
 
 ## 🔗Links
 - 👯 Web hosting company [EliasDH.com](https://eliasdh.com).

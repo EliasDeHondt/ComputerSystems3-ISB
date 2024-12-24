@@ -12,7 +12,7 @@ import os
 import easygui
 import subprocess
 
-hostName = "127.0.0.1"
+hostName = "0.0.0.0"
 hostPort = 1234
 
 class MyServer(BaseHTTPRequestHandler):
