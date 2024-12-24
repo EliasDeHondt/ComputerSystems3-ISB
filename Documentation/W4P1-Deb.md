@@ -40,11 +40,11 @@
 ## ✨Exercises
 
 ### 👉Exercise 0: Install necessary software packages
-èg 
+
 - Install the necessary software packages
 ```bash
 sudo apt-get update -y && sudo apt-get upgrade -y
-sudo apt-get install dh-make debhelper fakeroot devscripts zenity menu wget curl dbus-x11 -y
+sudo apt-get install dh-make debhelper fakeroot devscripts zenity menu wget curl dbus-x11 curl -y
 ```
 
 - If you want to leave the virtual environment, you can use the following command
@@ -56,9 +56,9 @@ deactivate
 
 - Run the following [script](/Scripts/Deb/variables.sh) to set the environment variables:
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/variables.sh )
+bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/variables.sh)
 ```
-- [script](/Scripts/Deb/variables.sh):
+- [variables.sh](/Scripts/Deb/variables.sh):
     ```bash
     #!/bin/bash
     cat >>~/.bashrc <<EOF
@@ -78,7 +78,7 @@ echo $DEBFULLNAME
 
 - Run the following [script](/Scripts/Deb/executable.sh) to make the executable:
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/executable.sh )
+bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/executable.sh)
 ```
 - [script](/Scripts/Deb/executable.sh):
     ```bash
@@ -104,15 +104,17 @@ cd pakket/pakket-1
 dh_make --native
 ```
 - Press `s` to select `single binary`.
-- Press `y` to confirm the license.
+- Press `Y` to confirm the license.
 - Press `y` to confirm the package name.
 
 ### 👉Exercise 4: Edit the control file
 
+
+> rm ~/pakket/pakket-1/debian/control && curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/control -o ~/pakket/pakket-1/debian/control
+
 - Edit the control file
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/control )
-mv control debian
+nano debian/control
 ```
 - Delete the lines that start with `Description:`
 ```bash
@@ -161,7 +163,7 @@ dch -a "Add icon"
 
 - Get the manpage from the github repository:
 ```bash
-wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/pakket.1
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/refs/heads/main/Scripts/Deb/pakket.1
 mv pakket.1 debian
 ```
 ```plaintext
@@ -197,14 +199,14 @@ echo "debian/pakket.1" >> debian/manpages
 
 ### 👉Exercise 7: pakket.desktop + Icon
 
-- Get the [icon](/Images/32x32.png) from the github repository:
+- Get the [icon](/Images/pakket.png) from the github repository:
 ```bash
-wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Images/pakket.png
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Images/pakket.png
 ```
 
 - Get the [pakket.desktop](/Scripts/Deb/pakket.desktop) file from the github repository:
 ```bash
-wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/pakket.desktop
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/pakket.desktop
 ```
 ```plaintext
 [Desktop Entry]
@@ -222,7 +224,7 @@ Categories=Utility;Education;
 
 - Get the [install](/Scripts/Deb/install) file from the github repository:
 ```bash
-wget https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/install
+curl -O https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Deb/install
 mv install debian
 ```
 ```plaintext
