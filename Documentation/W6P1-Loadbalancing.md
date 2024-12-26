@@ -74,6 +74,7 @@
 ```bash
 sudo apt-get update -y && sudo apt-get upgrade -y # On both
 sudo apt-get install apache2 nano iputils-ping libapache2-mod-proxy-html -y # On loadbalancer1
+sudo apt-get install apache2 nano iputils-ping -y # On webserver1 and webserver2
 ```
 
 > **Note:** In the latest Ubuntu versions, load balancing packages are automatically installed when you install Apache2.
@@ -138,7 +139,7 @@ echo -e "127.0.0.1 localhost\n10.1.0.254 loadbalancer1\n10.1.0.1 webserver1\n10.
 
 - Enable the necessary modules on the load balancer.
 ```bash
-sudo a2enmod proxy proxy_http headers proxy_balance lbmethod_byrequests # On loadbalancer1
+sudo a2enmod proxy proxy_http headers proxy_balancer lbmethod_byrequests # On loadbalancer1
 sudo systemctl restart apache2 # On loadbalancer1
 ```
 
