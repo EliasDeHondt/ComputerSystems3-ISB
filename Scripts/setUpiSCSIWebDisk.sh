@@ -56,6 +56,7 @@ function CreateDisk() { # Function: Create the iSCSI disk.
     create "$1" /iscsi/"$1".img "$2"
     cd /iscsi
     create iqn.2024-10.be.kdg:"$1"
+    cd /iscsi/iqn.2024-10.be.kdg:"$1"/tpg1/luns
     cd iqn.2024-10.be.kdg:"$1"/tpg1/luns
     create /backstores/fileio/"$1"
     cd /iscsi/iqn.2024-10.be.kdg:"$1"/tpg1/acls

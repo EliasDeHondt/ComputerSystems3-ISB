@@ -224,9 +224,11 @@ exit # On Target
 sudo targetcli # On Target
 cd /iscsi # On Target
 ls # On Target
+exit # On Target
 sudo systemctl --type=service | grep target # On Target
 sudo systemctl enable rtslib-fb-targetctl # On Target
 sudo targetcli saveconfig /root/target.json # On Target
+sudo cat /root/target.json
 # sudo targetcli restoreconfig /root/target.json # (This is to restore the configuration) # On Target
 ```
 
@@ -285,12 +287,15 @@ sudo mkfs.ext4 /dev/sdb # On Node
 ```bash
 sudo mkdir /mnt/data # On Node
 sudo mount /dev/sdb /mnt # On Node
+# sudo u
 ```
 
 - Add the disk to the `/etc/fstab` file.
 ```bash
-echo "/dev/sdb /mnt ext4 defaults 0 0" | sudo tee -a /etc/fstab > /dev/null # On Node
+echo "/dev/sdb /mnt ext4 defaults,_netdev,nofail 0 0" | sudo tee -a /etc/fstab > /dev/null # On Node
 ```
+> **nofail**: Makes the system continue booting if the disk is not available.
+> **_netdev**: Wait to mount until the network is available.
 
 - Reboot the server.
 ```bash
@@ -315,7 +320,6 @@ bash <(curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-I
 - Run the following command on the Node server.
 ```bash
 sudo apt install apache2 -y # On Node
-sudo systemctl status apache2 # On Node
 sudo ufw allow 80/tcp # On Node
 sudo ufw reload # On Node
 sudo rm /var/www/html/index.html # On Node
@@ -336,7 +340,9 @@ curl -s http://10.2.0.1 # On Node
 
 - Unmount the disk to test the web server.
 ```bash
+sudo systemctl stop apache2 # On Node
 sudo umount /var/www/html/ # On Node
+sudo systemctl start apache2 # On Node
 curl -s http://10.2.0.1 # On Node (This should not work)
 ```
 
