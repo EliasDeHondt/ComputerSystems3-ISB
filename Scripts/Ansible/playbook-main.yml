@@ -1,4 +1,3 @@
----
 ############################
 # @author Elias De Hondt   #
 # @see https://eliasdh.com #
@@ -9,4 +8,6 @@
   become: true
   gather_facts: true
   tasks:
-    - import_tasks: roles/nginx/tasks/tasks-main.yml
+    - name: Include nginx task
+      ansible.builtin.import_tasks:
+        file: roles/nginx/tasks/tasks-main.yml

@@ -56,7 +56,7 @@ sudo nano /etc/netplan/01-netcfg.yaml # On both
 network:
   version: 2
   ethernets:
-    ens34:
+    eth1:
       dhcp4: no
       dhcp6: no
       addresses:
@@ -110,7 +110,7 @@ sudo su - ansible -c 'cat <<EOF > /home/ansible/show_info.sh
 #!/bin/bash
 echo "Welcome: \$(whoami)!" | sudo tee /etc/motd
 echo "Hostname: \$(hostname)" | sudo tee -a /etc/motd
-echo "IP address: \$(ip addr show ens34 | awk '\''/inet / {print \$2}'\'' | cut -d'\''/'\'' -f1)" | sudo tee -a /etc/motd
+echo "IP address: \$(ip addr show eth1 | awk '\''/inet / {print \$2}'\'' | cut -d'\''/'\'' -f1)" | sudo tee -a /etc/motd
 echo "Date: \$(date)" | sudo tee -a /etc/motd
 echo "Kernel: \$(uname -r)" | sudo tee -a /etc/motd
 echo -e "\n\n" | sudo tee -a /etc/motd
@@ -206,7 +206,7 @@ ansible-lint /etc/ansible/roles/nginx/tasks/tasks-main.yml # On master
 
 - Run the playbook.
 ```bash
-ansible-playbook /etc/ansible/playbooks/playbook-main.yml # On master
+ansible-playbook /etc/ansible/playbook-main.yml # On master
 ```
 
 - Test the website (should be running).
