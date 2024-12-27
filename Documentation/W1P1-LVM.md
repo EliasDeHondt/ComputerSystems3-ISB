@@ -73,8 +73,8 @@
 - CentOS9TestHDD1.vmdk -> `20GB`
 - CentOS9TestHDD2.vmdk -> `20GB`
 - CentOS9TestHDD3.vmdk -> `20GB`
-- CentOS9TestHDD4.vmdk -> `0.1GB`
-- CentOS9TestHDD5.vmdk -> `0.2GB`
+- CentOS9TestHDD4.vmdk -> `0.1GB` or `1GB`
+- CentOS9TestHDD5.vmdk -> `0.2GB` or `2GB`
 
 > HDD1, HDD2, HDD3 are RAID disks
 
