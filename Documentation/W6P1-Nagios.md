@@ -181,7 +181,18 @@ sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB
 
 - Curl from GitHub the `commands.cfg` file.
 ```bash
-sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Nagios/commands.cfg -o /etc/nagios4/commands.cfg # On server01
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Nagios/commands.cfg -o /etc/nagios4/objects/commands.cfg # On server01
+```
+
+- Curl from GitHub the `contacts.cfg` file.
+```bash
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Nagios/contacts.cfg -o /etc/nagios4/objects/contacts.cfg # On server01
+```
+sudo nano 
+
+- Curl from GitHub the `localhost.cfg` file.
+```bash
+sudo curl -s https://raw.githubusercontent.com/EliasDeHondt/ComputerSystems3-ISB/main/Scripts/Nagios/localhost.cfg -o /etc/nagios4/objects/localhost.cfg # On server01
 ```
 
 - Restart the `nagios` and `apache2` services.
